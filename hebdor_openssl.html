@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Hachage et chiffrement avec openssl  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_openssl_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Hachage et chiffrement avec openssl <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#hachage-avec-md5-et-sha256-avec-ou-sans-cle">Hachage avec MD5 et SHA256 avec ou sans cle</a></li>
+<li><a href="#cryptographie-asymetrique-avec-rsa">Cryptographie asymetrique avec RSA</a>
+<ul>
+<li><a href="#generation-des-cles-secretes-et-publiques">Generation des cles secretes et publiques</a></li>
+<li><a href="#chiffrement-et-dechiffrement">Chiffrement et dechiffrement</a></li>
+</ul></li>
+<li><a href="#cryptographie-symetrique-avec-aes">Cryptographie symetrique avec AES</a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>Pour etre conforme au RGPD, on doit parfois transformer les noms, identifiants, … des clients</p>
+<ul>
+<li>avec les algorithmes MD5, SHA256, … on peut hacher ces donnees, la transformation n’est pas inversible mathematiquement et il faut donc stocker la correspondance “id / id hache” dans une table si on veut pouvoir retrouver par jointure l’identifiant a partir de sa version hachee</li>
+<li>avec les algorithmes RSA, AES, … on peut chiffrer ces donnees, la transformation est inversible a condition qu’on connaisse la cle secrete</li>
+</ul>
+</div>
+<div id="hachage-avec-md5-et-sha256-avec-ou-sans-cle" class="section level1">
+<h1>Hachage avec MD5 et SHA256 avec ou sans cle</h1>
+<p>Si on choisit l’algorithme SHA256 le message hache fera 256 bits. Plus generalement les fonctions de hachage sont concues pour donner des resultats de longueur courte.</p>
+<p>Point d’attention</p>
+<ul>
+<li>si on ne choisit pas une cle aleatoire, alors un attaquant qui connait un identifiant mais pas sa version hachee peut simplement appliquer tous les algorithmes de hachage standards pour obtenir une short liste d’identifiants haches qui contient le vrai hache. Pour eviter ca il suffit d’utiliser une cle aleatoire secrete dans l’algorithme de hachage</li>
+<li>l’algorithme MD5 est suffisant dans le cadre du RGPD, mais il n’est plus considere comme assez sur pour des applications cryptographiques (signatures electroniques par exemple)</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;openssl&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># le hache fait 256 bits soit 64 characteres hexadecimaux </span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># (chacun des 16 groupes possibles de 4 bits est remplace par un chiffre ou une lettre entre a et f)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Use a salt to prevent dictionary attacks</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">sha256</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="st">&quot;random_salt_value&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">sha256</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="ot">NULL</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># MD5 n&#39;est plus considere comme sur,  preferer shaY avec Y &gt;= 224</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">md5</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="st">&quot;random_salt_value&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">md5</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="ot">NULL</span>)</span></code></pre></div>
+<pre><code>[1] &quot;0e000572656c206efa68a0366c99d51b420339eb76a571ace703d6285639bcca&quot;
+[1] &quot;084385f2203befd723dce46e4607e09fa634680968f5dd021531f1341850a3c9&quot;
+[1] &quot;a0221a3d2d4e7b065376df5ebdaa7970&quot;
+[1] &quot;c1b216ea5cc1c74b340f35136db6083f&quot;</code></pre>
+</div>
+<div id="cryptographie-asymetrique-avec-rsa" class="section level1">
+<h1>Cryptographie asymetrique avec RSA</h1>
+<p>On a une cle publique qui est connue de tous (les nombres <em>e = 65537</em> et <em>n = p * q</em>) et une cle secrete (les nombres premiers <em>p</em> et <em>q</em>). La cle publique est suffisante pour chiffrer un message, seule la cle secrete permet le dechiffrement.</p>
+<p>Points d’attention</p>
+<ul>
+<li>le message et sa version chiffree ont au plus <em>n</em> bits</li>
+<li>le chiffrement asymetrique est plus lent que le chiffrement symetrique ou le hachage</li>
+</ul>
+<div id="generation-des-cles-secretes-et-publiques" class="section level3">
+<h3>Generation des cles secretes et publiques</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># generation de la cle secrete (couple de grands nombres premiers)</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># chaque nombre premier fait 1024 bits soit 309 chiffres en base 10, n fait 2048 bits</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>key &lt;-<span class="st"> </span><span class="kw">rsa_keygen</span>(<span class="dt">bits =</span> <span class="dv">2048</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">### key$data pour voir les differentes cles</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># cle publique : n</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># cles secretes : p, q</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>key<span class="op">$</span>data</span></code></pre></div>
+<pre><code>$e
+[b] 65537
+$n
+[b] 23641989786064580967902479751113512555151255293494873290639641405624520787074227552946225561094935716053392936805347325515668786453140902346792401671332022090685021746909774280874167370020694727778040869391342629445931574018987492270472247850734955968200919182331816005829921464418328184854457970656319292851374447188665945315783278303289594103724997034828138121757168757329416994584650121658442934512754744940754211359730343820193808896888381988503076206429007409374744755054179446070567054894278054979928870682937484880609189729426551019930208064940942356386368138725733900514881859431274900491418970564529223166789
+$p
+[b] 168209684362765243829011502769478789342277452004116492574270230394854702172017555624418837060423884977594641394171600034132964058315327970456957962421367149928464400493837138052961022512695140634452863947914959910455012758390647029144551365408888039820816128684837490856921232831877347831176262607888376345821
+$q
+[b] 140550705362942540612436287214964726197956640108980203016502069642488704612794572186342619113038099643044822611435725595809822495863113483117598895213034961854199902051878336921115149726490716288994983494385618336971843656316262611030083712349122388124573664812392862893690037446393661685863262435004846806409
+$d
+[b] 5948285237078579666138883205152977837281063346421669678034652900458408582298044434754876074231264705769327191281007248583668196893752236733391212767728057620173418429052218870520990368254134845451151500608722532568380696766697968476552434423467181728789309190189805974031914415166910500023882043397653978970981615112497147819617856223719252148383028764856925371561983477795581143311892956353730257661116595585980012346035589772785588406685448059576061698617181847689027794702413330170896412165644067530605850011670689129416108366669395405813351892605083610297439491195397942881060435243356900045417743827246532557793
+$dp
+[b] 140428406252040447161400527198780734566489559050631332807666617568605296549088248178568256589208722077286656615336538942391578230962762092369372125638345680669485523356566692620834893643851400423162786596613686949062744908217151699125468649093130465579997754684125206177498686420350417808064861926322485542653
+$dq
+[b] 4145513427019362055080936618803528018381222596863737010099615493826856066291284435299148309283345997070443293222229543261064541930564389014851437576434633585061391437909590388155020590220891322255020875149112718698850630752999612846501240764314106172769594184694987624906584713732379389333867682177462637545
+$qi
+[b] 153549810993399462942147264349577647118561299875276761219192976320368841821592171386931415978262690613100681140287044440163054113701820345785408606992642260592232252049877241381698201771772725771220675507495471735962882256754209812754580243790309350729567536156269902804034231392485023438548213013382155198182</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>(<span class="dt">p =</span> <span class="kw">as.numeric</span>(openssl<span class="op">:::</span><span class="kw">as.character.bignum</span>(key<span class="op">$</span>data<span class="op">$</span>p)))</span>
+<span id="cb5-2"><a href="#cb5-2"></a>(<span class="dt">q =</span> <span class="kw">as.numeric</span>(openssl<span class="op">:::</span><span class="kw">as.character.bignum</span>(key<span class="op">$</span>data<span class="op">$</span>q)))</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># n et p*q sont trop grand pour le type numerique de R --&gt; la conversion en numerique donne Inf </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">as.numeric</span>(openssl<span class="op">:::</span><span class="kw">as.character.bignum</span>(key<span class="op">$</span>data<span class="op">$</span>n))</span>
+<span id="cb5-6"><a href="#cb5-6"></a>p <span class="op">*</span><span class="st"> </span>q</span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co"># la classe &quot;bignum&quot; de openssl permet de faire les calculs sur les nombres trop grands pour R</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co"># on a bien n = p * q</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="kw">class</span>(key<span class="op">$</span>data<span class="op">$</span>n)</span>
+<span id="cb5-11"><a href="#cb5-11"></a>key<span class="op">$</span>data<span class="op">$</span>n <span class="op">-</span><span class="st"> </span>key<span class="op">$</span>data<span class="op">$</span>p <span class="op">*</span><span class="st"> </span>key<span class="op">$</span>data<span class="op">$</span>q</span></code></pre></div>
+<pre><code>[1] 1.682097e+308
+[1] 1.405507e+308
+[1] Inf
+[1] Inf
+[1] &quot;bignum&quot;
+[b] 0</code></pre>
+</div>
+<div id="chiffrement-et-dechiffrement" class="section level3">
+<h3>Chiffrement et dechiffrement</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># la cle publique n sous une autre forme</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>pubkey &lt;-<span class="st"> </span>key<span class="op">$</span>pubkey</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># phrase a chiffrer (convertie au prealable en hexadecimal avec charToRaw) </span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>msg1 &lt;-<span class="st"> </span><span class="kw">charToRaw</span>(<span class="st">&quot;En mathematiques, une extension de Galois parfois nommee extension galoisienne</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="st">est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une </span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="st">structure de groupe appelee groupe de Galois.&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8"></a></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co"># phrase trop longue a chiffrer avec RSA (max 2048 bits ici, soit 2048/8 = 256 caracteres ASCII)</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>msg2 &lt;-<span class="st"> </span><span class="kw">charToRaw</span>(<span class="st">&quot;En mathematiques, une extension de Galois parfois nommee extension galoisienne</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="st">est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une </span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="st">structure de groupe appelee groupe de Galois.Le theoreme fondamental de la theorie de Galois ..&quot;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13"></a></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># le message chiffre puis dechiffre : OK</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a>ciphertext &lt;-<span class="st"> </span><span class="kw">rsa_encrypt</span>(msg1, pubkey)</span>
+<span id="cb7-16"><a href="#cb7-16"></a></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="kw">c</span>(ciphertext[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>], <span class="st">&quot;...&quot;</span>)</span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="kw">cat</span>(<span class="kw">rawToChar</span>(<span class="kw">rsa_decrypt</span>(ciphertext, key)), <span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-19"><a href="#cb7-19"></a></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="co"># echec du chiffrement car le message est trop long</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="kw">try</span>(<span class="kw">cat</span>(<span class="kw">rsa_encrypt</span>(msg2, pubkey)), <span class="dt">outFile =</span> <span class="kw">stdout</span>())</span></code></pre></div>
+<pre><code> [1] &quot;61&quot;  &quot;16&quot;  &quot;48&quot;  &quot;49&quot;  &quot;52&quot;  &quot;83&quot;  &quot;02&quot;  &quot;18&quot;  &quot;a6&quot;  &quot;f4&quot;  &quot;...&quot;
+En mathematiques, une extension de Galois parfois nommee extension galoisienne
+est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une 
+structure de groupe appelee groupe de Galois. 
+
+Error : OpenSSL error in RSA_padding_add_PKCS1_type_2: data too large for key size</code></pre>
+</div>
+</div>
+<div id="cryptographie-symetrique-avec-aes" class="section level1">
+<h1>Cryptographie symetrique avec AES</h1>
+<p>On a une seule cle utilisee pour chiffrer et dechiffrer, cette cle est connue uniquement par la personne qui envoie le message et par celle qui le recoit. Et avec le chiffrement symetrique il n’y a pas de limite a la longueur du message a chiffrer.</p>
+<p>Point d’attention : la cle secrete n’est pas obtenue par un algorithme mathematique comme pour RSA (deux grands nombres premiers fournis par un generateur pseudo-aleatoire de nombres premiers), c’est l’utilisateur qui choisit sa cle secrete, elle doit donc verifier les criteres usuels des bons mots de passe (de meme pour la cle secrete d’un algorithme de hachage). Sinon un attaquant peut simplement essayer par force brute tous les mots de passe simples pour tenter de dechiffrer les messages.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># aes-256 requires 32 byte key</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>passphrase &lt;-<span class="st"> </span><span class="kw">charToRaw</span>(<span class="st">&quot;This is super secret&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>key &lt;-<span class="st"> </span><span class="kw">sha256</span>(passphrase)</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co"># symmetric encryption uses same key for decryption</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>ciphertext &lt;-<span class="st"> </span><span class="kw">aes_cbc_encrypt</span>(msg2, <span class="dt">key =</span> key)</span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="kw">c</span>(ciphertext[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>], <span class="st">&quot;...&quot;</span>)</span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="kw">cat</span>(<span class="kw">rawToChar</span>(<span class="kw">aes_cbc_decrypt</span>(ciphertext, key)))</span></code></pre></div>
+<pre><code> [1] &quot;97&quot;  &quot;0b&quot;  &quot;db&quot;  &quot;b4&quot;  &quot;04&quot;  &quot;02&quot;  &quot;59&quot;  &quot;cf&quot;  &quot;77&quot;  &quot;f8&quot;  &quot;...&quot;
+En mathematiques, une extension de Galois parfois nommee extension galoisienne
+est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une 
+structure de groupe appelee groupe de Galois.Le theoreme fondamental de la theorie de Galois ..</code></pre>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

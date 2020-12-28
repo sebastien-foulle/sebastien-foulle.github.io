@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Comparer des fichiers avec diffr  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="site_libs/jquery-1.11.1/jquery.min.js"></script>
+<script src="site_libs/highlight-8.9.1/highlight.min.js"></script>
+<script src="site_libs/difflib-1/difflib.js"></script>
+<link href="site_libs/codediff-1/codediff.css" rel="stylesheet" />
+<link href="site_libs/codediff-1/googlecode.css" rel="stylesheet" />
+<script src="site_libs/codediff-1/codediff.js"></script>
+<script src="site_libs/diffr-binding-0.1/diffr.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdo_diffr_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Comparer des fichiers avec <em>diffr</em> <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Cas d’usage</a></li>
+<li><a href="#exemple">Exemple</a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Cas d’usage</h1>
+<p>Imaginons la situation suivante : on vous demande de lancer un script</p>
+<ul>
+<li>dont l’auteur n’utilisait pas Git et qui a quitte la societe</li>
+<li>sans aucune documentation a jour</li>
+<li>qui contient plusieurs milliers de lignes</li>
+<li>et dont vous trouvez plusieurs versions …</li>
+</ul>
+<p>Comment identifier rapidement les differences entre les versions ? le package <em>diffr</em> est la solution (et vous rappellera Git) !</p>
+</div>
+<div id="exemple" class="section level1">
+<h1>Exemple</h1>
+<p>Illustration avec un fichier <em>fichier1.csv</em> et un fichier <em>fichier2.csv</em> place dans votre <em>working directory</em> :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">diffr</span>(<span class="st">&quot;file1.csv&quot;</span>, <span class="st">&quot;file2.csv&quot;</span>, <span class="dt">width=</span><span class="st">&#39;100%&#39;</span>, <span class="dt">wordWrap =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div id="htmlwidget-344975d30d6bad74a6eb" style="width:100%;height:480px;" class="diffr html-widget"></div>
+<script type="application/json" data-for="htmlwidget-344975d30d6bad74a6eb">{"x":{"message":["function (..., domain = NULL, appendLF = TRUE) ","{","    args <- list(...)","    cond <- if (length(args) == 1L && inherits(args[[1L]], \"condition\")) {","        if (nargs() > 1L) ","            warning(\"additional arguments ignored in message()\")","        args[[1L]]","    }","    else {","        msg <- .makeMessage(..., domain = domain, appendLF = appendLF)","        call <- sys.call()","        simpleMessage(msg, call)","    }","    defaultHandler <- function(c) {","        cat(conditionMessage(c), file = stderr(), sep = \"\")","    }","    withRestarts({","        signalCondition(cond)","        defaultHandler(cond)","    }, muffleMessage = function() NULL)","    invisible()","}"],"contextSize":3,"minJumpSize":10,"wordWrap":false,"file1":"file1.csv","file2":"file2.csv","f1":"---\ntitle: \"Discretisation supervisee avec smbinning\"\noutput: \n  flexdashboard::flex_dashboard:\n    theme: flatly\n  orientation: columns\n  vertical_layout: fill\n---\n\n```{r donnees, message=FALSE}\nlibrary(\"smbinning\")\nlibrary(\"ggplot2\")\n\ndiscretise = smbinning(titanic::titanic_train ,\n                       \"Survived\",\n                       \"Fare\")\n```\n\nColumn {data-width=100}\n-----------------------------------------------------------------------\n  \n### **Lien entre la variable Fare et la cible Survived**\n```{r violin_plots}\nfreq_cible = mean(titanic::titanic_train$Survived)\n# les chances de survie augmentent avec le montant du billet\nggplot(titanic::titanic_train, aes(factor(Survived), Fare)) + geom_violin() + \n  ggtitle(paste0(\"Distribution des tarifs selon survie/deces (taux de survie : \",formattable::percent(freq_cible, digits = 0),\")\")) + coord_flip()\n```\n\n### **Frequence de chaque modalite creee**\n\n```{r frequences}\nsmbinning.plot(discretise,option=\"dist\",sub=\"Fare\") \n```\n\nColumn {data-width=100}\n-----------------------------------------------------------------------\n  \n### **Frequence de la cible pour chaque modalite creee**\n\n```{r bien_classes}\nsmbinning.plot(discretise,option=\"goodrate\",sub=\"Fare\")\n```\n\n\n### **WoE de chaque modalite creee**\n```{r WoE}\nsmbinning.plot(discretise,option=\"WoE\",sub=\"Fare\")\n```\n\n```\nNote : WoE > 0 <=> Frequence cible > 38%\n```\n\nColumn {data-width=300}\n-----------------------------------------------------------------------\n  \n  \n### **les indicateurs de qualite de la discretisation de la variable Fare** {data-height=130}\n```{r tableau_IV}\ndtf = discretise$ivtable\nknitr::kable(dtf[dtf$Cutpoint != \"Missing\",])\n```\n\n### **Un peu de theorie (et de formules mathematiques avec LaTeX) : Weight Of Evidence, Information Value**\n\nLe tableau d'indicateurs ci-dessus permet de se faire une idee de la qualite de la discretisation obtenue\n\n- la colonne *PctRec* correspond au graphique des frequences des modalites, les colonnes *GoodRate* et *WoE* aux deux autres graphiques\n- pour chaque modalite, l'indicateur WoE joue le même rôle qu'un lift, mais il doit être compare a 0 alors que le lift est compare a 1\n- pour chaque variable qualitative, l'indicateur IV est positif, non majore et plus il est eleve, plus la variable est predictive de la cible.\n\nPlus precisement, si on note $Y$ la variable cible de valeurs 0 et 1 et $X$ la variable explicative discretisee grace au package *smbinning*, de modalites *a*, *b* et *c*, alors on a les formules suivantes pour le Weight of Evidence et l'Information Value :\n\n$$ WoE(i) = \\log\\left(\\frac{P(X = i | Y = 1)} {P(X = i | Y = 0)}\\right) = \\log\\left(\\frac{\\frac{P(Y = 1 | X = i)} {P(Y = 0 | X = i)}} {\\frac{P(Y = 1)} {P(Y = 0)}}\\right) \\ et \\ IV = \\sum_{i = a,b,c}  \\left( P(X = i | Y = 1) - P(X = i | Y = 0) \\right) \\log\\left(\\frac{P(X = i | Y = 1)} {P(X = i | Y = 0)}\\right)$$\nLe membre de  droite de la 1ere formule est le logarithme de *l'odds-ratio* ( = le coefficient de la modalite $i$ dans un modele de regression logistique). Si le WoE est positif cela indique que la modalite $i$ favorise l'apparition de la cible, s'il est negatif c'est le contraire.\n\nOn prend en compte le % d'individus qui prennent cette modalite $(= P(X=i))$ en multipliant le WoE par la quantite $P(X = i | Y = 1) - P(X = i | Y = 0)$, de cette façon on obtient un WoE pondere qui est toujours positif. Enfin on somme les WoE ponderes pour toutes les modalites de $X$ ce qui donne l'Information Value totale.\n\nPour info l'IV est utilisee dans les regressions logistiques de *credit scoring* et on a les regles empiriques suivantes.\n\nInformation Value\t| Pouvoir de prediction\n:-----------------:|:---------------:\n  < 0,02\t| \tinutilisable\n0,02 a 0,1\t| \tpredicteur faible\n0,1 a 0,3\t| \tpredicteur moyen\n0,3 a 0,5\t| \tpredicteur fort\n>0,5\t\t| suspect, trop beau pour etre vrai\n","f2":"---\ntitle: \"Discretisation supervisee avec smbinning\"\noutput: \n  flexdashboard::flex_dashboard:\n    theme: flatly\n  orientation: columns\n  vertical_layout: fill\n---\n\n```{r donnees, message=FALSE}\nlibrary(\"smbinning\")\nlibrary(\"ggplot2\")\n\ndiscretise = smbinning(titanic::titanic_train ,\n                       \"Survived\",\n                       \"Fare\")\n```\n\nColumn {data-width=100}\n-----------------------------------------------------------------------\n  \n### **Lien entre la variable Fare et la cible Survived**\n```{r violin_plots}\nfreq_cible = mean(titanic::titanic_train$Survived)\n\nUNE LIGNE EN PLUS\nET ENCORE UNE LIGNE\n\n# les chances de survie DIMINUENT avec le montant du billet\nggplot(titanic::titanic_train, aes(factor(Survived), Fare)) + geom_violin() + \n  ggtitle(paste0(\"Distribution des tarifs selon survie/deces (taux de survie : \",formattable::percent(freq_cible, digits = 0),\")\")) + coord_flip()\n```\n\n### **Frequence de chaque modalite creee**\n\n```{r frequences}\nsmbinning.plot(discretise,option=\"dist\",sub=\"Fare\") \n```\n\nColumn {data-width=100}\n-----------------------------------------------------------------------\n  \n### **Frequence de la cible pour chaque modalite creee**\n\n```{r bien_classes}\nsmbinning.plot(discretise,option=\"goodrate\",sub=\"Fare\")\n```\n\n3 LIGNES SUPPRIMEES JUSTE EN-DESSOUS, ET LE RESTE INCHANGE\n\n```\nNote : WoE > 0 <=> Frequence cible > 38%\n```\n\nColumn {data-width=300}\n-----------------------------------------------------------------------\n  \n  \n### **les indicateurs de qualite de la discretisation de la variable Fare** {data-height=130}\n```{r tableau_IV}\ndtf = discretise$ivtable\nknitr::kable(dtf[dtf$Cutpoint != \"Missing\",])\n```\n\n### **Un peu de theorie (et de formules mathematiques avec LaTeX) : Weight Of Evidence, Information Value**\n\nLe tableau d'indicateurs ci-dessus permet de se faire une idee de la qualite de la discretisation obtenue\n\n- la colonne *PctRec* correspond au graphique des frequences des modalites, les colonnes *GoodRate* et *WoE* aux deux autres graphiques\n- pour chaque modalite, l'indicateur WoE joue le même rôle qu'un lift, mais il doit être compare a 0 alors que le lift est compare a 1\n- pour chaque variable qualitative, l'indicateur IV est positif, non majore et plus il est eleve, plus la variable est predictive de la cible.\n\nPlus precisement, si on note $Y$ la variable cible de valeurs 0 et 1 et $X$ la variable explicative discretisee grace au package *smbinning*, de modalites *a*, *b* et *c*, alors on a les formules suivantes pour le Weight of Evidence et l'Information Value :\n\n$$ WoE(i) = \\log\\left(\\frac{P(X = i | Y = 1)} {P(X = i | Y = 0)}\\right) = \\log\\left(\\frac{\\frac{P(Y = 1 | X = i)} {P(Y = 0 | X = i)}} {\\frac{P(Y = 1)} {P(Y = 0)}}\\right) \\ et \\ IV = \\sum_{i = a,b,c}  \\left( P(X = i | Y = 1) - P(X = i | Y = 0) \\right) \\log\\left(\\frac{P(X = i | Y = 1)} {P(X = i | Y = 0)}\\right)$$\nLe membre de  droite de la 1ere formule est le logarithme de *l'odds-ratio* ( = le coefficient de la modalite $i$ dans un modele de regression logistique). Si le WoE est positif cela indique que la modalite $i$ favorise l'apparition de la cible, s'il est negatif c'est le contraire.\n\nOn prend en compte le % d'individus qui prennent cette modalite $(= P(X=i))$ en multipliant le WoE par la quantite $P(X = i | Y = 1) - P(X = i | Y = 0)$, de cette façon on obtient un WoE pondere qui est toujours positif. Enfin on somme les WoE ponderes pour toutes les modalites de $X$ ce qui donne l'Information Value totale.\n\nPour info l'IV est utilisee dans les regressions logistiques de *credit scoring* et on a les regles empiriques suivantes.\n\nInformation Value\t| Pouvoir de prediction\n:-----------------:|:---------------:\n  < 0,02\t| \tinutilisable\n0,02 a 0,1\t| \tpredicteur faible\n0,1 a 0,3\t| \tpredicteur moyen\n0,3 a 0,5\t| \tpredicteur fort\n>0,5\t\t| suspect, trop beau pour etre vrai\n"},"evals":[],"jsHooks":[]}</script>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

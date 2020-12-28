@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Les couleurs dans R  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_couleurs_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Les couleurs dans R <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#yellow-et-blue-pas-toujours-le-meilleur-choix"><em>yellow</em> et <em>blue</em>, pas toujours le meilleur choix</a></li>
+<li><a href="#liste-alphabetique-des-couleurs-de-r-base">Liste alphabetique des couleurs de R base</a></li>
+<li><a href="#toutes-les-variantes-de-bleus">Toutes les variantes de bleus</a></li>
+<li><a href="#addins">Addins</a></li>
+<li><a href="#arc-en-ciel-et-degrades-de-couleurs-en-r-base">Arc-en-ciel et degrades de couleurs en R base</a></li>
+<li><a href="#palettes-du-package-rcolorbrewer">Palettes du package RColorBrewer</a>
+<ul>
+<li><a href="#palettes-sequentielles-tons-clairs-sombres">Palettes sequentielles : tons clairs &gt;&gt; sombres</a></li>
+<li><a href="#palettes-divergentes-tons-sombres-clairs-sombres">Palettes divergentes : tons sombres &gt;&gt; clairs &gt;&gt; sombres</a></li>
+<li><a href="#palettes-qualitatives-contrastes-entre-couleurs-successives">Palettes qualitatives : contrastes entre couleurs successives</a></li>
+</ul></li>
+<li><a href="#palettes-du-package-viridislite">Palettes du package viridisLite</a></li>
+<li><a href="#quelques-palettes-du-package-khroma">Quelques palettes du package khroma</a></li>
+<li><a href="#afficher-une-palette-de-couleurs-avec-une-seule-commande">Afficher une palette de couleurs avec une seule commande</a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>Il y a beaucoup de couleurs disponibles dans R, mais elles ne sont pas toujours facilement visualisables. On expose ci-dessous une partie des possibilités avec R base et avec quelques packages (liste non exhaustive). Une fois n’est pas coutume, le code n’est pas réalisé avec le package <em>ggplot2</em> mais en R base.</p>
+</div>
+<div id="yellow-et-blue-pas-toujours-le-meilleur-choix" class="section level1">
+<h1><em>yellow</em> et <em>blue</em>, pas toujours le meilleur choix</h1>
+<p>La couleur jaune dans R peut etre difficile a distinguer sur fond blanc, on peut la remplacer par la couleur “or” pour y remedier. Et un texte ecrit en noir sur fond bleu n’est pas plus facile a lire, les couleurs “royalblue” et “cornflowerblue” sont de bonnes alternatives.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">plot</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="kw">c</span>(<span class="fl">0.4</span>,<span class="fl">2.6</span>), <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">axes =</span> <span class="ot">FALSE</span>, <span class="dt">frame.plot    =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">lines</span>(<span class="dv">7</span><span class="op">:</span><span class="dv">10</span>,<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">-</span><span class="fl">0.5</span>,<span class="dt">col=</span><span class="st">&quot;yellow&quot;</span>);<span class="kw">text</span>(<span class="dt">x=</span><span class="fl">8.5</span>,<span class="dt">y=</span><span class="fl">0.5</span>,<span class="dt">labels=</span><span class="st">&quot;yellow&quot;</span>,<span class="dt">cex=</span><span class="fl">0.6</span>,<span class="dt">col=</span><span class="st">&quot;yellow&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">lines</span>(<span class="dv">7</span><span class="op">:</span><span class="dv">10</span>,<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span><span class="fl">+0.5</span>,<span class="dv">2</span>),<span class="dt">col=</span> <span class="st">&quot;gold&quot;</span>);<span class="kw">text</span>(<span class="dt">x =</span><span class="fl">8.5</span>,<span class="dt">y =</span><span class="fl">2.5</span>, <span class="dt">labels=</span> <span class="st">&quot;gold&quot;</span>, <span class="dt">cex =</span><span class="fl">0.6</span>, <span class="dt">col=</span> <span class="st">&quot;gold&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">rect</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>);<span class="kw">text</span>(<span class="dt">x =</span> <span class="dv">1</span>, <span class="dt">y =</span> <span class="fl">1.5</span>, <span class="dt">labels =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">cex =</span> <span class="fl">0.6</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">rect</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;royalblue&quot;</span>);<span class="kw">text</span>(<span class="dt">x =</span> <span class="dv">3</span>, <span class="dt">y =</span> <span class="fl">1.5</span>, <span class="dt">labels =</span> <span class="st">&quot;royalblue&quot;</span>, <span class="dt">cex =</span> <span class="fl">0.6</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">rect</span>(<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">6</span>,<span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;cornflowerblue&quot;</span>);<span class="kw">text</span>(<span class="dt">x =</span> <span class="dv">5</span>, <span class="dt">y =</span> <span class="fl">1.5</span>, <span class="dt">labels =</span> <span class="st">&quot;cornflowerblue&quot;</span>, <span class="dt">cex =</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-1-1.png" height="350px" /></p>
+</div>
+<div id="liste-alphabetique-des-couleurs-de-r-base" class="section level1">
+<h1>Liste alphabetique des couleurs de R base</h1>
+<p>Ces couleurs ne sont pas specifiques a R, cf <a href="https://fr.wikipedia.org/wiki/Noms_de_couleur_X11" class="uri">https://fr.wikipedia.org/wiki/Noms_de_couleur_X11</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>liste =<span class="st"> </span><span class="kw">colors</span>()</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co"># dimensions de la grille des couleurs</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>nbcol =<span class="st"> </span><span class="dv">13</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>nbrow =<span class="st"> </span><span class="kw">ceiling</span>(<span class="kw">length</span>(liste) <span class="op">/</span><span class="st"> </span>nbcol)</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># fonction qui construit le kieme rectangle de la grille</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co"># (grille construite de haut en bas, de la 1ere a la derniere colonne)</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>rectangle =<span class="st"> </span><span class="cf">function</span>(k) {</span>
+<span id="cb2-10"><a href="#cb2-10"></a>  i =<span class="st"> </span>(k<span class="dv">-1</span>) <span class="op">%%</span><span class="st"> </span>nbrow <span class="op">+</span><span class="st"> </span><span class="dv">1</span> </span>
+<span id="cb2-11"><a href="#cb2-11"></a>  j =<span class="st"> </span>(k<span class="dv">-1</span>) <span class="op">%/%</span><span class="st"> </span>nbrow <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>  <span class="kw">rect</span>(<span class="dt">xleft =</span> j,<span class="dt">ybottom =</span> nbrow<span class="op">-</span>i,</span>
+<span id="cb2-13"><a href="#cb2-13"></a>       <span class="dt">xright =</span> j<span class="op">+</span><span class="dv">1</span>,<span class="dt">ytop =</span> nbrow<span class="op">-</span>i<span class="op">+</span><span class="dv">1</span>,<span class="dt">col =</span> liste[k])</span>
+<span id="cb2-14"><a href="#cb2-14"></a>  <span class="kw">text</span>(<span class="dt">x =</span> j<span class="fl">+0.5</span>, <span class="dt">y =</span> nbrow<span class="op">-</span>i<span class="fl">+0.5</span>, <span class="dt">labels =</span> liste[k], <span class="dt">cex =</span> <span class="fl">0.6</span>)</span>
+<span id="cb2-15"><a href="#cb2-15"></a>}</span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co"># on reduit les marges</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>omi_old =<span class="st"> </span><span class="kw">par</span>(<span class="st">&quot;omi&quot;</span>); mai_old =<span class="st"> </span><span class="kw">par</span>(<span class="st">&quot;mai&quot;</span>)</span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="kw">par</span>(<span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)); <span class="kw">par</span>(<span class="dt">mai =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="kw">plot.new</span>(); <span class="kw">plot.window</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">1</span>, nbcol<span class="op">+</span><span class="dv">1</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>,nbrow<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb2-22"><a href="#cb2-22"></a></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co"># on applique la fonction rectangle a chaque couleur de R base</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a>{<span class="kw">invisible</span>(<span class="kw">lapply</span>(<span class="kw">seq_along</span>(liste), rectangle))</span>
+<span id="cb2-25"><a href="#cb2-25"></a></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co"># on retablit les marges pour la suite du document</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="kw">par</span>(<span class="dt">omi =</span> omi_old); <span class="kw">par</span>(<span class="dt">mai =</span> mai_old)}</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-2-1.png" /><!-- --></p>
+</div>
+<div id="toutes-les-variantes-de-bleus" class="section level1">
+<h1>Toutes les variantes de bleus</h1>
+<p>Avec les expressions regulieres on peut selectionner les couleurs qui contiennent “blue” dans leur nom.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>teintes =<span class="st"> </span><span class="kw">grep</span>(<span class="st">&quot;blue&quot;</span>, <span class="kw">colors</span>(), <span class="dt">value =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">pie</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(teintes)), <span class="dt">col =</span> teintes, <span class="dt">labels =</span> teintes, <span class="dt">main =</span> <span class="st">&quot;Les bleus&quot;</span>)</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/bleus-1.png" /><!-- --></p>
+</div>
+<div id="addins" class="section level1">
+<h1>Addins</h1>
+<p>L’addin “Colour Picker” de Rstudio fournit une interface dynamique pour choisir dans la palette de couleurs standards ou pour definir la couleur de votre choix, cf <a href="https://deanattali.com/blog/colourpicker-package/" class="uri">https://deanattali.com/blog/colourpicker-package/</a>.</p>
+</div>
+<div id="arc-en-ciel-et-degrades-de-couleurs-en-r-base" class="section level1">
+<h1>Arc-en-ciel et degrades de couleurs en R base</h1>
+<p>Les degrades de 2 ou 3 couleurs conviennent bien pour des valeurs numeriques (par exemple rouge pour des correlations negatives, bleu pour les positives et blanc pour les nulles).</p>
+<p>Les palettes arc-en-ciel sont a reserver aux variables qualitatives, mais meme dans ce cas elles ne conviennent pas vraiment car elles peuvent donner une impression de proximite entre certaines modalites (par exemple les 3 bleus ci-dessous).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>ma_palette =<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;red&quot;</span>))(<span class="dv">9</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>{<span class="kw">pie</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">9</span>), <span class="dt">col =</span> ma_palette, <span class="dt">labels =</span> <span class="st">&quot;&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Dégradés entre 3 couleurs&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">pie</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">9</span>), <span class="dt">col =</span> <span class="kw">topo.colors</span>(<span class="dv">9</span>), <span class="dt">labels =</span> <span class="st">&quot;&quot;</span>, <span class="dt">main =</span>  <span class="st">&quot;Arc-en-ciel avec topo.colors&quot;</span>)}</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/palette-1.png" width="50%" /><img src="hebdor_couleurs_files/figure-html/palette-2.png" width="50%" /></p>
+</div>
+<div id="palettes-du-package-rcolorbrewer" class="section level1">
+<h1>Palettes du package RColorBrewer</h1>
+<p>Ce package propose des palettes de couleurs specifiques aux variables numeriques et aussi aux variables qualitatives, et on a la possibilite de filtrer les palettes de couleurs visibles par les daltoniens.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">library</span>(<span class="st">&quot;RColorBrewer&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">display.brewer.all</span>(<span class="dt">colorblindFriendly =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-3-1.png" /><!-- --></p>
+<div id="palettes-sequentielles-tons-clairs-sombres" class="section level3">
+<h3>Palettes sequentielles : tons clairs &gt;&gt; sombres</h3>
+<p>A utiliser par exemple pour des variables numeriques a valeurs positives.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">c</span>(<span class="st">&quot;Blues&quot;</span>, <span class="st">&quot;BuGn&quot;</span>, <span class="st">&quot;BuPu&quot;</span>, <span class="st">&quot;GnBu&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Greys&quot;</span>, <span class="st">&quot;Oranges&quot;</span>, <span class="st">&quot;OrRd&quot;</span>, <span class="st">&quot;PuBu&quot;</span>, </span>
+<span id="cb6-2"><a href="#cb6-2"></a>            <span class="st">&quot;PuBuGn&quot;</span>, <span class="st">&quot;PuRd&quot;</span>, <span class="st">&quot;Purples&quot;</span>, <span class="st">&quot;RdPu&quot;</span>, <span class="st">&quot;Reds&quot;</span>, <span class="st">&quot;YlGn&quot;</span>, <span class="st">&quot;YlGnBu&quot;</span>, <span class="st">&quot;YlOrBr&quot;</span>, <span class="st">&quot;YlOrRd&quot;</span>)) {</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="kw">pie</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">9</span>), <span class="dt">col =</span> <span class="kw">brewer.pal</span>(<span class="dv">9</span>,i), <span class="dt">labels =</span> <span class="st">&quot;&quot;</span>, <span class="dt">main =</span> i)}</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-1.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-2.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-3.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-4.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-5.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-6.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-7.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-8.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-9.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-10.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-11.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-12.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-13.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-14.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-15.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-16.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-17.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-4-18.png" width="33%" /></p>
+</div>
+<div id="palettes-divergentes-tons-sombres-clairs-sombres" class="section level3">
+<h3>Palettes divergentes : tons sombres &gt;&gt; clairs &gt;&gt; sombres</h3>
+<p>On peut les utiliser pour visualiser une matrice de correlations.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">c</span>(<span class="st">&quot;BrBG&quot;</span>, <span class="st">&quot;PiYG&quot;</span>, <span class="st">&quot;PRGn&quot;</span>, <span class="st">&quot;PuOr&quot;</span>, <span class="st">&quot;RdBu&quot;</span>, <span class="st">&quot;RdGy&quot;</span>, <span class="st">&quot;RdYlBu&quot;</span>, <span class="st">&quot;RdYlGn&quot;</span>, <span class="st">&quot;Spectral&quot;</span>)) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="kw">pie</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">11</span>), <span class="dt">col =</span> <span class="kw">brewer.pal</span>(<span class="dv">11</span>,i), <span class="dt">labels =</span> <span class="st">&quot;&quot;</span>, <span class="dt">main =</span> i)}</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-1.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-2.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-3.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-4.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-5.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-6.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-7.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-8.png" width="33%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-5-9.png" width="33%" /></p>
+</div>
+<div id="palettes-qualitatives-contrastes-entre-couleurs-successives" class="section level3">
+<h3>Palettes qualitatives : contrastes entre couleurs successives</h3>
+<p>Palettes tres adaptees aux variables qualitatives avec au plus une dizaine de modalites.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>m =<span class="st"> </span><span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">9</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">8</span>,<span class="dv">12</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>palettes =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Accent&quot;</span>, <span class="st">&quot;Dark2&quot;</span>, <span class="st">&quot;Paired&quot;</span>, <span class="st">&quot;Pastel1&quot;</span>, <span class="st">&quot;Pastel2&quot;</span>, <span class="st">&quot;Set1&quot;</span>, <span class="st">&quot;Set2&quot;</span>, <span class="st">&quot;Set3&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>) {</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="kw">pie</span>(<span class="kw">rep</span>(<span class="dv">1</span>,m[i]),</span>
+<span id="cb8-6"><a href="#cb8-6"></a>      <span class="dt">col =</span> <span class="kw">brewer.pal</span>(m[i],palettes[i]), <span class="dt">labels =</span> <span class="st">&quot;&quot;</span>, <span class="dt">main =</span> palettes[i])}</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-1.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-2.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-3.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-4.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-5.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-6.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-7.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-6-8.png" width="25%" /></p>
+</div>
+</div>
+<div id="palettes-du-package-viridislite" class="section level1">
+<h1>Palettes du package viridisLite</h1>
+<p>Quelques jolies palettes de couleurs sequentielles concues a l’origine dans des bibliotheques Python.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">library</span>(<span class="st">&quot;viridisLite&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a>liste =<span class="st"> </span><span class="kw">list</span>(<span class="dt">magma =</span> magma, <span class="dt">inferno =</span> inferno, <span class="dt">plasma =</span> plasma, <span class="dt">viridis =</span> viridis)</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
+<span id="cb9-6"><a href="#cb9-6"></a>  <span class="kw">pie</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">9</span>), <span class="dt">col =</span> liste[[i]](<span class="dv">9</span>), </span>
+<span id="cb9-7"><a href="#cb9-7"></a>      <span class="dt">labels =</span> <span class="st">&quot;&quot;</span>, <span class="dt">main =</span>  <span class="kw">names</span>(liste)[i])}</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-7-1.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-7-2.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-7-3.png" width="25%" /><img src="hebdor_couleurs_files/figure-html/unnamed-chunk-7-4.png" width="25%" /></p>
+</div>
+<div id="quelques-palettes-du-package-khroma" class="section level1">
+<h1>Quelques palettes du package khroma</h1>
+<p>Trois palettes respectivement qualitatives, divergentes et sequentielles.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">library</span>(<span class="st">&quot;khroma&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>{<span class="kw">plot_scheme</span>(<span class="kw">colour</span>(<span class="st">&quot;muted&quot;</span>)(<span class="dv">9</span>), <span class="dt">colours =</span> <span class="ot">TRUE</span>, <span class="dt">names =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="fl">0.9</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">plot_scheme</span>(<span class="kw">colour</span>(<span class="st">&quot;sunset&quot;</span>)(<span class="dv">9</span>), <span class="dt">colours =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="fl">0.9</span>)</span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="kw">plot_scheme</span>(<span class="kw">colour</span>(<span class="st">&quot;YlOrBr&quot;</span>)(<span class="dv">9</span>), <span class="dt">colours =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="fl">0.9</span>)}</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/khroma-1.png" /><img src="hebdor_couleurs_files/figure-html/khroma-2.png" /><img src="hebdor_couleurs_files/figure-html/khroma-3.png" /></p>
+</div>
+<div id="afficher-une-palette-de-couleurs-avec-une-seule-commande" class="section level1">
+<h1>Afficher une palette de couleurs avec une seule commande</h1>
+<p>Si vous n’aimez pas les diagrammes circulaires ou les grilles precedentes pour visualiser une palette de couleurs, ou que vous avez oublie le code pour les realiser, la fonction <em>show_col</em> du package <em>scales</em> sera votre amie :</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>scales<span class="op">::</span><span class="kw">show_col</span>(viridis<span class="op">::</span><span class="kw">plasma</span>(<span class="dv">10</span>))</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/show_col-1.png" /><!-- --></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>cex =<span class="st"> </span><span class="fl">0.6</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>scales<span class="op">::</span><span class="kw">show_col</span>(<span class="kw">colors</span>()[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>], <span class="dt">cex_label =</span> cex)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>scales<span class="op">::</span><span class="kw">show_col</span>(<span class="kw">colors</span>()[<span class="dv">101</span><span class="op">:</span><span class="dv">200</span>], <span class="dt">cex_label =</span> cex)</span>
+<span id="cb12-4"><a href="#cb12-4"></a>scales<span class="op">::</span><span class="kw">show_col</span>(<span class="kw">colors</span>()[<span class="dv">201</span><span class="op">:</span><span class="dv">300</span>], <span class="dt">cex_label =</span> cex)</span>
+<span id="cb12-5"><a href="#cb12-5"></a>scales<span class="op">::</span><span class="kw">show_col</span>(<span class="kw">colors</span>()[<span class="dv">301</span><span class="op">:</span><span class="dv">400</span>], <span class="dt">cex_label =</span> cex)</span>
+<span id="cb12-6"><a href="#cb12-6"></a>scales<span class="op">::</span><span class="kw">show_col</span>(<span class="kw">colors</span>()[<span class="dv">401</span><span class="op">:</span><span class="dv">500</span>], <span class="dt">cex_label =</span> cex)</span>
+<span id="cb12-7"><a href="#cb12-7"></a>scales<span class="op">::</span><span class="kw">show_col</span>(<span class="kw">colors</span>()[<span class="dv">501</span><span class="op">:</span><span class="dv">600</span>], <span class="dt">cex_label =</span> cex)</span>
+<span id="cb12-8"><a href="#cb12-8"></a>scales<span class="op">::</span><span class="kw">show_col</span>(<span class="kw">colors</span>()[<span class="dv">601</span><span class="op">:</span><span class="dv">657</span>], <span class="dt">cex_label =</span> cex)</span></code></pre></div>
+<p><img src="hebdor_couleurs_files/figure-html/show_col2-1.png" width="50%" /><img src="hebdor_couleurs_files/figure-html/show_col2-2.png" width="50%" /><img src="hebdor_couleurs_files/figure-html/show_col2-3.png" width="50%" /><img src="hebdor_couleurs_files/figure-html/show_col2-4.png" width="50%" /><img src="hebdor_couleurs_files/figure-html/show_col2-5.png" width="50%" /><img src="hebdor_couleurs_files/figure-html/show_col2-6.png" width="50%" /><img src="hebdor_couleurs_files/figure-html/show_col2-7.png" width="50%" /></p>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

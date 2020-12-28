@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Quelques trucs a connaitre sur le package formattable  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_formattable_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Quelques trucs a connaitre sur le package <em>formattable</em> <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Controler la largeur des barres</a></li>
+<li><a href="#exporter-le-tableau-en-html">Exporter le tableau en html</a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Controler la largeur des barres</h1>
+<p>La largeur des barres de la 1ere colonne ci-dessous est un % de la largeur de la colonne, qui est elle-meme proportionnelle a la longueur du nom de la colonne, ce qui peut donner un resultat assez laid.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># pour la manip de donnees</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># pour les widgets javascript (notamment leur export en html)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(<span class="st">&quot;htmlwidgets&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># pour faire de jolies tables</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">library</span>(<span class="st">&quot;formattable&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">set.seed</span>(<span class="dv">2018</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>ma_table =<span class="st"> </span>iris[<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">150</span>,<span class="dv">3</span>),<span class="op">-</span><span class="dv">5</span>]<span class="op">-</span><span class="dv">2</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="kw">names</span>(ma_table) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;un_nom_de_champ_tres_long&quot;</span>, <span class="kw">colnames</span>(ma_table)[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="kw">rownames</span>(ma_table) =<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="kw">formattable</span>(ma_table,</span>
+<span id="cb1-16"><a href="#cb1-16"></a>            <span class="kw">list</span>(<span class="dt">un_nom_de_champ_tres_long =</span> <span class="kw">color_bar</span>(<span class="st">&quot;cornflowerblue&quot;</span>),</span>
+<span id="cb1-17"><a href="#cb1-17"></a>                 <span class="dt">Sepal.Width =</span> <span class="kw">color_bar</span>(<span class="st">&quot;gold&quot;</span>),</span>
+<span id="cb1-18"><a href="#cb1-18"></a>                 <span class="dt">Petal.Length =</span> <span class="kw">formatter</span>(<span class="st">&quot;span&quot;</span>, <span class="dt">style =</span> x <span class="op">~</span><span class="st"> </span><span class="kw">ifelse</span>(x <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="st">&quot;color:green&quot;</span>, <span class="st">&quot;color:orange&quot;</span>)),</span>
+<span id="cb1-19"><a href="#cb1-19"></a>                 <span class="dt">Petal.Width =</span> <span class="kw">color_tile</span>(<span class="st">&quot;pink&quot;</span>, <span class="st">&quot;transparent&quot;</span>)))</span></code></pre></div>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:right;">
+un_nom_de_champ_tres_long
+</th>
+<th style="text-align:right;">
+Sepal.Width
+</th>
+<th style="text-align:right;">
+Petal.Length
+</th>
+<th style="text-align:right;">
+Petal.Width
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 70.37%">3.8</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 100.00%">2.0</span>
+</td>
+<td style="text-align:right;">
+<span style="color:green">-0.8</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffc0cb">-1.8</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 100.00%">5.4</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 40.00%">0.8</span>
+</td>
+<td style="text-align:right;">
+<span style="color:orange">4.1</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff8f9">-0.1</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 90.74%">4.9</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 55.00%">1.1</span>
+</td>
+<td style="text-align:right;">
+<span style="color:orange">3.4</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.1</span>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Solution : on redefinit la fonction <em>formattable::color_bar</em> en modifiant un peu son code : on remplace <em>width = percent(fun(as.numeric(x), …))</em> par <em>width = paste0(fixedWidth * fun(as.numeric(x), …),“px”)</em>. La largeur des barres des deux 1eres colonnes devient proportionnelle a une largeur fixe exprimee en pixels.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>my_color_bar &lt;-<span class="st"> </span><span class="cf">function</span> (<span class="dt">color =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="dt">fun =</span> <span class="st">&quot;proportion&quot;</span>, <span class="dt">fixedWidth=</span><span class="dv">100</span>,...) {</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  fun &lt;-<span class="st"> </span><span class="kw">match.fun</span>(fun)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="kw">formatter</span>(<span class="st">&quot;span&quot;</span>, </span>
+<span id="cb2-4"><a href="#cb2-4"></a>            <span class="dt">style =</span> <span class="cf">function</span>(x) <span class="kw">style</span>(<span class="dt">display =</span> <span class="st">&quot;inline-block&quot;</span>, </span>
+<span id="cb2-5"><a href="#cb2-5"></a>                                      <span class="dt">direction =</span> <span class="st">&quot;rtl&quot;</span>, <span class="st">`</span><span class="dt">border-radius</span><span class="st">`</span> =<span class="st"> &quot;4px&quot;</span>, <span class="st">`</span><span class="dt">padding-right</span><span class="st">`</span> =<span class="st"> &quot;2px&quot;</span>, </span>
+<span id="cb2-6"><a href="#cb2-6"></a>                                      <span class="st">`</span><span class="dt">background-color</span><span class="st">`</span> =<span class="st"> </span><span class="kw">csscolor</span>(color), </span>
+<span id="cb2-7"><a href="#cb2-7"></a>                                      <span class="dt">width =</span> <span class="kw">paste0</span>(fixedWidth <span class="op">*</span><span class="st"> </span><span class="kw">fun</span>(<span class="kw">as.numeric</span>(x), ...),<span class="st">&quot;px&quot;</span>)))</span>
+<span id="cb2-8"><a href="#cb2-8"></a>}</span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a>(<span class="dt">widget =</span> <span class="kw">formattable</span>(ma_table,</span>
+<span id="cb2-11"><a href="#cb2-11"></a>                     <span class="kw">list</span>(<span class="dt">un_nom_de_champ_tres_long =</span> <span class="kw">my_color_bar</span>(<span class="st">&quot;cornflowerblue&quot;</span>),</span>
+<span id="cb2-12"><a href="#cb2-12"></a>                          <span class="dt">Sepal.Width =</span> <span class="kw">my_color_bar</span>(<span class="st">&quot;gold&quot;</span>),</span>
+<span id="cb2-13"><a href="#cb2-13"></a>                          <span class="dt">Petal.Length =</span> <span class="kw">formatter</span>(<span class="st">&quot;span&quot;</span>, <span class="dt">style =</span> x <span class="op">~</span><span class="st"> </span><span class="kw">ifelse</span>(x <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="st">&quot;color:green&quot;</span>, <span class="st">&quot;color:orange&quot;</span>)),</span>
+<span id="cb2-14"><a href="#cb2-14"></a>                          <span class="dt">Petal.Width =</span> <span class="kw">color_tile</span>(<span class="st">&quot;pink&quot;</span>, <span class="st">&quot;transparent&quot;</span>))))</span></code></pre></div>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:right;">
+un_nom_de_champ_tres_long
+</th>
+<th style="text-align:right;">
+Sepal.Width
+</th>
+<th style="text-align:right;">
+Petal.Length
+</th>
+<th style="text-align:right;">
+Petal.Width
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 70.3703703703704px">3.8</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 100px">2.0</span>
+</td>
+<td style="text-align:right;">
+<span style="color:green">-0.8</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffc0cb">-1.8</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 100px">5.4</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 40px">0.8</span>
+</td>
+<td style="text-align:right;">
+<span style="color:orange">4.1</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #fff8f9">-0.1</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 90.7407407407407px">4.9</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 55px">1.1</span>
+</td>
+<td style="text-align:right;">
+<span style="color:orange">3.4</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ffffff">0.1</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exporter-le-tableau-en-html" class="section level1">
+<h1>Exporter le tableau en html</h1>
+<p>Appliquer la fonction <em>saveWidget</em> marche avec les htmlwidgets mais avec <em>formattable</em> on a une erreur.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># pour exporter le message d&#39;erreur dans le html plutot que dans la console de Rstudio</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">options</span>(<span class="dt">try.outFile =</span> <span class="kw">stdout</span>())</span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># try : pour intercepter le message d&#39;erreur en empechant le plantage du script</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">try</span>(<span class="kw">saveWidget</span>(widget, <span class="dt">file =</span> <span class="kw">file.path</span>(<span class="kw">getwd</span>(), <span class="st">&quot;ma_table.html&quot;</span>)))</span></code></pre></div>
+<pre><code>Error in .getNamespace(pkg) : 
+  type / longueur incorrect (symbol / 0) dans l&#39;allocation de vecteur</code></pre>
+<p>Si on convertit en htmlwidget plus de probleme, <em>ma_table.html</em> est cree dans le repertoire de travail.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">saveWidget</span>(<span class="kw">as.htmlwidget</span>(widget, <span class="dt">width =</span> <span class="st">&#39;40%&#39;</span>), <span class="dt">file =</span> <span class="kw">file.path</span>(<span class="kw">getwd</span>(), <span class="st">&quot;ma_table.html&quot;</span>))</span></code></pre></div>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

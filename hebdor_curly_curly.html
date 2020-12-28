@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Programmation non interactive sous dplyr avec curly curly  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_curly_curly_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Programmation non interactive sous <em>dplyr</em> avec curly curly <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#fonctions-a-la-dplyr-avec">Fonctions “a la dplyr” avec <em>{{}}</em></a></li>
+<li><a href="#exemples-de-fonctions-et-boucles-avec-les-noms-entre-guillemets">Exemples de fonctions et boucles avec les noms entre guillemets</a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>Quand on veut appliquer une meme operation un grand nombre de fois, on cree souvent une fonction qui realise cette operation et on l’applique de facon repetee avec une boucle. Le package <em>dplyr</em> et sa syntaxe sans guillemets peut se retrouver en difficulte dans cette situation, et plusieurs evolutions du package ont tente d’y remedier :</p>
+<ul>
+<li>les fonctions comme <em>mutate_</em> desormais obsoletes</li>
+<li>les fonctions <em>mutate_if</em>, <em>mutate_at</em>, … qui n’acceptent que des fonctions d’une variable, impossible donc de calculer des ratios pour l’evolution d’un indicateur d’une annee a l’autre</li>
+<li>les “!!”, “enquo” et autres horreurs du meme genre qui remplacent le tout aussi horrible “eval(parse(paste(…)))” de R base</li>
+</ul>
+<p>Dans l’article <a href="https://www.tidyverse.org/articles/2019/06/rlang-0-4-0/" class="uri">https://www.tidyverse.org/articles/2019/06/rlang-0-4-0/</a>, Rstudio fait amende honorable et choisit de revenir a plus de simplicite et d’efficacite avec le nouvel operateur “{{ }}” (prononcer <em>curly-curly</em>). Et l’article plus recent <a href="https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/" class="uri">https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/</a> complete le paysage avec l’operateur <em>{}</em>.</p>
+<p>Pour resumer ce qu’on va voir dans les exemples qui suivent :</p>
+<ul>
+<li>La syntaxe <em>{{}}</em> permet de creer des fonctions parametrees par des noms de colonnes sans guillemets, comme avec les fonctions usuelles de <em>dplyr</em></li>
+<li>La syntaxe <em>{}:=</em> permet de nommer un champ calcule a partir d’un nom entre guillemets</li>
+<li>La syntaxe <em>.data[[]]</em> permet de manipuler des colonnes a partir de leur nom entre guillemets</li>
+</ul>
+</div>
+<div id="fonctions-a-la-dplyr-avec" class="section level1">
+<h1>Fonctions “a la dplyr” avec <em>{{}}</em></h1>
+<p>Le code <em>dplyr</em> classique ne fonctionne pas bien a l’interieur d’une fonction, mais en entourant tous les parametres avec 2 accolades on regle la plupart des difficultes :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>max_by &lt;-<span class="st"> </span><span class="cf">function</span>(data, var, by) {</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>({{ by }}) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">maximum =</span> <span class="kw">max</span>({{ var }}, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb1-5"><a href="#cb1-5"></a>}</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by</span>(height)</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by</span>(height, <span class="dt">by =</span> gender)</span></code></pre></div>
+<pre><code># A tibble: 1 x 1
+  maximum
+    &lt;int&gt;
+1     264
+# A tibble: 3 x 2
+  gender    maximum
+  &lt;chr&gt;       &lt;int&gt;
+1 feminine      213
+2 masculine     264
+3 &lt;NA&gt;          183</code></pre>
+<p>On peut passer des formules de calculs si on veut :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>summarise_by &lt;-<span class="st"> </span><span class="cf">function</span>(data, ..., by) {</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>({{ by }}) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(...)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>}</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_by</span>(<span class="dt">average =</span> <span class="kw">mean</span>(height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb3-6"><a href="#cb3-6"></a>                          <span class="dt">maximum =</span> <span class="kw">max</span>(height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb3-7"><a href="#cb3-7"></a>                          <span class="dt">by =</span> gender)</span></code></pre></div>
+<pre><code># A tibble: 3 x 3
+  gender    average maximum
+  &lt;chr&gt;       &lt;dbl&gt;   &lt;int&gt;
+1 feminine     165.     213
+2 masculine    177.     264
+3 &lt;NA&gt;         181.     183</code></pre>
+<p>Et on peut utiliser les <em>{}</em> simples suivis de <em>:=</em> pour nommer le champ calcule avec une chaine de caracteres :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>max_by_nom &lt;-<span class="st"> </span><span class="cf">function</span>(data, var, by, <span class="dt">nom =</span> <span class="st">&quot;mon_champ&quot;</span>) {</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>({{ by }}) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="st">&quot;{nom}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">max</span>({{ var }}, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb5-3"><a href="#cb5-3"></a>}</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by_nom</span>(height, <span class="dt">by =</span> gender)</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by_nom</span>(height, <span class="dt">by =</span> gender, <span class="dt">nom =</span> <span class="st">&quot;ma_variable&quot;</span>)</span></code></pre></div>
+<pre><code># A tibble: 3 x 2
+  gender    mon_champ
+  &lt;chr&gt;         &lt;int&gt;
+1 feminine        213
+2 masculine       264
+3 &lt;NA&gt;            183
+# A tibble: 3 x 2
+  gender    ma_variable
+  &lt;chr&gt;           &lt;int&gt;
+1 feminine          213
+2 masculine         264
+3 &lt;NA&gt;              183</code></pre>
+</div>
+<div id="exemples-de-fonctions-et-boucles-avec-les-noms-entre-guillemets" class="section level1">
+<h1>Exemples de fonctions et boucles avec les noms entre guillemets</h1>
+<p>On utilise ici la notation classique de R base <em>.data[[ma_variable]]</em> dans les fonctions de <em>dplyr</em>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>max_by_char &lt;-<span class="st"> </span><span class="cf">function</span>(data, var_char, by_char) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(.data[[by_char]]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">maximum =</span> <span class="kw">max</span>(.data[[var_char]], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb7-3"><a href="#cb7-3"></a>}</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by_char</span>(<span class="st">&quot;height&quot;</span>, <span class="dt">by =</span> <span class="st">&quot;gender&quot;</span>)</span></code></pre></div>
+<pre><code># A tibble: 3 x 2
+  gender    maximum
+  &lt;chr&gt;       &lt;int&gt;
+1 feminine      213
+2 masculine     264
+3 &lt;NA&gt;          183</code></pre>
+<p>Et pour finir on realise une boucle sur 2 champs.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># fonction qui calcule un ratio</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>ratio_char &lt;-<span class="st"> </span><span class="cf">function</span>(data, num_char, denom_char, ratio_char) {</span>
+<span id="cb9-3"><a href="#cb9-3"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;{ratio_char}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span>.data[[num_char]] <span class="op">/</span><span class="st"> </span>.data[[denom_char]])</span>
+<span id="cb9-4"><a href="#cb9-4"></a>}</span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a>vect_numerateur =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Sepal.Width&quot;</span>, <span class="st">&quot;Sepal.Length&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>vect_denom =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Petal.Width&quot;</span>, <span class="st">&quot;Petal.Length&quot;</span>)</span>
+<span id="cb9-8"><a href="#cb9-8"></a>vect_ratio =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;ratio_W&quot;</span>, <span class="st">&quot;ratio_L&quot;</span>)</span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a>dtf =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Sepal.Length <span class="op">&gt;</span><span class="st"> </span><span class="fl">7.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>Species)</span>
+<span id="cb9-11"><a href="#cb9-11"></a></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(vect_ratio)) {</span>
+<span id="cb9-13"><a href="#cb9-13"></a>  dtf =<span class="st"> </span>dtf <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">ratio_char</span>(vect_numerateur[i], vect_denom[i], vect_ratio[i])</span>
+<span id="cb9-14"><a href="#cb9-14"></a>}</span>
+<span id="cb9-15"><a href="#cb9-15"></a></span>
+<span id="cb9-16"><a href="#cb9-16"></a>dtf</span></code></pre></div>
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width  ratio_W  ratio_L
+1          7.6         3.0          6.6         2.1 1.428571 1.151515
+2          7.3         2.9          6.3         1.8 1.611111 1.158730
+3          7.7         3.8          6.7         2.2 1.727273 1.149254
+4          7.7         2.6          6.9         2.3 1.130435 1.115942
+5          7.7         2.8          6.7         2.0 1.400000 1.149254
+6          7.4         2.8          6.1         1.9 1.473684 1.213115
+7          7.9         3.8          6.4         2.0 1.900000 1.234375
+8          7.7         3.0          6.1         2.3 1.304348 1.262295</code></pre>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

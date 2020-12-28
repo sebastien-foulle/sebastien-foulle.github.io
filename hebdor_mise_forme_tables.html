@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Mise en forme des tables  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.16/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="site_libs/react-16.12.0/react.min.js"></script>
+<script src="site_libs/react-16.12.0/react-dom.min.js"></script>
+<script src="site_libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="site_libs/reactable-binding-0.2.3/reactable.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.flash.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_mise_forme_tables_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Mise en forme des tables <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#mises-en-forme-simples-avec">Mises en forme simples avec</a>
+<ul>
+<li><a href="#kable">kable</a></li>
+<li><a href="#dt">DT</a></li>
+<li><a href="#reactable">reactable</a></li>
+</ul></li>
+<li><a href="#mises-en-forme-complexes-avec">Mises en forme complexes avec</a>
+<ul>
+<li><a href="#kable-et-kableextra">kable et kableExtra</a></li>
+<li><a href="#dt-1">DT</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>Plusieurs packages permettent de mettre en forme les tables, dont <em>kable</em>, <em>formattable</em>, <em>DT</em> et <em>reactable</em>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;knitr&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(<span class="st">&quot;kableExtra&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(<span class="st">&quot;DT&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">library</span>(<span class="st">&quot;formattable&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">library</span>(<span class="st">&quot;reactable&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">library</span>(<span class="st">&quot;htmltools&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">library</span>(<span class="st">&quot;sparkline&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co"># une table avec des rownames et pas mal de colonnes</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>mtcars2 =<span class="st"> </span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>tibble<span class="op">::</span><span class="kw">rownames_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;modeles&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(modeles, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;marque&quot;</span>, <span class="st">&quot;modeles&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>, <span class="dt">extra =</span> <span class="st">&quot;merge&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(modeles)) <span class="op">%&gt;%</span><span class="st"> </span>tibble<span class="op">::</span><span class="kw">column_to_rownames</span>(<span class="dt">var =</span> <span class="st">&quot;modeles&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="st">  </span><span class="kw">select</span>(marque, mpg, cyl, disp, hp, drat)</span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co"># une table a 3 lignes</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a>lignes_gardees =<span class="st"> </span><span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">131</span>, <span class="dv">140</span>)</span>
+<span id="cb1-19"><a href="#cb1-19"></a>ma_table =<span class="st"> </span><span class="kw">cbind</span>(iris[lignes_gardees,<span class="op">-</span><span class="dv">5</span>]<span class="op">-</span><span class="fl">1.5</span>, <span class="dt">Species =</span> iris[lignes_gardees, <span class="st">&quot;Species&quot;</span>])</span>
+<span id="cb1-20"><a href="#cb1-20"></a>ma_table<span class="op">$</span>Petal.Width =<span class="st"> </span><span class="kw">abs</span>(ma_table<span class="op">$</span>Petal.Width)</span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="kw">rownames</span>(ma_table) =<span class="st"> </span><span class="ot">NULL</span></span></code></pre></div>
+</div>
+<div id="mises-en-forme-simples-avec" class="section level1">
+<h1>Mises en forme simples avec</h1>
+<div id="kable" class="section level3">
+<h3>kable</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">kable</span>(ma_table)</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+Sepal.Length
+</th>
+<th style="text-align:right;">
+Sepal.Width
+</th>
+<th style="text-align:right;">
+Petal.Length
+</th>
+<th style="text-align:right;">
+Petal.Width
+</th>
+<th style="text-align:left;">
+Species
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+4.3
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+-0.3
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:left;">
+setosa
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5.9
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:left;">
+virginica
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5.4
+</td>
+<td style="text-align:right;">
+1.6
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:left;">
+virginica
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="dt" class="section level3">
+<h3>DT</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">datatable</span>(ma_table)</span></code></pre></div>
+<div id="htmlwidget-3f5032271fa75ee52ea4" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3f5032271fa75ee52ea4">{"x":{"filter":"none","data":[["1","2","3"],[4.3,5.9,5.4],[2.5,1.3,1.6],[-0.3,4.6,3.9],[1.3,0.4,0.6],["setosa","virginica","virginica"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="reactable" class="section level3">
+<h3>reactable</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">reactable</span>(ma_table)</span></code></pre></div>
+<div id="htmlwidget-de465df344c610be7acc" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-de465df344c610be7acc">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Sepal.Length":[4.3,5.9,5.4],"Sepal.Width":[2.5,1.3,1.6],"Petal.Length":[-0.3,4.6,3.9],"Petal.Width":[1.3,0.4,0.6],"Species":["setosa","virginica","virginica"]},"columns":[{"accessor":"Sepal.Length","name":"Sepal.Length","type":"numeric"},{"accessor":"Sepal.Width","name":"Sepal.Width","type":"numeric"},{"accessor":"Petal.Length","name":"Petal.Length","type":"numeric"},{"accessor":"Petal.Width","name":"Petal.Width","type":"numeric"},{"accessor":"Species","name":"Species","type":"factor"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"7f7115495bb88e98f4a6a7a644b09b5d","key":"7f7115495bb88e98f4a6a7a644b09b5d"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="mises-en-forme-complexes-avec" class="section level1">
+<h1>Mises en forme complexes avec</h1>
+<div id="kable-et-kableextra" class="section level3">
+<h3>kable et kableExtra</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">kable</span>(ma_table, <span class="dt">format =</span> <span class="st">&quot;html&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot;Sepal&quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Petal&quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Species&quot;</span> =<span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot;numeric&quot;</span> =<span class="st"> </span><span class="dv">4</span>, <span class="st">&quot;character&quot;</span> =<span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">add_header_above</span>(<span class="kw">c</span>( <span class="st">&quot;all&quot;</span> =<span class="st"> </span><span class="dv">5</span>))</span></code></pre></div>
+<table class="table table-striped table-bordered" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="5">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+all
+</div>
+</th>
+</tr>
+<tr>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+numeric
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+character
+</div>
+</th>
+</tr>
+<tr>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Sepal
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Petal
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Species
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:right;">
+Sepal.Length
+</th>
+<th style="text-align:right;">
+Sepal.Width
+</th>
+<th style="text-align:right;">
+Petal.Length
+</th>
+<th style="text-align:right;">
+Petal.Width
+</th>
+<th style="text-align:left;">
+Species
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+4.3
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+-0.3
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:left;">
+setosa
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5.9
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:left;">
+virginica
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5.4
+</td>
+<td style="text-align:right;">
+1.6
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:left;">
+virginica
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="dt-1" class="section level3">
+<h3>DT</h3>
+<p>Script R base sur la documentation Javascript :</p>
+<ul>
+<li>configuration pour certaines colonnes <a href="https://rstudio.github.io/DT/options.html" class="uri">https://rstudio.github.io/DT/options.html</a></li>
+<li>pour ajouter un bouton
+<ul>
+<li><a href="https://datatables.net/extensions/buttons/built-in" class="uri">https://datatables.net/extensions/buttons/built-in</a></li>
+<li><a href="https://datatables.net/reference/option/buttons" class="uri">https://datatables.net/reference/option/buttons</a></li>
+<li><a href="https://datatables.net/reference/button/" class="uri">https://datatables.net/reference/button/</a></li>
+<li><a href="https://datatables.net/reference/button/colvis" class="uri">https://datatables.net/reference/button/colvis</a></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">datatable</span>(<span class="dt">data =</span> mtcars2,</span>
+<span id="cb6-2"><a href="#cb6-2"></a>          <span class="co"># on enleve les rownames et  on ajoute un bouton</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>          <span class="dt">rownames =</span> <span class="ot">FALSE</span>, </span>
+<span id="cb6-4"><a href="#cb6-4"></a>          <span class="dt">extensions =</span> <span class="st">&#39;Buttons&#39;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>          <span class="co">### parametrage des options</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>          <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">5</span>,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>          <span class="co"># texte a afficher en francais plutot qu&#39;en anglais</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>          <span class="dt">language =</span> <span class="kw">list</span>(</span>
+<span id="cb6-9"><a href="#cb6-9"></a>            <span class="dt">info =</span> <span class="st">&#39;Extrait des enregistrements de _START_ a _END_&#39;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10"></a>            <span class="dt">paginate =</span> <span class="kw">list</span>(<span class="dt">previous =</span> <span class="st">&#39;Precedent&#39;</span>, <span class="st">`</span><span class="dt">next</span><span class="st">`</span> =<span class="st"> &#39;Suivant&#39;</span>),</span>
+<span id="cb6-11"><a href="#cb6-11"></a>            <span class="dt">sLengthMenu =</span> <span class="st">&quot;Afficher _MENU_ elements&quot;</span>),</span>
+<span id="cb6-12"><a href="#cb6-12"></a>          <span class="co">#  on masque les colonnes 4 et 5</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>          <span class="dt">columnDefs =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">visible =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb6-14"><a href="#cb6-14"></a>                                 <span class="dt">targets =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>))),</span>
+<span id="cb6-15"><a href="#cb6-15"></a>          <span class="co"># elements a afficher parmi les 5 &quot;lftip &quot; qui constituent le</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a>          <span class="co"># Document Object Model :</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>          <span class="co"># l = Length menu, f = Filtering box, t = Table, i = Information summary, </span></span>
+<span id="cb6-18"><a href="#cb6-18"></a>          <span class="co"># p = Pagination control. On peut mettre un B pour ajouter un bouton</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a>          <span class="dt">dom =</span> <span class="st">&#39;Btip&#39;</span>,</span>
+<span id="cb6-20"><a href="#cb6-20"></a>          <span class="co"># extend pour le type du bouton qui va masquer certaines des 5 1eres colonnes</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a>          <span class="dt">buttons =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">extend =</span> <span class="st">&#39;colvis&#39;</span>, </span>
+<span id="cb6-22"><a href="#cb6-22"></a>                              <span class="dt">className =</span> <span class="st">&quot;btn btn-default&quot;</span>, </span>
+<span id="cb6-23"><a href="#cb6-23"></a>                              <span class="dt">text =</span> <span class="st">&quot;Afficher / cacher des colonnes&quot;</span>, </span>
+<span id="cb6-24"><a href="#cb6-24"></a>                              <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">4</span>))),</span>
+<span id="cb6-25"><a href="#cb6-25"></a>          <span class="co"># echappement du code HTML pour eviter pb de securite</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a>          <span class="dt">escape =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb6-27"><a href="#cb6-27"></a>          <span class="co"># jolies couleurs pr l&#39;entete, avec du javascript,</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a>          <span class="co"># mais ca ne marche pas dans ce markdown qui impose son vert cayman :-)</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a>          <span class="dt">initComplete =</span> DT<span class="op">::</span><span class="kw">JS</span>(</span>
+<span id="cb6-30"><a href="#cb6-30"></a>            <span class="st">&quot;function(settings, json) {&quot;</span>,</span>
+<span id="cb6-31"><a href="#cb6-31"></a>            <span class="st">&quot;$(this.api().table().header()).css({&#39;background-color&#39;: &#39;#428bca&#39;,</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="st">            &#39;color&#39;: &#39;#fff&#39;});&quot;</span>,<span class="st">&quot;}&quot;</span>)))</span></code></pre></div>
+<div id="htmlwidget-3af4c4d5e411c80a348a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3af4c4d5e411c80a348a">{"x":{"filter":"none","extensions":["Buttons"],"data":[["Mazda","Mazda","Datsun","Hornet","Hornet","Duster","Merc","Merc","Merc","Merc","Merc","Merc","Merc","Cadillac","Lincoln","Chrysler","Fiat","Honda","Toyota","Toyota","Dodge","AMC","Camaro","Pontiac","Fiat","Porsche","Lotus","Ford","Ferrari","Maserati","Volvo"],[21,21,22.8,21.4,18.7,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>marque<\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"language":{"info":"Extrait des enregistrements de _START_ a _END_","paginate":{"previous":"Precedent","next":"Suivant"},"sLengthMenu":"Afficher _MENU_ elements"},"columnDefs":[{"visible":false,"targets":[4,5]},{"className":"dt-right","targets":[1,2,3,4,5]}],"dom":"Btip","buttons":[{"extend":"colvis","className":"btn btn-default","text":"Afficher / cacher des colonnes","columns":[0,1,2,3,4]}],"escape":true,"initComplete":"function(settings, json) {\n$(this.api().table().header()).css({'background-color': '#428bca',\n            'color': '#fff'});\n}","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":["options.initComplete"],"jsHooks":[]}</script>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

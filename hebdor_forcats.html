@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Les facteurs avec forcats  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_forcats_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Les facteurs avec <em>forcats</em> <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#reordonner-les-modalites">Reordonner les modalites</a></li>
+<li><a href="#regroupements-de-modalites">Regroupements de modalites</a></li>
+<li><a href="#recodage-de-modalites">Recodage de modalites</a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>Il y a beaucoup d’operations utiles sur les facteurs, que ce soit pour ameliorer le rendu d’un graphique ou d’un tableau, ou lors d’une modelisation pour des raisons plus techniques (modalites rares, valeurs manquantes qui font planter une fonction, …). Le package <em>forcats</em> de Rstudio permet de realiser toutes ces operations facilement, comme le montrent les exemples ci-dessous.</p>
+<p>Les donnees pour la suite du code :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;forcats&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># pour recentrer les titres en ggplot2</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>tips2 =<span class="st"> </span>reshape<span class="op">::</span>tips</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a>titanic =<span class="st"> </span>titanic<span class="op">::</span>titanic_train[<span class="dv">10</span><span class="op">:</span><span class="dv">20</span>,] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(Pclass, Age, Sex, Survived) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Survived =</span> <span class="kw">factor</span>(Survived),</span>
+<span id="cb1-12"><a href="#cb1-12"></a>         <span class="dt">Age =</span> <span class="kw">cut</span>(Age, <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">80</span>), </span>
+<span id="cb1-13"><a href="#cb1-13"></a>                   <span class="dt">include.lowest =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+</div>
+<div id="reordonner-les-modalites" class="section level1">
+<h1>Reordonner les modalites</h1>
+<p>C’est principalement utile pour la lecture des tableaux et des graphiques.</p>
+<p>Les donnees non triees :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span></code></pre></div>
+<pre><code>   day  n
+1  Fri 19
+2  Sat 87
+3  Sun 76
+4 Thur 62</code></pre>
+<p>On trie par frequence decroissante avec la fonction <em>fct_infreq</em>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>donnees =<span class="st"> </span>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>donnees_tri =<span class="st"> </span>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_infreq</span>(day)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day, <span class="dt">name =</span> <span class="st">&quot;nb_trie&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(day, nb)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Sans tri&quot;</span>); <span class="kw">ggplot</span>(donnees_tri, <span class="kw">aes</span>(day, nb_trie)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec tri&quot;</span>)</span></code></pre></div>
+<p><img src="hebdor_forcats_files/figure-html/graphiques-1.png" width="50%" /><img src="hebdor_forcats_files/figure-html/graphiques-2.png" width="50%" /></p>
+<p>Cette fois on trie les modalites par la moyenne croissante du champ total_bill avec <em>fct_reorder</em>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_reorder</span>(day, total_bill, mean)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span></code></pre></div>
+<pre><code>   day  n
+1  Fri 19
+2 Thur 62
+3  Sat 87
+4  Sun 76</code></pre>
+</div>
+<div id="regroupements-de-modalites" class="section level1">
+<h1>Regroupements de modalites</h1>
+<p>On peut donner en parametre a la fonction <em>fct_lump</em> le nombre de modalites a conserver, ou la frequence minimale des modalites qu’on veut garder.</p>
+<p>Et on peut aussi proceder a un regroupement manuel avec <em>fct_collapse</em>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># on garde les deux modalites les plus frequentes, les autres sont regroupees</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_lump</span>(day, <span class="dt">n =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># on garde les modalites de frequence &gt;= 30%,  les autres sont regroupees</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_lump</span>(day, <span class="dt">prop =</span> <span class="fl">0.3</span>, <span class="dt">other_level =</span> <span class="st">&quot;Autres jours&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># regroupement manuel</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_collapse</span>(day, </span>
+<span id="cb8-9"><a href="#cb8-9"></a>                                    <span class="dt">semaine =</span> <span class="kw">c</span>(<span class="st">&quot;Fri&quot;</span>, <span class="st">&quot;Thur&quot;</span>), </span>
+<span id="cb8-10"><a href="#cb8-10"></a>                                    <span class="dt">weekend =</span> <span class="kw">c</span>(<span class="st">&quot;Sat&quot;</span>, <span class="st">&quot;Sun&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span></code></pre></div>
+<pre><code>    day  n
+1   Sat 87
+2   Sun 76
+3 Other 81
+           day  n
+1          Sat 87
+2          Sun 76
+3 Autres jours 81
+      day   n
+1 semaine  81
+2 weekend 163</code></pre>
+</div>
+<div id="recodage-de-modalites" class="section level1">
+<h1>Recodage de modalites</h1>
+<p>On recode les modalites avec … <em>recode</em> , et on peut changer les donnees manquantes en modalite avec <em>fct_explicit_na</em>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>titanic <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">cible =</span> <span class="kw">recode</span>(Survived, <span class="st">&quot;1&quot;</span> =<span class="st"> &quot;oui&quot;</span> , <span class="st">&quot;0&quot;</span> =<span class="st"> &quot;non&quot;</span>))</span>
+<span id="cb10-2"><a href="#cb10-2"></a>       </span>
+<span id="cb10-3"><a href="#cb10-3"></a>titanic <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Age =</span> <span class="kw">fct_explicit_na</span>(Age, <span class="dt">na_level =</span> <span class="st">&quot;manquant&quot;</span>)) </span></code></pre></div>
+<pre><code>   Pclass     Age    Sex Survived cible
+1       2  [0,20] female        1   oui
+2       3  [0,20] female        1   oui
+3       1 (40,80] female        1   oui
+4       3  [0,20]   male        0   non
+5       3 (30,40]   male        0   non
+6       3  [0,20] female        0   non
+7       2 (40,80] female        1   oui
+8       3  [0,20]   male        0   non
+9       2    &lt;NA&gt;   male        1   oui
+10      3 (30,40] female        0   non
+11      3    &lt;NA&gt; female        1   oui
+   Pclass      Age    Sex Survived
+1       2   [0,20] female        1
+2       3   [0,20] female        1
+3       1  (40,80] female        1
+4       3   [0,20]   male        0
+5       3  (30,40]   male        0
+6       3   [0,20] female        0
+7       2  (40,80] female        1
+8       3   [0,20]   male        0
+9       2 manquant   male        1
+10      3  (30,40] female        0
+11      3 manquant female        1</code></pre>
+<p><strong>Remarques</strong></p>
+<ul>
+<li><p>Si on ne declare pas explicitement NA comme une modalite, la fonction <em>barplot</em> de R base ne l’affiche pas (et en plus elle represente les modalites de frequence 0 comme “(20,25]” et “(25,30]” creees par la fonction <em>cut</em> au debut du script R).</p></li>
+<li><p>Avec <em>ggpglot2</em> par contre NA est affichee sans meme avoir besoin d’etre declaree comme modalite, et seules les modalites vraiment presentes dans l’echantillon sont conservees dans le graphique.</p></li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>donnees =<span class="st"> </span>titanic <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Age, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="kw">barplot</span>(<span class="dt">formula =</span> nb <span class="op">~</span><span class="st"> </span>Age, </span>
+<span id="cb12-4"><a href="#cb12-4"></a>        <span class="dt">data =</span> donnees, </span>
+<span id="cb12-5"><a href="#cb12-5"></a>        <span class="dt">main =</span> <span class="st">&quot;barplot classique&quot;</span>);<span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(Age, nb)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;barplot avec ggplot2&quot;</span>)</span></code></pre></div>
+<p><img src="hebdor_forcats_files/figure-html/pbs-1.png" width="50%" /><img src="hebdor_forcats_files/figure-html/pbs-2.png" width="50%" /></p>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

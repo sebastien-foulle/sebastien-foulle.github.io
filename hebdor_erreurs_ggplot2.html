@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Quelques erreurs classiques avec ggplot2  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_erreurs_ggplot2_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Quelques erreurs classiques avec <em>ggplot2</em> <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#difficultes-specifiques-a-ggplot2">Difficultes specifiques a ggplot2</a>
+<ul>
+<li><a href="#les-courbes-reduites-a-un-point">Les courbes reduites a un point</a></li>
+<li><a href="#ma-couleur-ne-sapplique-pas">Ma couleur ne s’applique pas</a></li>
+</ul></li>
+<li><a href="#problemes-non-specifiques-a-ggplot2-ou-r">Problemes non specifiques a ggplot2 ou R</a>
+<ul>
+<li><a href="#les-courbes-avec-des-points-manquants">Les courbes avec des points manquants</a></li>
+<li><a href="#les-courbes-cumulees-avec-des-points-manquants">Les courbes cumulees avec des points manquants</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>Le package <em>ggplot2</em> a beaucoup de points forts par rapport a un graphique realise en R base (syntaxe coherente d’un type de graphique a un autre, gestion automatique des marges, legende positionnee par defaut en dehors du graphique, …)</p>
+<p>Mais il y a quelques situations delicates illustrees ci-dessous, avec les solutions !</p>
+</div>
+<div id="difficultes-specifiques-a-ggplot2" class="section level1">
+<h1>Difficultes specifiques a ggplot2</h1>
+<div id="les-courbes-reduites-a-un-point" class="section level3">
+<h3>Les courbes reduites a un point</h3>
+<p>Le message qui accompagne le graphique vide suivant n’est pas tres eclairant.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;tidyr&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>dtf =<span class="st"> </span><span class="kw">matrix</span>(AirPassengers, <span class="dt">ncol =</span> <span class="dv">12</span>, <span class="dt">dimnames =</span> <span class="kw">list</span>(<span class="dv">1949</span><span class="op">:</span><span class="dv">1960</span>, month.abb)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>tibble<span class="op">::</span><span class="kw">rownames_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;annee&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> Jan<span class="op">:</span>Dec, <span class="dt">names_to =</span> <span class="st">&quot;mois&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mois =</span> <span class="kw">factor</span>(mois, <span class="dt">levels =</span> month.abb))</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a>collect_messages &lt;-<span class="st"> </span>catchr<span class="op">::</span><span class="kw">make_catch_fn</span>(<span class="dt">message =</span> <span class="kw">c</span>(collect, muffle))</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a>gg =<span class="st"> </span><span class="kw">ggplot</span>(dtf, <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">col =</span> annee)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co"># pour envoyer le message dans ce html plutot que dans la console de Rstudio ...</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="kw">collect_messages</span>(<span class="kw">print</span>(gg))<span class="op">$</span>message[[<span class="dv">1</span>]]<span class="op">$</span>message</span></code></pre></div>
+<pre><code>[1] &quot;geom_path: Each group consists of only one observation. Do you need to adjust\nthe group aesthetic?\n&quot;</code></pre>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-1-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>On obtient l’explication precise en executant la commande <code>?aes_group_order</code>. Le package <em>ggplot2</em> croise toutes les variables qualitatives et trace une courbe par croisement. C’est souvent ce qu’on veut mais pas toujours : ici il croise les 12 annees (format <em>character</em>) et les 12 mois (format <em>facteur</em>), on a donc 144 courbes reduites a un point, et comme on n’a pas ajoute <em>+ geom_point()</em> au graphique on ne voit meme pas les points…</p>
+<p>Pour corriger le probleme il suffit de lui indiquer explicitement les groupes avec la variable <em>group</em> (group = 0 donnerait une seule courbe). Ici on veut une courbe par anne, et on utilise la palette de couleurs par defaut du package <em>viridis</em> (cf hebdomadR precedent sur les couleurs) :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">ggplot</span>(dtf, <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">col =</span> annee, <span class="dt">group =</span> annee)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()  <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>()</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-2-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ma-couleur-ne-sapplique-pas" class="section level3">
+<h3>Ma couleur ne s’applique pas</h3>
+<p>Les barres ne deviennent pas bleues mais sont bordees par du rouge … entre autres parce que <em>ggplot2</em> s’attend a recevoir dans le parametre <em>col</em> de la fonction <em>aes</em> le nom d’un champ sans guillemets, pas une couleur constante entre guillemets. Il lui attribue alors la 1ere couleur de sa palette par defaut, qui est le rouge.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">ggplot</span>(dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>()</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-3-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>Les barres ne deviennent pas bleues mais sont bordees par du bleu, c’est un peu mieux … soit en utilisant la fonction speciale <em>I</em> dans <em>aes</em> soit en sortant le parametre <em>col</em> de la fonction <em>aes</em> :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">ggplot</span>(dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">col =</span> <span class="kw">I</span>(<span class="st">&quot;blue&quot;</span>))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec la fonction I&quot;</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-4-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">ggplot</span>(dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>(<span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec col dans geom_point&quot;</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-5-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>Il fallait utiliser le mot-cle “fill” pour le remplissage, le parametre <em>col</em> ne concerne que les bords et ne fonctionne donc bien qu’avec les points et les courbes.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">ggplot</span>(dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>(<span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec fill dans geom_point&quot;</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-6-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>Et maintenant qu’on a resolu le probleme, on peut aussi faire mieux. Pour avoir une couleur par mois de l’annee par exemple :</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">ggplot</span>(dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">fill =</span> mois)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>()</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-7-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>On peut aussi personnaliser les couleurs en fournissant un vecteur nomme qui donne la correspondance mois / couleur.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>mes_couleurs =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;darkslateblue&quot;</span>,  <span class="st">&quot;cornflowerblue&quot;</span>, <span class="st">&quot;bisque&quot;</span>, <span class="st">&quot;antiquewhite&quot;</span>, </span>
+<span id="cb9-2"><a href="#cb9-2"></a>                 <span class="st">&quot;forestgreen&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;coral&quot;</span>, <span class="st">&quot;darkorange&quot;</span>, <span class="st">&quot;gold&quot;</span>, <span class="st">&quot;yellow&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="kw">names</span>(mes_couleurs) =<span class="st"> </span>month.abb</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="kw">ggplot</span>(dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">fill =</span> mois)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> mes_couleurs) <span class="op">+</span><span class="st"> </span><span class="kw">theme_void</span>()</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-8-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="problemes-non-specifiques-a-ggplot2-ou-r" class="section level1">
+<h1>Problemes non specifiques a ggplot2 ou R</h1>
+<div id="les-courbes-avec-des-points-manquants" class="section level3">
+<h3>Les courbes avec des points manquants</h3>
+<p>La courbe semble normale, mais si on est attentif on voit qu’il manque un mois dans la legende.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>dtf_NA =<span class="st"> </span>dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>( (annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span> <span class="op">&amp;</span><span class="st"> </span>mois <span class="op">!=</span><span class="st"> &quot;Feb&quot;</span>))</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">ggplot</span>(dtf_NA, <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">group =</span> annee)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;La courbe&quot;</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>Avec l’option <em>drop = FALSE</em> pour l’axe des abscisses on garde toutes les modalites du facteur <em>mois</em>, meme celles qui ont disparu quand on a filtre la table initiale, et tout semble OK.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>dtf_NA =<span class="st"> </span>dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>( (annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span> <span class="op">&amp;</span><span class="st"> </span>mois <span class="op">!=</span><span class="st"> &quot;Feb&quot;</span>))</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">ggplot</span>(dtf_NA, <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">group =</span> annee)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;La courbe&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">drop=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-10-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>Mais avec des barres plutot qu’une ligne on voit le probleme : la courbe devrait etre a 0 en fevrier, la courbe a simplement relie directement janvier a mars.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">ggplot</span>(dtf_NA, <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">group =</span> annee)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Les barres&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">drop=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-11-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p>Si on doit absolument avoir des courbes plutot que des barres, la solution vient de la fonction <em>complete</em> du package <em>tidyr</em> qui va completer le dataframe en croisant toutes les valeurs de <em>annee</em> avec toutes les modalites du facteur <em>mois</em>. Et pour les combinaisons qui ne sont pas presentes dans notre table filtree, on met <em>0</em> comme valeur de la courbe avec le parametre <em>list(value = 0)</em>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>dtf_complet =<span class="st"> </span>dtf_NA <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">complete</span>(annee, mois, <span class="dt">fill =</span> <span class="kw">list</span>(<span class="dt">value =</span> <span class="dv">0</span>))</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">ggplot</span>(dtf_complet, <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> value, <span class="dt">group =</span> annee)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;La courbe correcte&quot;</span>)  <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_discrete</span>(<span class="dt">drop=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-12-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+</div>
+<div id="les-courbes-cumulees-avec-des-points-manquants" class="section level3">
+<h3>Les courbes cumulees avec des points manquants</h3>
+<p>C’est une situation qui se presente aussi de temps en temps : on a par exemple des operations financieres qui n’ont pas lieu tous les jours (depots, retraits, …), et on veut obtenir le cumul quotidien de ces flux financiers. Cette fois les jours manquants ne doivent pas etre ajoutes avec en face la valeur 0 pour la quantite cumulee, mais avec la valeur de cumul la plus recente. La fonction <em>fill.na</em> de <em>tidyr</em> permet de recuperer la derniere valeur renseignee et de la repeter sur toutes les lignes vides qui suivent, ainsi en fevrier la valeur cumulee est la meme qu’en janvier :</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>dtf_complet_cumul =<span class="st"> </span>dtf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>( (annee <span class="op">==</span><span class="st"> &quot;1950&quot;</span> <span class="op">&amp;</span><span class="st"> </span>mois <span class="op">!=</span><span class="st"> &quot;Feb&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cumul =</span> <span class="kw">cumsum</span>(value)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>value) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(annee, mois) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">complete</span>(annee, mois) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fill</span>(cumul, <span class="dt">.direction =</span> <span class="st">&quot;down&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="kw">ggplot</span>(dtf_complet_cumul, <span class="kw">aes</span>(<span class="dt">x =</span> mois, <span class="dt">y =</span> cumul, <span class="dt">group =</span> annee)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;La courbe cumulee correcte&quot;</span>)  <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_discrete</span>(<span class="dt">drop=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<p><img src="hebdor_erreurs_ggplot2_files/figure-html/unnamed-chunk-13-1.png" width="500" height="400" style="display: block; margin: auto;" /></p>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

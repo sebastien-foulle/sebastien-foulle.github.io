@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Echantillonnage avec R base, dplyr et themis  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_echantillonnage_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Echantillonnage avec R base, <em>dplyr</em> et <em>themis</em> <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#echantillonnage-usuel">Echantillonnage usuel</a>
+<ul>
+<li><a href="#echantillonnage-simple-equilibre">Echantillonnage simple / equilibre</a></li>
+<li><a href="#echantillonnage-stratifie">Echantillonnage stratifie</a></li>
+</ul></li>
+<li><a href="#sur-echantillonnage-avec-rose-et-smote">Sur-echantillonnage avec ROSE et SMOTE</a>
+<ul>
+<li><a href="#algorithme-rose">Algorithme ROSE</a></li>
+<li><a href="#algorithme-smote">Algorithme SMOTE</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>On peut avoir besoin d’echantillonner un jeu de donnees pour differentes raisons :</p>
+<ul>
+<li>construire un echantillon d’apprentissage et un echantillon test</li>
+<li>remedier a la rarete de la cible</li>
+<li>…</li>
+</ul>
+<p>tout en preservant la distribution de certaines variables.</p>
+<p>On utilise R base et le package <em>dplyr</em> (<em>group_by</em> combine a <em>sample_n</em> ou <em>sample_freq</em>) pour realiser les echantillonnages les plus classiques que sont l’echantillonnage simple, l’echantillonnage equilibre et l’echantillonnage stratifie selon une variable qualitative.</p>
+<p>Pour les echantillonnages plus complexes, notamment du sur-echantillonnage avec les algorithmes ROSE ou SMOTE dans le cas d’une cible rare, on emploie le package <em>themis</em> qui fait partie de la collection de package <em>tidymodels</em>.</p>
+<p>On utilise le jeu de donnees “bankData” du package <em>otvPlots</em>, la modalite cible ‘yes’ de la variable <em>y</em> a une frequence de 12%.</p>
+<blockquote>
+<p>Sur le CRAN, la version 0.1.0 du package <em>themis</em> a un bug dans la fonction <em>step_smote</em>, il a ete corrige dans la version en developpement sur github. En attendant le passage en production sur le CRAN de la nouvelle version, il faut donc installer la version de github avec la commande <code>remotes::install_github("tidymodels/themis")</code>.</p>
+</blockquote>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;themis&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># remotes::install_github(&quot;tidymodels/themis&quot;)</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">data</span>(<span class="st">&quot;bankData&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;otvPlots&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>bankData =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(y, <span class="kw">everything</span>())</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># frequence de la cible y</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq =</span> scales<span class="op">::</span><span class="kw">percent</span>(nb <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(nb)), </span>
+<span id="cb1-13"><a href="#cb1-13"></a>         <span class="dt">nb =</span> scales<span class="op">::</span><span class="kw">number</span>(nb, <span class="dt">trim =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span></code></pre></div>
+<pre><code>    y     nb freq
+1  no 39 922  88%
+2 yes  5 289  12%</code></pre>
+</div>
+<div id="echantillonnage-usuel" class="section level1">
+<h1>Echantillonnage usuel</h1>
+<div id="echantillonnage-simple-equilibre" class="section level3">
+<h3>Echantillonnage simple / equilibre</h3>
+<p>Echantillonnage simple : 70% pour l’echantillon d’apprentissage, 30% pour l’echantillon test.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>bankData =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">simple =</span> <span class="kw">sample</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;train&quot;</span>, <span class="st">&quot;test&quot;</span>), </span>
+<span id="cb3-2"><a href="#cb3-2"></a>                                               <span class="dt">size =</span> <span class="kw">nrow</span>(.),</span>
+<span id="cb3-3"><a href="#cb3-3"></a>                                               <span class="dt">replace =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>                                               <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>                                               )</span>
+<span id="cb3-6"><a href="#cb3-6"></a>                               )</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(simple) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">freq =</span> scales<span class="op">::</span><span class="kw">percent</span>(n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)))</span></code></pre></div>
+<pre><code>  simple     n freq
+1   test 13515  30%
+2  train 31696  70%</code></pre>
+<p>Echantillonnage equilibre : 3000 modalites ‘no’ et 3000 modalites ‘yes’.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># echantillon (d&#39;apprentissage) equilibre 3000 / 3000</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>dtf_train =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(y) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">3000</span>) <span class="op">%&gt;%</span><span class="st"> </span>ungroup</span>
+<span id="cb5-3"><a href="#cb5-3"></a>dtf_train <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span></code></pre></div>
+<pre><code># A tibble: 2 x 2
+  y         n
+  &lt;chr&gt; &lt;int&gt;
+1 no     3000
+2 yes    3000</code></pre>
+</div>
+<div id="echantillonnage-stratifie" class="section level3">
+<h3>Echantillonnage stratifie</h3>
+<p>Le probleme : certaines modalites rares peuvent etre presentes dans l’echantillon test mais absentes de l’echantillon d’apprentissage, ce qui declenche une erreur quand on applique le modele predictif a l’echantillon test ou qu’on le met en production.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># zoom sur les modalites de la variable &#39;job&#39;</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(job) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>(), </span>
+<span id="cb7-3"><a href="#cb7-3"></a>                                         <span class="dt">freq_cible =</span> scales<span class="op">::</span><span class="kw">percent</span>(<span class="kw">mean</span>(y <span class="op">==</span><span class="st"> &#39;yes&#39;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq_modalite =</span> scales<span class="op">::</span><span class="kw">percent</span>(nb <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(nb)),</span>
+<span id="cb7-5"><a href="#cb7-5"></a>         <span class="dt">nb =</span> scales<span class="op">::</span><span class="kw">number</span>(nb, <span class="dt">trim =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># echantillon qui perd la modalite &#39;unknown&#39; car il n&#39;est pas stratifie</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="kw">set.seed</span>(<span class="dv">2014</span>)</span>
+<span id="cb7-9"><a href="#cb7-9"></a>dtf_train2 =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(y) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">200</span>) <span class="op">%&gt;%</span><span class="st"> </span>ungroup</span>
+<span id="cb7-10"><a href="#cb7-10"></a>dtf_train2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(job)</span></code></pre></div>
+<pre><code>             job    nb freq_cible freq_modalite
+1         admin. 5 171        12%        11.44%
+2    blue-collar 9 732         7%        21.53%
+3   entrepreneur 1 487         8%         3.29%
+4      housemaid 1 240         9%         2.74%
+5     management 9 458        14%        20.92%
+6        retired 2 264        23%         5.01%
+7  self-employed 1 579        12%         3.49%
+8       services 4 154         9%         9.19%
+9        student   938        29%         2.07%
+10    technician 7 597        11%        16.80%
+11    unemployed 1 303        16%         2.88%
+12       unknown   288        12%         0.64%
+# A tibble: 11 x 2
+   job               n
+   &lt;chr&gt;         &lt;int&gt;
+ 1 admin.           55
+ 2 blue-collar      58
+ 3 entrepreneur     18
+ 4 housemaid         9
+ 5 management       80
+ 6 retired          34
+ 7 self-employed    13
+ 8 services         32
+ 9 student          11
+10 technician       74
+11 unemployed       16</code></pre>
+<p>La stratification preserve les frequences relatives des modalites de la cible et de la variable ‘job’.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>dtf_strat =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(job, y) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_frac</span>(<span class="fl">0.5</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a>dtf_strat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(job) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>(), </span>
+<span id="cb9-4"><a href="#cb9-4"></a>                                          <span class="dt">freq_cible =</span> scales<span class="op">::</span><span class="kw">percent</span>(<span class="kw">mean</span>(y <span class="op">==</span><span class="st"> &#39;yes&#39;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq_modalite =</span> scales<span class="op">::</span><span class="kw">percent</span>(nb <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(nb)),</span>
+<span id="cb9-6"><a href="#cb9-6"></a>         <span class="dt">nb =</span> scales<span class="op">::</span><span class="kw">number</span>(nb, <span class="dt">trim =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span></code></pre></div>
+<pre><code>             job    nb freq_cible freq_modalite
+1         admin. 2 586        12%        11.44%
+2    blue-collar 4 866         7%        21.53%
+3   entrepreneur   744         8%         3.29%
+4      housemaid   620         9%         2.74%
+5     management 4 728        14%        20.92%
+6        retired 1 132        23%         5.01%
+7  self-employed   790        12%         3.50%
+8       services 2 076         9%         9.18%
+9        student   468        29%         2.07%
+10    technician 3 798        11%        16.80%
+11    unemployed   651        16%         2.88%
+12       unknown   144        12%         0.64%</code></pre>
+</div>
+</div>
+<div id="sur-echantillonnage-avec-rose-et-smote" class="section level1">
+<h1>Sur-echantillonnage avec ROSE et SMOTE</h1>
+<p>Les deux algorithmes qu’on a choisi dans le package <em>themis</em> creent de nouvelles cibles artificielles a partir des vraies cibles contenues dans le jeu de donnees initial. On binarise toutes les variables qualitatives (sauf la cible) avec l’etape <em>step_dummy(all_nominal(), - all_outcomes())</em> car les algorithmes ROSE et SMOTE ne s’appliquent qu’a des predicteurs numeriques.</p>
+<p>Note : le sur-echantillonnage par simple replication des cibles peut deboucher sur du surapprentissage, alors que les methodes qui generent des cibles artificielles ajoutent un certain bruit et reduisent ce risque.</p>
+<div id="algorithme-rose" class="section level3">
+<h3>Algorithme ROSE</h3>
+<p>Cet algorithme cree des cibles supplementaires dans le voisinage de chaque cible reelle a partir d’une estimation par noyau de la distribution des autres cibles dans son voisinage.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a>bankData_num =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.integer</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">recipe</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="st">  </span><span class="kw">step_dummy</span>(<span class="kw">all_nominal</span>(), <span class="op">-</span><span class="st"> </span><span class="kw">all_outcomes</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">step_rose</span>(y) <span class="op">%&gt;%</span><span class="st"> </span>prep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">juice</span>()</span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a>bankData_num <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span></code></pre></div>
+<pre><code>    y     n
+1  no 39922
+2 yes  5289
+# A tibble: 2 x 2
+  y         n
+  &lt;fct&gt; &lt;int&gt;
+1 no    39967
+2 yes   39877</code></pre>
+</div>
+<div id="algorithme-smote" class="section level3">
+<h3>Algorithme SMOTE</h3>
+<p>La methode SMOTE relie chaque cible reelle aux cibles les plus proches par des segments et elle choisit comme cibles artificielles supplementaires des points situes sur ces segments.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>bankData_num =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.integer</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">recipe</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="st">  </span><span class="kw">step_dummy</span>(<span class="kw">all_nominal</span>(), <span class="op">-</span><span class="st"> </span><span class="kw">all_outcomes</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">step_smote</span>(y) <span class="op">%&gt;%</span><span class="st"> </span>prep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">juice</span>()</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a>bankData_num <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span></code></pre></div>
+<pre><code># A tibble: 2 x 2
+  y         n
+  &lt;fct&gt; &lt;int&gt;
+1 no    39922
+2 yes   39922</code></pre>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Gestion des erreurs  </title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_gestion_erreurs_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> Gestion des erreurs <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#gestion-des-erreurs-et-warnings-avec-du-r-basique">Gestion des erreurs et warnings avec du R basique</a></li>
+<li><a href="#gestion-des-erreurs-et-warnings-avec-le-package-catchr">Gestion des erreurs et warnings avec le package <em>catchr</em></a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>Dans des simulations longues, par exemple le calcul de modeles predictifs en parcourant une grille d’hyperparametres, on a envie de pouvoir</p>
+<ul>
+<li>intercepter les warnings et erreurs pour eviter l’interruption de la simulation</li>
+<li>stocker les messages associes</li>
+<li>conserver les resultats calcules dans le cas de simples warnings</li>
+</ul>
+</div>
+<div id="gestion-des-erreurs-et-warnings-avec-du-r-basique" class="section level1">
+<h1>Gestion des erreurs et warnings avec du R basique</h1>
+<p>La solution proposee quand on execute la commande <code>demo("error.catching", ask = FALSE)</code> est <del>totalement incompre</del> peu intuitive.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>tryCatch.W.E &lt;-<span class="st"> </span><span class="cf">function</span>(expr) {</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  W &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="co"># warning handler</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  w_handler &lt;-<span class="st"> </span><span class="cf">function</span>(ww){ </span>
+<span id="cb1-5"><a href="#cb1-5"></a>    W &lt;&lt;-<span class="st"> </span>ww</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="kw">invokeRestart</span>(<span class="st">&quot;muffleWarning&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  }</span>
+<span id="cb1-8"><a href="#cb1-8"></a>  <span class="kw">list</span>(<span class="dt">value =</span> <span class="kw">withCallingHandlers</span>(<span class="kw">tryCatch</span>(expr, <span class="dt">error =</span> <span class="cf">function</span>(e) e),</span>
+<span id="cb1-9"><a href="#cb1-9"></a>                                   <span class="dt">warning =</span> w_handler),</span>
+<span id="cb1-10"><a href="#cb1-10"></a>       <span class="dt">warning =</span> W)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">tryCatch.W.E</span>(<span class="kw">log</span>(<span class="dv">2</span>))</span></code></pre></div>
+<pre><code>$value
+[1] 0.6931472
+
+$warning
+NULL</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">tryCatch.W.E</span>(<span class="kw">log</span>(<span class="op">-</span><span class="dv">1</span>))</span></code></pre></div>
+<pre><code>$value
+[1] NaN
+
+$warning
+&lt;simpleWarning in log(-1): production de NaN&gt;</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">tryCatch.W.E</span>(<span class="kw">log</span>(<span class="st">&quot;a&quot;</span>))</span></code></pre></div>
+<pre><code>$value
+&lt;simpleError in log(&quot;a&quot;): argument non numérique pour une fonction mathématique&gt;
+
+$warning
+NULL</code></pre>
+<p>La vignette <a href="https://cran.r-project.org/web/packages/tryCatchLog/vignettes/tryCatchLog-intro.html" class="uri">https://cran.r-project.org/web/packages/tryCatchLog/vignettes/tryCatchLog-intro.html</a> du package <em>tryCatchLog</em> permet de comprendre le fonctionnement des fonctions <em>withCallingHandlers</em>, <em>tryCatch</em> et <em>invokeRestart</em> utilisees ici.</p>
+</div>
+<div id="gestion-des-erreurs-et-warnings-avec-le-package-catchr" class="section level1">
+<h1>Gestion des erreurs et warnings avec le package <em>catchr</em></h1>
+<p>La gestion devient beaucoup plus simple : on intercepte les warnings et erreurs avec <em>muffle</em>, ce qui evite les messages rouges dans la console et les plantages en cas d’erreur. Et avec <em>collect</em> on stocke les messages generes.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">library</span>(<span class="st">&quot;catchr&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>collect_warnings_errors &lt;-<span class="st"> </span><span class="kw">make_catch_fn</span>(<span class="dt">warning =</span> <span class="kw">c</span>(collect, muffle),</span>
+<span id="cb8-3"><a href="#cb8-3"></a>                                         <span class="dt">error =</span> <span class="kw">c</span>(collect, muffle))</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">collect_warnings_errors</span>(<span class="kw">log</span>(<span class="dv">2</span>))</span></code></pre></div>
+<pre><code>$value
+[1] 0.6931472
+
+$warning
+list()
+
+$error
+list()</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">collect_warnings_errors</span>(<span class="kw">log</span>(<span class="op">-</span><span class="dv">1</span>))</span></code></pre></div>
+<pre><code>$value
+[1] NaN
+
+$warning
+$warning[[1]]
+&lt;simpleWarning in log(-1): production de NaN&gt;
+
+
+$error
+list()</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">collect_warnings_errors</span>(<span class="kw">log</span>(<span class="st">&quot;a&quot;</span>))</span></code></pre></div>
+<pre><code>$value
+NULL
+
+$warning
+list()
+
+$error
+$error[[1]]
+&lt;simpleError in log(&quot;a&quot;): argument non numérique pour une fonction mathématique&gt;</code></pre>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
