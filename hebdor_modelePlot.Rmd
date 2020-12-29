@@ -1,0 +1,145 @@
+---
+title: Choix du decile avec modelplotr
+output: 
+  flexdashboard::flex_dashboard:
+    theme: flatly
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+```
+
+```{r calculs, include=FALSE}
+# installer aussi caret et otvPlots
+library("dplyr")
+
+# ne marche qu'avec les modeles de caret et mlr
+# https://modelplot.github.io/modelplotr.html
+# remotes::install_github("modelplot/modelplotr")
+library("modelplotr")
+
+# le repertoire des images
+chemin_images = file.path(getwd(), "images_modelePlot")
+# dir.create(chemin_images)
+
+# les donnees du package otvPlots
+bank = otvPlots::bankData
+bank = bank %>% select(c('y','duration','campaign','pdays','previous'))
+
+# rename target class value 'yes' for better interpretation
+bank$y[bank$y=='yes'] <- 'term.deposit'
+
+#explore data
+str(bank)
+
+# pour les details
+# ?modelplotr::aggregate_over_deciles()
+
+# prepare data for training and train models
+set.seed(2018)
+test_size = 0.3
+train_index =  sample(seq(1, nrow(bank)),size = (1 - test_size)*nrow(bank) ,replace = F)
+train = bank[train_index,]
+test = bank[-train_index,]
+
+# frequence de la cible dans l'echantillon test utilise plus bas
+freq_cible = bank %>% slice(-train_index) %>%  summarise(moy = mean(y == 'term.deposit'))
+
+# estimate some models with caret...
+# setting caret cross validation, here tuned for speed (not accuracy!)
+fitControl <- caret::trainControl(method = "cv",number = 2,classProbs=TRUE)
+# mnl model using glmnet package
+mnl = caret::train(y ~.,data = train, method = "glmnet",trControl = fitControl)
+# random forest using ranger package, here tuned for speed (not accuracy!)
+rf = caret::train(y ~.,data = train, method = "ranger",trControl = fitControl,
+                   tuneGrid = expand.grid(.mtry = 2,.splitrule = "gini",.min.node.size=10))
+ 
+# on fait les calculs par decile
+prepared_input = prepare_scores_and_ntiles(datasets=list("train","test"),
+                           dataset_labels = list("train data","test data"),
+                           models = list("rf", "mnl"),
+                           model_labels = list("random forest", "multinomial logit"),
+                           target_column="y")
+
+# on chosit le perimetre : un seul modele, un seul jeu de donnees
+plot_input = plotting_scope(prepared_input, select_model_label = 'multinomial logit', select_dataset_label = 'test data')
+
+# plot the cumulative gains plot ( P(Yhat | Y) sensibilite cumule en ordonnee, deciles de score en abscisse, des meilleurs au plus mauvais scores)
+# plot_cumgains()
+
+# plot the cumulative gains plot and annotate the plot at decile = 2
+plot_cumgains(plot_input, highlight_ntile = 2, save_fig = TRUE, save_fig_filename = file.path(chemin_images, "cumgains"), custom_line_colors = "red")
+
+# plot the cumulative lift plot and annotate the plot at decile = 2 ( P(Y|Yhat) cumule / P(Y) )
+plot_cumlift(plot_input, highlight_ntile = 2, save_fig = TRUE, save_fig_filename = file.path(chemin_images, "cumlift"), custom_line_colors = "red")
+
+# plot the response plot and annotate the plot at decile = 1 ( P(Y | Yhat) precision non cumulee), 
+# parallelle a la courbe de lift non cumulee pas produite
+# pour ne pas ajouter de decile contre-productif qui ne se voit pas dans le cumul
+plot_response(plot_input, highlight_ntile = 2, save_fig = TRUE, save_fig_filename = file.path(chemin_images, "response"), custom_line_colors = "red")
+
+# plot the cumulative response plot and annotate the plot at decile = 3 ( P(Y | Yhat) precision cumulee, courbe parallele a la cumulative lift plot)
+plot_cumresponse(plot_input, highlight_ntile = 2, save_fig = TRUE, save_fig_filename = file.path(chemin_images, "cumresponse"), custom_line_colors = "red")
+
+### on compare 2 modeles
+# set plotting scope to model comparison
+plot_input = plotting_scope(prepared_input, scope = "compare_models", select_dataset_label = 'test data')
+
+# plot the cumulative response plot and annotate the plot at decile = 3
+plot_cumresponse(plot_input, highlight_ntile = 2, save_fig = TRUE, save_fig_filename = file.path(chemin_images, "cumresponse_2modeles"), custom_line_colors = c("cornflowerblue", "red"))
+```
+
+
+Column {data-width=200}
+-----------------------------------------------------------------------
+
+### **Reponse**
+
+```{r response, echo=FALSE}
+knitr::include_graphics(file.path(chemin_images, "response.png"))
+```
+
+### **Reponse cumulee**
+```{r cumresponse, echo=FALSE}
+knitr::include_graphics(file.path(chemin_images, "cumresponse.png"))
+```
+
+Column {data-width=200}
+-----------------------------------------------------------------------
+
+### **Lift cumule**
+
+```{r cumlift, echo=FALSE}
+knitr::include_graphics(file.path(chemin_images, "cumlift.png"))
+```
+
+### **Gain cumule**
+
+```{r cumgains, echo=FALSE}
+knitr::include_graphics(file.path(chemin_images, "cumgains.png"))
+```
+
+Column {data-width=300}
+-----------------------------------------------------------------------
+
+### **Analyse**
+
+ - La *courbe de reponse* donne la frequence de la cible dans chaque decile. En marketing on va solliciter les clients appetents au produit, on se limite donc (ici) aux trois 1ers deciles ou on est au-dessus de la frequence de la cible dans toute la population (trait pointille).
+ - La *courbe de lift cumulee* : si elle est proche de la valeur 1 pour un decile X, ca signifie que la cible est a peine plus frequente que la moyenne dans les X 1ers deciles et on devrait plutot se limiter aux deciles 1, 2, ... X-1.
+ - La *courbe de reponse cumulee* : elle est parallele a la courbe de lift cumulee, on passe de la 1ere a la seconde en divisant par la frequence de la cible dans toute la population. Au decile X elle fournit la frequence de la cible dans les X 1ers deciles. En termes statistiques cette courbe fournit la precision cumulee du modele.
+ - La *courbe de gain cumulee* : au decile X elle fournit la part de la population cible totale qui se trouve dans les X 1ers deciles. En termes statistiques cette courbe fournit la sensibilite cumulee du modele.
+  - Ici on choisit de se limiter aux deux 1ers deciles (on pourrait aller jusqu'au 3eme) et
+    + la frequence de la cible y est de 34% (versus 11.6% dans toute la population, soit un lift cumule de 3) d'apres la courbe de reponse cumulee 
+    + en ciblant les 20% de la population avec les plus hauts scores on atteint 60% de la population cible d'apres la courbe de gain cumulee (et le ratio de ces deux % redonne le lift de 3)
+ - Le modele de foret aleatoire permettrait d'ameliorer un peu les chiffres obtenus par la regression logistique regularisee, comme on le voit ci-dessous
+
+### **Comparaison de 2 modeles**
+
+```{r cumresponse_2modeles, echo=FALSE}
+knitr::include_graphics(file.path(chemin_images, "cumresponse_2modeles.png"))
+```
+
+
+

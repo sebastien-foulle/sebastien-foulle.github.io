@@ -1,0 +1,216 @@
+---
+title: Selection de variables "model-agnostic" par permutation
+output: 
+  flexdashboard::flex_dashboard:
+    theme: flatly
+    orientation: rows
+    vertical_layout: fill
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
+
+# pour la manip de donnees
+library("dplyr")
+
+# pour les graphiques
+library("ggplot2")
+
+# pour traiter les facteurs avec fct_explicit_na
+library("forcats")
+
+# pour une methode generique de permutation
+library("DALEX")
+
+# pour les metriques de score comme l'AUC
+library("yardstick")
+
+# pour ameliorer le look des tables avec la fonction kable_styling
+library("kableExtra")
+
+# pour les modeles : installer caret et mlr
+# install.packages(c("caret", "mlr"))
+```
+
+```{r calculs, include=FALSE}
+### les donnees
+set.seed(2019)
+
+donnees = titanic::titanic_train %>% select(-Name, -Ticket, -Cabin, -PassengerId) %>% 
+  mutate(cible = recode(factor(Survived, levels = c(1, 0)), "1" = "oui" , "0" = "non"),
+         Sex = factor(Sex),
+         Embarked = factor(Embarked), 
+         partition = sample(c("train", "test"),
+                              size = nrow(titanic::titanic_train),
+                              replace = TRUE, 
+                              prob = c(0.7, 0.3)),
+         # on discretise Age car beaucoup de valeurs manquantes pour ce champ, remplacees par "manquant"
+         Age = fct_explicit_na(cut(Age, breaks = c(0, 20, 25, 30, 40, 80), 
+                                include.lowest = TRUE),
+                               na_level = "manquant")) %>% select(- Survived) %>% select(cible, partition, everything())
+
+
+### le nombre de permutations
+nb_perm = 30
+
+# =========================== I. Entrainement d'un modele et importance des variables avec mlr =========================== 
+
+
+# this line is needed when using mlr without loading it (mlr::)
+mlr::configureMlr() 
+
+task_train = mlr::makeClassifTask(data = donnees %>% filter(partition == "train") %>% select(-partition), target = "cible")
+task_test = mlr::makeClassifTask(data = donnees %>% filter(partition == "test") %>% select(-partition), target = "cible")
+
+# random forest model
+rf_lrn = mlr::makeLearner("classif.ranger", predict.type = "prob")
+
+# le modele entraine est utlise beaucoup plus bas
+rf_mlr = mlr::train(rf_lrn, task_train)
+
+
+### nb_perm permutations des variables avec mlr
+
+# liste des mesures : ?measures
+set.seed(2019)
+rf_perm = mlr::generateFeatureImportanceData(task_test, 
+                                              "permutation.importance",
+                                              rf_lrn,
+                                              measure = mlr::auc,
+                                              nmc = nb_perm,
+                                              replace = TRUE)
+
+mat_perte_mlr = t(rf_perm$res)
+
+# importance de chaque variable
+dtf_perf_mlr = data.frame(Variable = rownames(mat_perte_mlr),
+                          perte_auc = mat_perte_mlr[, "auc"]) %>% 
+  mutate(pct_importance = round(abs(perte_auc) / sum(abs(perte_auc)) * 100)) %>% arrange(-pct_importance)
+
+
+
+# =========================== II. Avec caret =========================== 
+
+
+# ----------- II.1. Entrainement d'un modele avec caret -----------
+
+rf_caret = caret::train(cible ~.,data = donnees %>% filter(partition == "train") %>% select(-partition), 
+                        method = "ranger",
+                        trControl = caret::trainControl(classProbs=TRUE))
+
+
+# ----------- II.2. permutation des previsions de caret avec DALEX -----------
+
+# la fonction de prevision
+ma_prevision = function(object, newdata) {
+# avec caret
+ predict(object, newdata = newdata, type = "prob")[["oui"]]
+# avec mlr
+# predict(object, newdata = newdata)$data$prob.oui
+}
+
+# simple normalisation dans une liste
+mon_explainer = explain(# avec caret
+                        model = rf_caret, 
+                        # avec mlr
+                        # rf_mlr,
+                        data = donnees %>% filter(partition == "test") %>% select(-partition, -cible), 
+                        y = as.integer(donnees %>% filter(partition == "test") %>% .$cible == "oui"), 
+                        predict_function = ma_prevision)
+
+# on genere nb_perm permutations et on moyenne les resultats pour fiabiliser la mesure de l'importance de chaque variable
+set.seed(2019)
+dtf_perf_caret = model_parts(mon_explainer, type = "difference", B = nb_perm - 1) %>% as.data.frame %>% 
+  group_by(Variable = variable) %>% summarise(perte_auc = - mean(dropout_loss)) %>% 
+  filter(! Variable %in% c("_full_model_", "_baseline_")) %>% 
+  mutate(pct_importance = round(abs(perte_auc) / sum(abs(perte_auc)) * 100)) %>% arrange(-pct_importance)
+
+
+# =========================== III. Modele de mlr et permutations 'a la main'  =========================== 
+
+### AUC de reference : 0.84 sans permutation
+
+prev = predict(rf_mlr, newdata = donnees %>% filter(partition == "test") %>% select(-cible, -partition))$data$prob.oui
+AUC_ref = roc_auc_vec(donnees %>% filter(partition == "test") %>% .[["cible"]], prev)
+
+# la fonction applique une permutation par colonne et renvoie la perte d'AUC
+# on l'applique nb_perm fois pour chaque colonne, resultats dans une matrice, on moyenne les resultats pour fiabiliser la mesure de l'importance de chaque variable
+ma_fonction = function(nom_var) {
+                             permute = donnees %>% filter(partition == "test") %>% select(-partition)
+                             permute[[nom_var]] = sample(permute[[nom_var]])
+                             prev = predict(rf_mlr, newdata = permute)$data$prob.oui
+                             AUC_permute = roc_auc_vec(permute$cible, prev)
+                             return(abs(AUC_permute - AUC_ref))
+                           }
+
+vect_colonnes = donnees %>% select(-partition, -cible) %>% colnames
+
+set.seed(2020)
+mat_pertes = vapply(vect_colonnes,
+                    function(nom_var) replicate(nb_perm, ma_fonction(nom_var)),
+                    numeric(nb_perm))
+
+mat_pertes = mat_pertes %>% colMeans
+
+# resultat final
+dtf_perf = data.frame(Variable = vect_colonnes,
+                          perte_auc = unname(mat_pertes)) %>% 
+  mutate(pct_importance = round(abs(perte_auc) / sum(abs(perte_auc)) * 100)) %>% arrange(-pct_importance)
+
+# pour figer l'ordre des variables dans les graphiques par importance decroissante (au lieu d'un ordre alphabetique) 
+dtf_perf_mlr$Variable = factor(dtf_perf_mlr$Variable, levels = rev(dtf_perf_mlr$Variable))
+dtf_perf_caret$Variable = factor(dtf_perf_caret$Variable, levels = rev(dtf_perf_caret$Variable))
+dtf_perf$Variable = factor(dtf_perf$Variable, levels = rev(dtf_perf$Variable))
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Modele et permutations avec *mlr* {data-width=100}
+
+```{r, fig.width=3.5, fig.asp=0.6}
+ggplot(dtf_perf_mlr, aes(Variable, pct_importance)) + geom_col() + ggtitle("Importance des variables") + coord_flip()
+
+dtf_perf_mlr %>% kable() %>% 
+  kable_styling(bootstrap_options = c("striped", "bordered", "condensed"), full_width = F, font_size = 12)
+```
+
+### Modele avec *caret* et permutations avec *DALEX* {data-width=100}
+
+```{r, fig.width=3.5, fig.asp=0.6}
+ggplot(dtf_perf_caret, aes(Variable, pct_importance)) + geom_col() + ggtitle("Importance des variables") + coord_flip()
+
+dtf_perf_caret %>% kable() %>% kable_styling(bootstrap_options = c("striped", "bordered", "condensed"), full_width = F, font_size = 12)
+```
+
+### Modele avec *mlr* et permutations a la main {data-width=100}
+
+```{r, fig.width=3.5, fig.asp=0.6}
+ggplot(dtf_perf, aes(Variable, pct_importance)) + geom_col() + ggtitle("Importance des variables") + coord_flip()
+
+dtf_perf %>% kable() %>% kable_styling(bootstrap_options = c("striped", "bordered", "condensed"), full_width = F, font_size = 12)
+```
+
+
+### **Analyses des resultats** {data-width=230}
+
+Comparaison des permutations de chaque package
+
+  - Avec les permutations via *mlr* la variable Sex est nettement moins importante qu'avec les deux autres methodes : la fonction *mlr:::doPermutationImportance* entraine le modele sur un jeu de donnees et les previsions sont realisees sur ces memes donnees, les mesures d'AUC sont donc biaisees et on ne peut que deconseiller cette approche
+  - *DALEX* permet de calculer facilement l'importance des variables de tout modele (pas seulement ceux de *mlr* ou *caret*)  mais il ne realise que 10 permutations par defaut ce qui donne une mesure assez variable, il vaut mieux repliquer la mesure quelques dizaines de fois et prendre la moyenne des resultats (ce qu'on a fait)
+
+----
+
+Importance des variables
+
+  - Les variables "Sex", "Pclass" et "Age" sont classees a l'identique par les trois approches.
+  - Les valeurs de perte d'AUC sont proches entre *DALEX* et les permutations manuelles sauf pour la variable "Fare" : les package *mlr* et *caret* n'ont pas les m?mes parametres par defaut pour la methode *ranger* (foret aleatoire), en particulier le modele de *caret* ne trouve pas la variable "Fare" tres influente ...
+
+----
+
+ Exemples d'application pratique
+ 
+  - Quand une mesure specifique de l'importance des variables n'est pas convaincante, par exemple la "Variable Importance in Projection" de la regression PLS qui est tres artificielle
+  - Quand on veut comparer equitablement l'importance des variables de deux modeles on doit la mesurer avec la meme methode. On peut vouloir comparer par exemple un modele de regression logistique en production et un modele en developpement construit avec de nouvelles variables et une autre methode (boosting d'arbres, ...).
+  

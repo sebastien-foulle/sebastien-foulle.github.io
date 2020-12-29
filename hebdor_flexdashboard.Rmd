@@ -1,0 +1,144 @@
+---
+title: "Un exemple de tableau de bord"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: flatly
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+# resultat html a ouvrir avec chrome
+# https://rmarkdown.rstudio.com/flexdashboard/layouts.html
+# https://plot.ly/r/bar-charts/
+
+### les packages
+
+# install.packages("flexdashboard")
+# install.packages("plotly")
+
+library("flexdashboard")
+library("plotly")
+
+library("ggplot2")
+library("dplyr")
+library("tidyr")
+
+# pour les panel_div
+library("shinyLP")
+
+
+### les donnees
+set.seed(2018)
+
+donnees = data.frame(Dim.1 = rpois(10, 3) + 5,
+                     Dim.2 = rpois(10,1) + 4,
+                     Dim.3 = rpois(10,2) + 6,
+                     mois = factor(month.abb[1:10], levels = month.abb[1:10]),
+                     stringsAsFactors = FALSE) %>% gather(key = "Dim", value = "valeur", - mois)
+
+val_x = 3.7
+val_y = 5.2
+
+dtf1 = donnees
+dtf1$text = paste0("le chiffre ", dtf1$valeur)
+
+dtf2 = donnees %>% filter(Dim == "Dim.2")
+dtf2$text =as.character(dtf2$valeur)
+```
+
+Partie 1
+===================================== 
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Boutons de filtre avec plotly et infobulles personnalisées
+
+```{r}
+# les valeurs sur lequelles on filtre
+liste_choix = sort(unique(dtf1$Dim))
+
+plot_ly(dtf1, x = ~ mois, y = ~valeur, type = 'bar', text = ~text, color = ~Dim,
+        # pour appliquer un filtre par defaut
+        transforms = list(
+      list(
+        type = 'filter',
+        target = ~Dim,
+        # valeur par defaut
+        value = liste_choix[1]
+      )
+    )) %>% layout(
+      updatemenus = list(
+        list(
+          type = 'buttons',
+          # type = 'dropdown',
+          buttons = list(
+            # on filtre sur l'unique transformation qu'on a defini, en javascript la numerotation commence a 0
+            list(args = list("transforms[0].value", liste_choix[1]),
+                 label = liste_choix[1]),
+            list(args = list("transforms[0].value", liste_choix[2]),
+                 label = liste_choix[2]),
+            list(args = list("transforms[0].value", liste_choix[3]),
+                 label = liste_choix[3])
+            )
+          )
+        )
+      ) 
+```
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Value box
+
+```{r}
+valueBox(value = val_x, caption = "Cliquez-moi !",  icon = "fa-piggy-bank", href="#details", color = "warning")
+```
+
+### Des phrases {data-height=500}
+
+```{r}
+panel_div(class_type = "danger", panel_title = "Un titre",
+                                              content = "Une phrase importante")
+panel_div(class_type = "success", panel_title = "Un 2eme titre",
+                                              content = paste0("Un chiffre : ", val_y))
+```
+
+
+### Faceting avec plotly
+
+```{r}
+# "y" suivi d'un entier uniquement
+ plot_ly(donnees, x = ~mois, y = ~valeur, color = ~Dim, yaxis = ~paste0("y", as.integer(as.factor(Dim)))) %>% add_lines() %>%
+  subplot(nrows = 2, shareX = TRUE)
+```
+
+
+Zoom {#details}
+===================================== 
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Filtre sur la période
+
+```{r}
+plot_ly(dtf2, x = ~ mois, y = ~valeur, type = 'scatter', text = ~text, mode = "lines+markers") %>% 
+  layout(title = 'Mon titre',
+         xaxis = list(rangeslider = list(type = "mois")))
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+
+### Tableau
+
+```{r}
+knitr::kable(donnees[1:12, ])
+```
+

@@ -1,0 +1,93 @@
+---
+title: Discretisation supervisee avec *smbinning*
+output: 
+  flexdashboard::flex_dashboard:
+    theme: flatly
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set( cache = TRUE)
+```
+
+```{r donnees, message=FALSE}
+library("smbinning")
+library("ggplot2")
+
+discretise = smbinning(titanic::titanic_train ,
+                       "Survived",
+                       "Fare")
+```
+
+Column {data-width=100}
+-----------------------------------------------------------------------
+  
+### **Lien entre la variable Fare et la cible Survived**
+```{r violin_plots}
+freq_cible = mean(titanic::titanic_train$Survived)
+# les chances de survie augmentent avec le montant du billet
+ggplot(titanic::titanic_train, aes(factor(Survived), Fare)) + geom_violin() + 
+  ggtitle(paste0("Distribution des tarifs selon survie/deces (taux de survie : ",formattable::percent(freq_cible, digits = 0),")")) + coord_flip()
+```
+
+### **Frequence de chaque modalite creee**
+
+```{r frequences}
+smbinning.plot(discretise,option="dist",sub="Fare") 
+```
+
+Column {data-width=100}
+-----------------------------------------------------------------------
+  
+### **Frequence de la cible pour chaque modalite creee**
+
+```{r bien_classes}
+smbinning.plot(discretise,option="goodrate",sub="Fare")
+```
+
+
+### **WoE de chaque modalite creee**
+```{r WoE}
+smbinning.plot(discretise,option="WoE",sub="Fare")
+```
+
+```
+Note : WoE > 0 <=> Frequence cible > 38%
+```
+
+Column {data-width=300}
+-----------------------------------------------------------------------
+  
+  
+### **les indicateurs de qualite de la discretisation de la variable Fare** {data-height=130}
+```{r tableau_IV}
+dtf = discretise$ivtable
+knitr::kable(dtf[dtf$Cutpoint != "Missing",])
+```
+
+### **Un peu de theorie (et de formules mathematiques avec LaTeX) : Weight Of Evidence, Information Value**
+
+Le tableau d'indicateurs ci-dessus permet de se faire une idee de la qualite de la discretisation obtenue
+
+- la colonne *PctRec* correspond au graphique des frequences des modalites, les colonnes *GoodRate* et *WoE* aux deux autres graphiques
+- pour chaque modalite, l'indicateur WoE joue le meme role qu'un lift, mais il doit etre compare a 0 alors que le lift est compare a 1
+- pour chaque variable qualitative, l'indicateur IV est positif, non majore et plus il est eleve, plus la variable est predictive de la cible.
+
+Plus precisement, si on note $Y$ la variable cible de valeurs 0 et 1 et $X$ la variable explicative discretisee grace au package *smbinning*, de modalites *a*, *b* et *c*, alors on a les formules suivantes pour le Weight of Evidence et l'Information Value :
+
+$$ WoE(i) = \log\left(\frac{P(X = i | Y = 1)} {P(X = i | Y = 0)}\right) = \log\left(\frac{\frac{P(Y = 1 | X = i)} {P(Y = 0 | X = i)}} {\frac{P(Y = 1)} {P(Y = 0)}}\right) \ et \ IV = \sum_{i = a,b,c}  \left( P(X = i | Y = 1) - P(X = i | Y = 0) \right) \log\left(\frac{P(X = i | Y = 1)} {P(X = i | Y = 0)}\right)$$
+Le membre de  droite de la 1ere formule est le logarithme de *l'odds-ratio* ( = le coefficient de la modalite $i$ dans un modele de regression logistique). Si le WoE est positif cela indique que la modalite $i$ favorise l'apparition de la cible, s'il est negatif c'est le contraire.
+
+On prend en compte le % d'individus qui prennent cette modalite $(= P(X=i))$ en multipliant le WoE par la quantite $P(X = i | Y = 1) - P(X = i | Y = 0)$, de cette facon on obtient un WoE pondere qui est toujours positif. Enfin on somme les WoE ponderes pour toutes les modalites de $X$ ce qui donne l'Information Value totale.
+
+Pour info l'IV est utilisee dans les regressions logistiques de *credit scoring* et on a les regles empiriques suivantes.
+
+Information Value	| Pouvoir de prediction
+:-----------------:|:---------------:
+  < 0,02	| 	inutilisable
+0,02 a 0,1	| 	predicteur faible
+0,1 a 0,3	| 	predicteur moyen
+0,3 a 0,5	| 	predicteur fort
+>0,5		| suspect, trop beau pour etre vrai
+

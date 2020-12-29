@@ -1,0 +1,241 @@
+---
+title: Selection de variables "model-free"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: flatly
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set( cache = TRUE)
+```
+
+
+```{r donnees, include=FALSE}
+# pour la manip de donnees
+library("dplyr")
+
+# pour traiter les chaines de caracteres
+library("stringr")
+
+# pour les graphiques
+library("ggplot2")
+
+# pour discretiser les variables
+library("smbinning")
+
+# un des packages du "tidymodels" de Rstudio pour les metriques de score comme l'AUC
+library("yardstick")
+
+# pour les modeles : installer caret et mlr
+# install.packages(c("caret", "mlr"))
+
+set.seed(2018)
+donnees = titanic::titanic_train %>% select(-Name, -Ticket, -Cabin) %>% mutate(echantillon = sample(c("train", "test"),
+                                                                                                    size = nrow(titanic::titanic_train),
+                                                                                                    replace = TRUE, 
+                                                                                                    prob = c(0.7, 0.3))) %>% 
+  rename(id = PassengerId,
+         cible = Survived) %>% select(id, cible, echantillon, everything())
+
+
+# on type les variables character en facteurs pour eviter des messages d'erreurs de caret et mlr
+donnees = donnees %>% mutate_if(is.character, as.factor)
+
+### on discretise les variables numeriques et on cree les scores associes, le score est la frequence de la cible pour chaque modalite
+var_expl_num = donnees %>% select(-id, -cible, -echantillon) %>% select_if(is.numeric) %>% colnames(.)
+
+for (var_num in var_expl_num) {
+  # on discretise sur l'echantillon d'apprentissage
+  discretise = smbinning(donnees %>% filter(echantillon == "train") %>% select(c(var_num, "cible")),
+                         "cible",
+                         var_num)
+  
+  ## si la discretisation a reussi pour une variable "XXX" :
+  if (length(discretise) == 7) {
+    points = discretise$cuts
+    
+    # 1. on cree la variable discretisee "quali_XXX" dans toute la base
+    # Note : pour ca on utilise "cut" plutot que la fonction smbinning.gen du package smbinning car cette derniere est dangereuse :
+    # elle se base sur la position des colonnes, pas leur nom, il faut donc fournir une table avec exactement les memes champs
+    # et dans le meme ordre que pour la fonction "smbinning", ici il faudrait donc taper 
+    # smbinning.gen(donnees %>% select(c(var_num, "cible")), ivout = discretise, chrname = var_temp)
+    # Et avec addNA on s'assure que NA est traitee comme une modalite usuelle --> aucune ligne manquante dans le score final "sc_disc_XXX"
+    var_temp = paste0("quali_", var_num)
+    donnees[[var_temp]] = addNA(cut(donnees[[var_num]], breaks = c(-Inf, points, Inf), include.lowest = TRUE), ifany = TRUE)
+    
+    # 2. On calcule le score sur l'echantilllon d'apprentissage
+    scores = donnees %>% filter(echantillon == "train") %>% group_by_at(var_temp) %>% summarise(prev = mean(cible))
+    vect_score = scores$prev
+    names(vect_score) = scores[[var_temp]]
+    
+    # 3. on score toute la base, le score est "sc_discr_XXX" (et on supprime "quali_XXX")
+    # pour cela on pourrait aussi faire une jointure gauche entre donnees et scores, ca serait un peu plus long a taper ...
+    donnees[[paste0("sc_disc_", var_num)]] = vect_score[donnees[[var_temp]]]
+    donnees[[var_temp]] = NULL
+  } else {
+    ## si la variable est deja discrete on n'a pas besoin de creer une variable quali_XXX, et le reste du code est le meme
+    if (discretise == "Uniques values < 5") {
+      var_temp = paste0("sc_", var_num)
+      # exclude = NULL pour que la-aussi NA soit traitee comme une modalite usuelle 
+      donnees[[var_temp]] = factor(donnees[[var_num]], exclude = NULL)
+      scores = donnees %>% filter(echantillon == "train") %>% group_by_at(var_temp) %>% summarise(prev = mean(cible))
+      vect_score = scores$prev
+      names(vect_score) = scores[[var_temp]]
+      donnees[[var_temp]] = vect_score[donnees[[var_temp]]]
+    }
+  }
+}
+
+# on a reussi a discretiser les variables numeriques Parch et Fare
+var_disc = str_subset(names(donnees), "^sc_disc_")
+
+### on score les variables qualitatives, le score est "sc_XXX"
+var_expl_quali = donnees %>% select(-id, -cible, -echantillon) %>% select_if(function(x) !is.numeric(x)) %>% colnames(.)
+
+for (var_quali in var_expl_quali) {
+  var_temp = paste0("sc_", var_quali)
+  donnees[[var_temp]] = addNA(donnees[[var_quali]], ifany = TRUE)
+  scores = donnees %>% filter(echantillon == "train") %>% group_by_at(var_temp) %>% summarise(prev = mean(cible))
+  vect_score = scores$prev
+  names(vect_score) = scores[[var_temp]]
+  donnees[[paste0("sc_", var_quali)]] = vect_score[donnees[[var_temp]]]
+}
+
+# les variables de score : les discretisees, les quali, 
+# et on ajoute toutes les variables numeriques qui sont utilisees telles quelles comme des scores de la cible
+# var_scores1 suffit pour caret qui n'a pas besoin qu'on score (=numerise) les variables quali
+var_scores = c(var_expl_num, var_disc, paste0("sc_", var_expl_quali))
+var_scores1 = c(var_expl_num, var_disc,  var_expl_quali)
+
+
+# les variables de score et la cible sur l'echantillon test pour mesurer leur pouvoir predictif
+dtf = donnees %>% filter(echantillon == "test") %>% select(c(var_scores, "cible"))
+dtf1 = donnees %>% filter(echantillon == "test") %>% select(c(var_scores1, "cible"))
+```
+
+
+```{r metriques, include=FALSE}
+### avec yardstick : AUC calculee pour chaque variable 
+liste_AUC = numeric(length(var_scores))
+names(liste_AUC) = var_scores
+
+# pour obtenir la meme AUC - 0.5 que caret pour l'age (0.0320221), on change le signe (plus on est jeune, plus les chances de survie augmentent)
+# et comme l'age max est 80, on met 81 a la place des valeurs manquantes
+# donnees$Age = -  donnees$Age
+# donnees$Age[is.na(donnees$Age)] = -81
+
+# on calcule l'AUC  de chaque score sur l'echantillon test, la 1ere modalite de dtf$cible est la cible
+for (var_prev in var_scores) {liste_AUC[[var_prev]] = roc_auc_vec(factor(dtf$cible, levels = c("1", "0")), dtf[[var_prev]])}
+
+# si AUC < 1 (inversion cible / non cible ou variable numerique qui decroit alors que la frequence de la cible augmente) transfo 1-AUC
+cond = liste_AUC < 0.5
+liste_AUC[cond] = 1 - liste_AUC[cond] 
+
+# on remplace l'auc par auc - 0.5
+liste_AUC = liste_AUC - 0.5
+
+# meilleures variables au debut
+liste_AUC = sort(liste_AUC, decreasing = TRUE)
+
+
+### avec caret, AUC - 0.5 calculee pour toutes les variables
+liste_caret = caret::filterVarImp(dtf1,
+                    as.factor(dtf1$cible)) - 0.5
+
+
+### avec mlr : on choisit la metrique
+# https://mlr-org.github.io/mlr/articles/tutorial/filter_methods.html
+# (methodes = mlr::listFilterMethods(desc = TRUE, tasks = FALSE, features = FALSE,include.deprecated = FALSE))
+
+# tache de classif
+ma_tache = mlr::makeClassifTask(id = "dtf_test", data = dtf, 
+                           target = "cible")
+
+# ca donne directement auc - 0.5
+liste_auc = mlr::generateFilterValuesData(task = ma_tache, method = "auc")
+
+# valeur dans liste_anova = valeur stats Fisher
+liste_anova = mlr::generateFilterValuesData(task = ma_tache, method = "anova.test")
+```
+
+
+Column {data-width=250}
+-----------------------------------------------------------------------
+
+### Avec yardstick
+
+```{r}
+# levels = ... pour forcer a respecter l'ordre des variables (pour eviter un tri alphabetique)
+data.frame(variable = factor(names(liste_AUC), levels = names(liste_AUC)), 
+           auc = unname(liste_AUC)) %>% ggplot(aes(variable, auc)) + geom_col() +
+  ggtitle("AUC - 0.5 calculee 'a la main' pour chaque variable") + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+### Avec caret
+
+```{r}
+liste_caret %>% mutate(variable = row.names(.), auc = X0) %>% arrange(desc(X0)) %>% 
+  mutate(variable = factor(variable, levels = variable)) %>% filter(variable != "cible") %>% ggplot(aes(variable, auc)) + geom_col() +
+  ggtitle("AUC - 0.5 calculees avec caret") + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Column {data-width=250}
+-----------------------------------------------------------------------
+
+### Avec mlr : auc - 0.5
+
+```{r}
+mlr::plotFilterValues(liste_auc)
+```
+
+### Avec mlr : anova
+```{r}
+mlr::plotFilterValues(liste_anova)
+```
+
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+
+### **Analyse des resultats**
+Notes techniques
+
+  - on numerise les variables qualitatives en les remplacant par la frequence de la cible pour chaque modalite. En effet les fonctions de selection de variables de "mlr" basees sur l'AUC ou l'Anova n'acceptent que des variables numeriques, comme la fonction *roc_auc_vec* du package "yardstick". Par contre le package "caret" se charge de numeriser lui-meme les variables qualitatives avant le calcul de l'AUC.
+  - traitement des valeurs manquantes pour l'age : elles sont remplacees par le max de la variable par "caret" avant le calcul de l'AUC, ce qui est tout a fait arbitraire, alors que "yardstick" ecarte les valeurs manquantes du calcul, d'ou des valeurs differentes pour l'AUC de cette variable. Et "mlr" fait visiblement encore autre chose... En cas de valeurs manquantes il vaut donc mieux utiliser "yardstick".
+
+----
+  
+Quand on choisit l'AUC pour selectionner les variables, la cible etant "survivre au naufrage du Titanic"
+
+  - la variable la plus predictive est le sexe
+  - le prix du billet et la classe sont aussi assez predictives
+  - le prix discretise est un peu moins predictif que le prix, le lien entre cette variable et le taux de survie est donc assez lineaire
+  - la variable "SibSp" (nombre de freres, epouses, ... a bord) a une AUC qui depasse tres peu 0.5, elle n'est pas du tout predictive de la cible
+  
+----
+  
+Quand on choisit l'anova pour selectionner les variables (mlr) les resultats sont assez differents
+
+  - le sexe apparait beaucoup plus predictif
+  - le prix discretise semble deux fois plus predictif que le prix non transforme, idem pour la variable "Parch"
+
+*Mise en garde* : les differentes statistiques de tests proposees par le package "mlr" ne sont pas concues pour mesurer la qualite predictive d'un modele, contrairement a l'AUC. En particulier le test de Fisher pour l'anova indique seulement la bonne adequation du modele aux donnees, en privilegiant les variables discretes aux variables continues. Bref il est prudent de choisir l'AUC comme indicateur avec le package "mlr".
+
+----
+
+Exemples d'utilisation de la selection de variables
+
+  - Traitement des variables dont l'auc est faible (<= 0.52) : on fait tourner un modele sur toutes les variables, puis on supprime les variables de faible AUC et on refait tourner le modele. Normalement la degradation de qualite sera negligeable et le temps de mise en production du modele peut passer d'une heure a quelques minutes (le temps de mise en production est souvent tres lie au temps de construction de champs calcules, dont certains sont peu ou pas predictifs de la cible)
+  - Traitement des variables dont l'auc est forte (>= 0.6) :
+      - soit il n'y a pas d'erreur, par exemple la realisation sur le Web d'un devis automobile est assez predictif d'un futur contrat auto
+      - soit le champ a ete mal calcule ce qui le rend anormalement predictif. Imaginons qu'on souhaite predire le churn et l'un des champs explicatifs est un segment de valeur client qui est vide pour les clients nouveaux et pour les clients resilies. Au lieu de calculer le champ vu fin 2017 pour predire le churn trois mois plus tard dans l'echantillon d'apprentissage, vous avez pris la valeur du champ dans la base vue a aujourd'hui (fin 2018). Ce champ est donc vide pour toutes vos cibles et il devient evidemment assez predictif de la cible.
+      
+Bref la selection de variables peut servir a accelerer les temps de mise en production ou a detecter des erreurs dans la constitution de la base (sans parler des problemes de multicolinearite pour les modeles lineaires ou logistiques).
+      
+      
