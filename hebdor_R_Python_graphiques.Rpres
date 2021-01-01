@@ -1,0 +1,377 @@
+Graphiques sous R et Python dans Rstudio
+======================================
+author: Sebastien Foulle
+date: 24/04/2020
+width: 2600
+height: 1200
+
+<!-- pour distiguer les chunks Python et leurs resultats de ceux de R -->
+
+<style>
+.python{
+    background-color: gold !important;
+}
+</style>
+
+
+
+Contenu du document
+========================================================
+
+On presente dans les slides suivantes les graphiques usuels en R avec *ggplot2* et *patchwork*, et en Python avec *seaborn*, *matplotlib* et *pandas*.
+
+Ce document est une presentation Rstudio, cf https://support.rstudio.com/hc/en-us/sections/200130218-R-Presentations. 
+
+Ce format a moins de possibilites qu'un Rmarkdown (il faut par exemple exporter manuellement en html), mais il permet d'ecrire facilement sur deux colonnes.
+
+Prerequis pour produire ce fichier html avec Rstudio a partir de la source ".Rpres" :
+
+- une distribution Python (Anaconda convient tres bien)
+- le package R *reticulate* qui permet d'utiliser des objets R dans des chunks Python (syntaxe *r.mon_objet_r*) et inversement (syntaxe *py$mon_objet_python*)
+
+
+Chargement des packages et donnees
+========================================================
+
+```{r packages_donnees}
+knitr:::opts_chunk$set(echo = TRUE, warning = FALSE, out.width= 1000, fig.asp=0.6, fig.align = 'center')
+
+
+library("reticulate")
+# chemin vers l'executable python
+# Sys.which("Python")
+use_python("C:/Users/Sebastien/Anaconda3/python.exe", required = FALSE)
+
+library("dplyr")
+
+library("ggplot2")
+# pour centrer les titres des graphiques ggplot2
+theme_update(plot.title = element_text(hjust = 0.5))
+
+# pour la grille de graphiques
+library("patchwork")
+
+donnees = reshape2::tips %>% group_by(size, sex) %>% summarise(tip = mean(tip)) %>% ungroup
+dir.create("images")
+```
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+```
+
+
+Solutions a des problemes techniques
+========================================================
+
+Le format Rpres a un (petit) probleme avec les images des graphiques Python : dans le document html final les chemins vers les images dans les balises <img> sont des chemins complets, depuis la racine.
+Mais pour que le document html les trouve ces chemins devraient etre relatifs, a partir du dossier qui contient le html.
+On triche donc un peu dans chaque slide qui affiche un graphique :
+
+  1. On affiche le code qui devrait marcher mais on ne l'execute pas
+  2. On execute, mais sans l'afficher, le code et l'export de l'image en local
+  3. On recharge l'image locale dans le document sans afficher le code
+  
+Et pour eviter le message d'erreur *This application failed to start because it could not find or load the Qt platform plugin 'windows' in ''*, on a defini dans le script Rpres la variable d'environnement Python *QT_QPA_PLATFORM_PLUGIN_PATH* qui contient le chemin vers le sous-dossier 'plugins/platforms' du repertoire 'Anaconda', a vous d'adapter le chemin sur votre machine.
+
+
+```{python}
+import os
+os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = 'C:/Users/Sebastien/Anaconda3/Library/plugins/platforms'
+os.chdir(".")
+```
+
+
+Les donnees
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+donnees
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+donnees = r.donnees; donnees
+```
+
+```{python}
+donnees_transposees = donnees.pivot(index='size', columns='sex', values='tip'); donnees_transposees
+```
+
+
+Courbes
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+ggplot(donnees, aes(size, tip, col = sex)) + geom_line()
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+sns.lineplot("size", "tip", hue="sex", data=donnees)
+plt.show()
+```
+
+```{python, echo = FALSE}
+sns.lineplot("size", "tip", hue="sex", data=donnees)
+plt.savefig("images/courbes.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/courbes.jpg")
+```
+
+
+Nuage de points
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+
+```{r}
+ggplot(donnees, aes(size, tip, col = sex)) + geom_point()
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+sns.scatterplot("size", "tip", hue="sex", data=donnees)
+# ou : sns.lmplot("size", "tip", hue="sex", data=donnees)
+plt.show()
+```
+
+```{python, echo = FALSE}
+sns.scatterplot("size", "tip", hue="sex", data=donnees)
+plt.savefig("images/nuage.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/nuage.jpg")
+```
+
+
+Pavage hexagonal
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+
+```{r}
+ggplot(donnees, aes(size, tip)) + geom_hex(bins = 6)
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+plt.hexbin(donnees['size'], donnees['tip'], gridsize=(5,5), cmap="Blues")
+plt.xlabel("size"); plt.ylabel("tip"); plt.title("Avec matplotlib"); plt.colorbar()
+plt.show()
+```
+
+```{python, echo = FALSE}
+plt.hexbin(donnees['size'], donnees['tip'], gridsize=(5,5), cmap="Blues")
+plt.xlabel("size"); plt.ylabel("tip"); plt.title("Avec matplotlib"); g = plt.colorbar()
+plt.savefig("images/pavage2.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/pavage2.jpg")
+```
+
+
+Diagramme en barres groupees
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+ggplot(donnees, aes(size, tip, fill = sex)) + geom_col(position = "dodge")
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+sns.barplot("size", "tip", hue="sex", data=donnees)
+plt.show()
+```
+
+```{python, echo = FALSE}
+sns.barplot("size", "tip", hue="sex", data=donnees)
+plt.savefig("images/barplot_groupe.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/barplot_groupe.jpg")
+```
+
+
+Diagramme en barres empilees
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+
+```{r}
+ggplot(donnees, aes(size, tip, fill = sex)) + geom_col()
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+donnees_transposees.plot.bar(stacked="True", rot = 0)
+plt.title("Avec pandas")
+plt.show()
+```
+
+```{python, echo = FALSE}
+donnees_transposees = donnees.pivot(index='size', columns='sex', values='tip')
+donnees_transposees.plot.bar(stacked="True", rot = 0)
+plt.title("Avec pandas")
+plt.savefig("images/barplot_empilees.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/barplot_empilees.jpg")
+```
+
+
+Histogramme
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+ggplot(donnees, aes(tip)) + geom_histogram(bins = 4)
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+donnees.tip.hist(bins = 4)
+plt.title("Avec pandas")
+# ou : sns.distplot(donnees.tip)
+plt.show()
+```
+
+```{python, echo = FALSE}
+donnees.tip.hist(bins = 4)
+plt.title("Avec pandas")
+plt.savefig("images/histo.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/histo.jpg")
+```
+
+
+Courbes de densite
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+ggplot(donnees, aes(tip, fill = sex)) + geom_density(alpha = 0.4)
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+for genre in donnees.sex.cat.categories:
+    sns.kdeplot(donnees.tip[donnees.sex == genre], shade=True, label = genre)
+plt.show()
+```
+
+```{python, echo = FALSE}
+for genre in donnees.sex.cat.categories:
+    sns.kdeplot(donnees.tip[donnees.sex == genre], shade=True, label = genre)
+plt.savefig("images/densite.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/densite.jpg")
+```
+
+
+Boxplots
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+ggplot(donnees, aes(sex, tip, fill = sex)) + geom_boxplot()
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+sns.boxplot("sex", "tip", data=donnees)
+plt.show()
+```
+
+```{python, echo = FALSE}
+sns.boxplot("sex", "tip", data=donnees)
+plt.savefig("images/boxplots.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/boxplots.jpg")
+```
+
+
+Faceting
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+ggplot(donnees, aes(size, tip)) + geom_line() + facet_grid(. ~ sex)
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python,eval = FALSE}
+g = sns.FacetGrid(donnees, col="sex").map(sns.lineplot, "size", "tip")
+plt.show()
+```
+
+```{python, echo = FALSE}
+g = sns.FacetGrid(donnees, col="sex").map(sns.lineplot, "size", "tip")
+plt.savefig("images/facettes.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/facettes.jpg")
+```
+
+
+Grille
+====================================
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+
+```{r}
+ggplot(donnees, aes(size, tip, col = sex)) + geom_point() + ggtitle("nuage") | 
+  ggplot(donnees, aes(size, tip, fill = sex)) + geom_col(position = "dodge") + ggtitle("barres groupees")
+```
+
+***
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+
+```{python,eval = FALSE}
+f, axes = plt.subplots(1, 2, figsize=(15, 10))
+axes[0].set_title('nuage')
+axes[1].set_title('barres groupees')
+sns.barplot("size", "tip", hue="sex", data=donnees,  ax=axes[0])
+sns.scatterplot("size", "tip", hue="sex", data=donnees,  ax=axes[1])
+plt.show()
+```
+
+```{python, echo = FALSE}
+f, axes = plt.subplots(1, 2, figsize=(15, 10))
+axes[0].set_title('nuage')
+axes[1].set_title('barres groupees')
+sns.scatterplot("size", "tip", hue="sex", data=donnees,  ax=axes[0])
+sns.barplot("size", "tip", hue="sex", data=donnees,  ax=axes[1])
+plt.savefig("images/grille.jpg", bbox_inches  ='tight')
+plt.close()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("images/grille.jpg")
+```
+
