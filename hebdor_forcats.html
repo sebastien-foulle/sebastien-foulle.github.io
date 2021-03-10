@@ -14,8 +14,7 @@
 
 <title>  Les facteurs avec forcats  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -148,39 +147,39 @@ a.sourceLine {
 <h1>Introduction</h1>
 <p>Il y a beaucoup d’operations utiles sur les facteurs, que ce soit pour ameliorer le rendu d’un graphique ou d’un tableau, ou lors d’une modelisation pour des raisons plus techniques (modalites rares, valeurs manquantes qui font planter une fonction, …). Le package <em>forcats</em> de Rstudio permet de realiser toutes ces operations facilement, comme le montrent les exemples ci-dessous.</p>
 <p>Les donnees pour la suite du code :</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;forcats&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># pour recentrer les titres en ggplot2</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))</span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a>tips2 =<span class="st"> </span>reshape<span class="op">::</span>tips</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a>titanic =<span class="st"> </span>titanic<span class="op">::</span>titanic_train[<span class="dv">10</span><span class="op">:</span><span class="dv">20</span>,] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(Pclass, Age, Sex, Survived) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Survived =</span> <span class="kw">factor</span>(Survived),</span>
-<span id="cb1-12"><a href="#cb1-12"></a>         <span class="dt">Age =</span> <span class="kw">cut</span>(Age, <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">80</span>), </span>
-<span id="cb1-13"><a href="#cb1-13"></a>                   <span class="dt">include.lowest =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;forcats&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pour recentrer les titres en ggplot2</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>tips2 <span class="ot">=</span> reshape<span class="sc">::</span>tips</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>titanic <span class="ot">=</span> titanic<span class="sc">::</span>titanic_train[<span class="dv">10</span><span class="sc">:</span><span class="dv">20</span>,] <span class="sc">%&gt;%</span> <span class="fu">select</span>(Pclass, Age, Sex, Survived) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Survived =</span> <span class="fu">factor</span>(Survived),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">Age =</span> <span class="fu">cut</span>(Age, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">80</span>), </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">include.lowest =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 </div>
 <div id="reordonner-les-modalites" class="section level1">
 <h1>Reordonner les modalites</h1>
 <p>C’est principalement utile pour la lecture des tableaux et des graphiques.</p>
 <p>Les donnees non triees :</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tips2 <span class="sc">%&gt;%</span> <span class="fu">count</span>(day)</span></code></pre></div>
 <pre><code>   day  n
 1  Fri 19
 2  Sat 87
 3  Sun 76
 4 Thur 62</code></pre>
 <p>On trie par frequence decroissante avec la fonction <em>fct_infreq</em>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>donnees =<span class="st"> </span>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a>donnees_tri =<span class="st"> </span>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_infreq</span>(day)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day, <span class="dt">name =</span> <span class="st">&quot;nb_trie&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(day, nb)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Sans tri&quot;</span>); <span class="kw">ggplot</span>(donnees_tri, <span class="kw">aes</span>(day, nb_trie)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec tri&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>donnees <span class="ot">=</span> tips2 <span class="sc">%&gt;%</span> <span class="fu">count</span>(day, <span class="at">name =</span> <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>donnees_tri <span class="ot">=</span> tips2 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">day =</span> <span class="fu">fct_infreq</span>(day)) <span class="sc">%&gt;%</span> <span class="fu">count</span>(day, <span class="at">name =</span> <span class="st">&quot;nb_trie&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(donnees, <span class="fu">aes</span>(day, nb)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Sans tri&quot;</span>); <span class="fu">ggplot</span>(donnees_tri, <span class="fu">aes</span>(day, nb_trie)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Avec tri&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_forcats_files/figure-html/graphiques-1.png" width="50%" /><img src="hebdor_forcats_files/figure-html/graphiques-2.png" width="50%" /></p>
 <p>Cette fois on trie les modalites par la moyenne croissante du champ total_bill avec <em>fct_reorder</em>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_reorder</span>(day, total_bill, mean)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tips2 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">day =</span> <span class="fu">fct_reorder</span>(day, total_bill, mean)) <span class="sc">%&gt;%</span> <span class="fu">count</span>(day)</span></code></pre></div>
 <pre><code>   day  n
 1  Fri 19
 2 Thur 62
@@ -191,16 +190,16 @@ a.sourceLine {
 <h1>Regroupements de modalites</h1>
 <p>On peut donner en parametre a la fonction <em>fct_lump</em> le nombre de modalites a conserver, ou la frequence minimale des modalites qu’on veut garder.</p>
 <p>Et on peut aussi proceder a un regroupement manuel avec <em>fct_collapse</em>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># on garde les deux modalites les plus frequentes, les autres sont regroupees</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_lump</span>(day, <span class="dt">n =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># on garde les modalites de frequence &gt;= 30%,  les autres sont regroupees</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_lump</span>(day, <span class="dt">prop =</span> <span class="fl">0.3</span>, <span class="dt">other_level =</span> <span class="st">&quot;Autres jours&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span>
-<span id="cb8-6"><a href="#cb8-6"></a></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># regroupement manuel</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a>tips2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">day =</span> <span class="kw">fct_collapse</span>(day, </span>
-<span id="cb8-9"><a href="#cb8-9"></a>                                    <span class="dt">semaine =</span> <span class="kw">c</span>(<span class="st">&quot;Fri&quot;</span>, <span class="st">&quot;Thur&quot;</span>), </span>
-<span id="cb8-10"><a href="#cb8-10"></a>                                    <span class="dt">weekend =</span> <span class="kw">c</span>(<span class="st">&quot;Sat&quot;</span>, <span class="st">&quot;Sun&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on garde les deux modalites les plus frequentes, les autres sont regroupees</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tips2 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">day =</span> <span class="fu">fct_lump</span>(day, <span class="at">n =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span> <span class="fu">count</span>(day)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># on garde les modalites de frequence &gt;= 30%,  les autres sont regroupees</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>tips2 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">day =</span> <span class="fu">fct_lump</span>(day, <span class="at">prop =</span> <span class="fl">0.3</span>, <span class="at">other_level =</span> <span class="st">&quot;Autres jours&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">count</span>(day)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># regroupement manuel</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>tips2 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">day =</span> <span class="fu">fct_collapse</span>(day, </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">semaine =</span> <span class="fu">c</span>(<span class="st">&quot;Fri&quot;</span>, <span class="st">&quot;Thur&quot;</span>), </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">weekend =</span> <span class="fu">c</span>(<span class="st">&quot;Sat&quot;</span>, <span class="st">&quot;Sun&quot;</span>))) <span class="sc">%&gt;%</span> <span class="fu">count</span>(day)</span></code></pre></div>
 <pre><code>    day  n
 1   Sat 87
 2   Sun 76
@@ -216,44 +215,44 @@ a.sourceLine {
 <div id="recodage-de-modalites" class="section level1">
 <h1>Recodage de modalites</h1>
 <p>On recode les modalites avec … <em>recode</em> , et on peut changer les donnees manquantes en modalite avec <em>fct_explicit_na</em>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>titanic <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">cible =</span> <span class="kw">recode</span>(Survived, <span class="st">&quot;1&quot;</span> =<span class="st"> &quot;oui&quot;</span> , <span class="st">&quot;0&quot;</span> =<span class="st"> &quot;non&quot;</span>))</span>
-<span id="cb10-2"><a href="#cb10-2"></a>       </span>
-<span id="cb10-3"><a href="#cb10-3"></a>titanic <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Age =</span> <span class="kw">fct_explicit_na</span>(Age, <span class="dt">na_level =</span> <span class="st">&quot;manquant&quot;</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>titanic <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cible =</span> <span class="fu">recode</span>(Survived, <span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;oui&quot;</span> , <span class="st">&quot;0&quot;</span> <span class="ot">=</span> <span class="st">&quot;non&quot;</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>titanic <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Age =</span> <span class="fu">fct_explicit_na</span>(Age, <span class="at">na_level =</span> <span class="st">&quot;manquant&quot;</span>)) </span></code></pre></div>
 <pre><code>   Pclass     Age    Sex Survived cible
-1       2  [0,20] female        1   oui
-2       3  [0,20] female        1   oui
-3       1 (40,80] female        1   oui
-4       3  [0,20]   male        0   non
-5       3 (30,40]   male        0   non
-6       3  [0,20] female        0   non
-7       2 (40,80] female        1   oui
-8       3  [0,20]   male        0   non
-9       2    &lt;NA&gt;   male        1   oui
-10      3 (30,40] female        0   non
-11      3    &lt;NA&gt; female        1   oui
+10      2  [0,20] female        1   oui
+11      3  [0,20] female        1   oui
+12      1 (40,80] female        1   oui
+13      3  [0,20]   male        0   non
+14      3 (30,40]   male        0   non
+15      3  [0,20] female        0   non
+16      2 (40,80] female        1   oui
+17      3  [0,20]   male        0   non
+18      2    &lt;NA&gt;   male        1   oui
+19      3 (30,40] female        0   non
+20      3    &lt;NA&gt; female        1   oui
    Pclass      Age    Sex Survived
-1       2   [0,20] female        1
-2       3   [0,20] female        1
-3       1  (40,80] female        1
-4       3   [0,20]   male        0
-5       3  (30,40]   male        0
-6       3   [0,20] female        0
-7       2  (40,80] female        1
-8       3   [0,20]   male        0
-9       2 manquant   male        1
-10      3  (30,40] female        0
-11      3 manquant female        1</code></pre>
+10      2   [0,20] female        1
+11      3   [0,20] female        1
+12      1  (40,80] female        1
+13      3   [0,20]   male        0
+14      3  (30,40]   male        0
+15      3   [0,20] female        0
+16      2  (40,80] female        1
+17      3   [0,20]   male        0
+18      2 manquant   male        1
+19      3  (30,40] female        0
+20      3 manquant female        1</code></pre>
 <p><strong>Remarques</strong></p>
 <ul>
 <li><p>Si on ne declare pas explicitement NA comme une modalite, la fonction <em>barplot</em> de R base ne l’affiche pas (et en plus elle represente les modalites de frequence 0 comme “(20,25]” et “(25,30]” creees par la fonction <em>cut</em> au debut du script R).</p></li>
 <li><p>Avec <em>ggpglot2</em> par contre NA est affichee sans meme avoir besoin d’etre declaree comme modalite, et seules les modalites vraiment presentes dans l’echantillon sont conservees dans le graphique.</p></li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>donnees =<span class="st"> </span>titanic <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Age, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>)</span>
-<span id="cb12-2"><a href="#cb12-2"></a></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="kw">barplot</span>(<span class="dt">formula =</span> nb <span class="op">~</span><span class="st"> </span>Age, </span>
-<span id="cb12-4"><a href="#cb12-4"></a>        <span class="dt">data =</span> donnees, </span>
-<span id="cb12-5"><a href="#cb12-5"></a>        <span class="dt">main =</span> <span class="st">&quot;barplot classique&quot;</span>);<span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(Age, nb)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;barplot avec ggplot2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>donnees <span class="ot">=</span> titanic <span class="sc">%&gt;%</span> <span class="fu">count</span>(Age, <span class="at">name =</span> <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="at">formula =</span> nb <span class="sc">~</span> Age, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> donnees, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">&quot;barplot classique&quot;</span>);<span class="fu">ggplot</span>(donnees, <span class="fu">aes</span>(Age, nb)) <span class="sc">+</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;barplot avec ggplot2&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_forcats_files/figure-html/pbs-1.png" width="50%" /><img src="hebdor_forcats_files/figure-html/pbs-2.png" width="50%" /></p>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>

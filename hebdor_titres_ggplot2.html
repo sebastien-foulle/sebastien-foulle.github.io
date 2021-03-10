@@ -14,8 +14,7 @@
 
 <title>  Mise en forme des titres des graphiques ggplot2  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -151,48 +150,48 @@ a.sourceLine {
 <h1>Mises en forme mathematiques et parametrees</h1>
 <p>La commande <code>?plotmath</code>affiche toutes les mises en formes possibles.</p>
 <p>On en applique certaines ci-dessous grace a la fonction <code>quote</code>, et la fonction <code>bquote</code> etend les possibilites en permettant le passage de parametres.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># pour installer ggtext</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># remotes::install_github(&quot;tidyverse/ggplot2&quot;)</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># remotes::install_github(&quot;wilkelab/ggtext&quot;)</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">library</span>(<span class="st">&quot;ggtext&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># graphique avec mises en forme</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(Sepal.Length, Sepal.Width, <span class="dt">col =</span> Species)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">quote</span>(<span class="kw">paste</span>(<span class="st">&quot;C&#39;est &quot;</span>, <span class="kw">italic</span>(<span class="st">&quot;un &quot;</span>), <span class="kw">bold</span>(<span class="st">&quot;titre &quot;</span>), <span class="kw">scriptstyle</span>(<span class="kw">sqrt</span>(<span class="st">&quot;bizarre&quot;</span>)))))</span>
-<span id="cb1-12"><a href="#cb1-12"></a></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># le parametre x</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a>x =<span class="st"> &quot;sous-titre&quot;</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="co"># graphique avec mises en forme et evaluation d&#39;un parametre avec bquote</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(Sepal.Length, Sepal.Width, <span class="dt">col =</span> Species)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">quote</span>(<span class="kw">paste</span>(<span class="st">&quot;Un titre avec un parametrage rate : &quot;</span>, <span class="kw">widetilde</span>(x))),</span>
-<span id="cb1-19"><a href="#cb1-19"></a>       <span class="dt">subtitle =</span> <span class="kw">bquote</span>(<span class="kw">paste</span>(<span class="st">&quot;et un &quot;</span>, <span class="kw">widetilde</span>(.(x)), <span class="st">&quot; bien parametre&quot;</span>)),</span>
-<span id="cb1-20"><a href="#cb1-20"></a>       <span class="dt">caption =</span> <span class="st">&quot;les iris de Fisher, encore et toujours&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pour installer ggtext</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;tidyverse/ggplot2&quot;)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;wilkelab/ggtext&quot;)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggtext&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># graphique avec mises en forme</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(Sepal.Length, Sepal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">quote</span>(<span class="fu">paste</span>(<span class="st">&quot;C&#39;est &quot;</span>, <span class="fu">italic</span>(<span class="st">&quot;un &quot;</span>), <span class="fu">bold</span>(<span class="st">&quot;titre &quot;</span>), <span class="fu">scriptstyle</span>(<span class="fu">sqrt</span>(<span class="st">&quot;bizarre&quot;</span>)))))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># le parametre x</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="st">&quot;sous-titre&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># graphique avec mises en forme et evaluation d&#39;un parametre avec bquote</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(Sepal.Length, Sepal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">quote</span>(<span class="fu">paste</span>(<span class="st">&quot;Un titre avec un parametrage rate : &quot;</span>, <span class="fu">widetilde</span>(x))),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">bquote</span>(<span class="fu">paste</span>(<span class="st">&quot;et un &quot;</span>, <span class="fu">widetilde</span>(.(x)), <span class="st">&quot; bien parametre&quot;</span>)),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;les iris de Fisher, encore et toujours&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_titres_ggplot2_files/figure-html/calculs-1.png" width="50%" /><img src="hebdor_titres_ggplot2_files/figure-html/calculs-2.png" width="50%" /></p>
 </div>
 <div id="mises-en-forme-mardown-et-html-avec-le-package-ggtext" class="section level1">
 <h1>Mises en forme Mardown et html avec le package <em>ggtext</em></h1>
 <p>On n’a plus besoin de la fonction <em>quote</em> et on peut mettre de l’italique, du gras, des couleurs, des bordures …</p>
 <p>Pour voir toutes les possibilités du package : <a href="https://github.com/wilkelab/ggtext" class="uri">https://github.com/wilkelab/ggtext</a></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>marge =<span class="st"> </span><span class="dv">8</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>pad =<span class="st"> </span><span class="dv">4</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_markdown</span>(),</span>
-<span id="cb2-5"><a href="#cb2-5"></a>             <span class="dt">axis.title.x =</span> <span class="kw">element_markdown</span>(),</span>
-<span id="cb2-6"><a href="#cb2-6"></a>             <span class="dt">axis.title.y =</span> <span class="kw">element_textbox_simple</span>(<span class="dt">width =</span> <span class="ot">NULL</span>,</span>
-<span id="cb2-7"><a href="#cb2-7"></a>                                                   <span class="dt">orientation =</span> <span class="st">&quot;left-rotated&quot;</span>,</span>
-<span id="cb2-8"><a href="#cb2-8"></a>                                                   <span class="dt">margin =</span> <span class="kw">margin</span>(marge, marge, marge, marge),</span>
-<span id="cb2-9"><a href="#cb2-9"></a>                                                   <span class="dt">padding =</span> <span class="kw">margin</span>(pad, pad, pad, pad),</span>
-<span id="cb2-10"><a href="#cb2-10"></a>                                                   <span class="dt">r =</span> <span class="kw">unit</span>(<span class="dv">8</span>, <span class="st">&quot;pt&quot;</span>),</span>
-<span id="cb2-11"><a href="#cb2-11"></a>                                                   <span class="dt">fill =</span> <span class="st">&quot;palegreen&quot;</span>),)</span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="co"># graphique avec mises en forme</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(Sepal.Length, Sepal.Width, <span class="dt">col =</span> Species)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;C&#39;est *un* **titre** bizarre&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&lt;i style=&#39;color:purple&#39;&gt; Et ici c&#39;est pas mieux&lt;/i&gt;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>marge <span class="ot">=</span> <span class="dv">8</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pad <span class="ot">=</span> <span class="dv">4</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_markdown</span>(),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">axis.title.x =</span> <span class="fu">element_markdown</span>(),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">axis.title.y =</span> <span class="fu">element_textbox_simple</span>(<span class="at">width =</span> <span class="cn">NULL</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">orientation =</span> <span class="st">&quot;left-rotated&quot;</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">margin =</span> <span class="fu">margin</span>(marge, marge, marge, marge),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">padding =</span> <span class="fu">margin</span>(pad, pad, pad, pad),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">r =</span> <span class="fu">unit</span>(<span class="dv">8</span>, <span class="st">&quot;pt&quot;</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">fill =</span> <span class="st">&quot;palegreen&quot;</span>),)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># graphique avec mises en forme</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(Sepal.Length, Sepal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;C&#39;est *un* **titre** bizarre&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&lt;i style=&#39;color:purple&#39;&gt; Et ici c&#39;est pas mieux&lt;/i&gt;&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_titres_ggplot2_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /></p>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>

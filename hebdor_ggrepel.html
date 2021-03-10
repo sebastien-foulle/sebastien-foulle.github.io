@@ -14,8 +14,7 @@
 
 <title>  Eviter les etiquettes superposees avec ggrepel  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -146,59 +145,59 @@ a.sourceLine {
 <div id="intro" class="section level1">
 <h1>Introduction</h1>
 <p>Quand on a beaucoup de points sur un graphique <em>ggplot2</em>, on peut avoir des problemes de lisibilite des etiquettes qui se superposent. Le package <em>ggrepel</em> utilise un algorithme de repulsion pour regler ce probleme et il y a beaucoup d’options possibles, on en montre quelques-une ci-dessous.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;ggrepel&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">theme_set</span>(<span class="kw">theme_classic</span>(<span class="dt">base_size =</span> <span class="dv">15</span>))</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>), <span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">set.seed</span>(<span class="dv">2019</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co"># les noms de lignes deviennent une colonne nommee &quot;modeles&quot;</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a>mtcars2 =<span class="st"> </span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>tibble<span class="op">::</span><span class="kw">rownames_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;modeles&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggrepel&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">15</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">legend.position=</span><span class="st">&quot;none&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># les noms de lignes deviennent une colonne nommee &quot;modeles&quot;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>mtcars2 <span class="ot">=</span> mtcars <span class="sc">%&gt;%</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;modeles&quot;</span>)</span></code></pre></div>
 </div>
 <div id="application-simple" class="section level1">
 <h1>Application simple</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>gg_base =<span class="st"> </span><span class="kw">ggplot</span>(mtcars2, <span class="kw">aes</span>(disp, drat, <span class="dt">label =</span> modeles, <span class="dt">color =</span> <span class="kw">factor</span>(cyl))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a>gg_texte_usuel =<span class="st"> </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec geom_text&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a>gg_texte_repel =<span class="st"> </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec geom_text_repel&quot;</span>)</span>
-<span id="cb2-5"><a href="#cb2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6"></a>gg_texte_usuel</span>
-<span id="cb2-7"><a href="#cb2-7"></a>gg_texte_repel</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gg_base <span class="ot">=</span> <span class="fu">ggplot</span>(mtcars2, <span class="fu">aes</span>(disp, drat, <span class="at">label =</span> modeles, <span class="at">color =</span> <span class="fu">factor</span>(cyl))) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gg_texte_usuel <span class="ot">=</span> gg_base <span class="sc">+</span> <span class="fu">geom_text</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Avec geom_text&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>gg_texte_repel <span class="ot">=</span> gg_base <span class="sc">+</span> <span class="fu">geom_text_repel</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Avec geom_text_repel&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>gg_texte_usuel</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>gg_texte_repel</span></code></pre></div>
 <p><img src="hebdor_ggrepel_files/figure-html/simple-1.png" width="50%" height="400" /><img src="hebdor_ggrepel_files/figure-html/simple-2.png" width="50%" height="400" /></p>
 </div>
 <div id="quelques-options" class="section level1">
 <h1>Quelques options</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># on repousse les etiquettes entre elles mais les points ne sont plus repoussoirs</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>gg_texte_padding =<span class="st"> </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>(<span class="dt">point.padding =</span> <span class="ot">NA</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec l&#39;option &#39;padding = NA&#39;&quot;</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># on impose la direction verticale aux etiquettes</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>gg_texte_vertical =<span class="st"> </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>(<span class="dt">direction =</span> <span class="st">&quot;y&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec l&#39;option &#39;direction = y&#39;&quot;</span>)</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># on augmente la force de repulsion</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>gg_texte_repousse =<span class="st">  </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>(<span class="dt">force =</span> <span class="dv">100</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec l&#39;option &#39;force=100&#39;&quot;</span>)</span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># avec des fleches marquees</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>gg_texte_fleches =<span class="st">  </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>(<span class="dt">force =</span> <span class="dv">100</span>,</span>
-<span id="cb3-12"><a href="#cb3-12"></a>                                              <span class="dt">arrow =</span> <span class="kw">arrow</span>(<span class="dt">length =</span> <span class="kw">unit</span>(<span class="fl">0.02</span>, <span class="st">&quot;npc&quot;</span>), </span>
-<span id="cb3-13"><a href="#cb3-13"></a>                                                            <span class="dt">type =</span> <span class="st">&quot;closed&quot;</span>)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-14"><a href="#cb3-14"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec des fleches&quot;</span>)</span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="co"># on impose une limite a ne pas franchir</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a>gg_texte_limite =<span class="st"> </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="fl">3.5</span>, <span class="ot">NA</span>),</span>
-<span id="cb3-17"><a href="#cb3-17"></a>                                            <span class="dt">xlim  =</span> <span class="kw">c</span>(<span class="dv">150</span>, <span class="ot">NA</span>)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec options &#39;xlim&#39; et &#39;ylim&#39;&quot;</span>)</span>
-<span id="cb3-19"><a href="#cb3-19"></a><span class="co"># avec des etiquettes encadrees</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>gg_texte_cadre =<span class="st"> </span>gg_base <span class="op">+</span><span class="st"> </span><span class="kw">geom_label_repel</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec cadre&quot;</span>)</span>
-<span id="cb3-21"><a href="#cb3-21"></a></span>
-<span id="cb3-22"><a href="#cb3-22"></a>gg_texte_padding</span>
-<span id="cb3-23"><a href="#cb3-23"></a>gg_texte_vertical</span>
-<span id="cb3-24"><a href="#cb3-24"></a>gg_texte_repousse</span>
-<span id="cb3-25"><a href="#cb3-25"></a>gg_texte_fleches</span>
-<span id="cb3-26"><a href="#cb3-26"></a>gg_texte_limite</span>
-<span id="cb3-27"><a href="#cb3-27"></a>gg_texte_cadre</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on repousse les etiquettes entre elles mais les points ne sont plus repoussoirs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gg_texte_padding <span class="ot">=</span> gg_base <span class="sc">+</span> <span class="fu">geom_text_repel</span>(<span class="at">point.padding =</span> <span class="cn">NA</span>) <span class="sc">+</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Avec l&#39;option &#39;padding = NA&#39;&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># on impose la direction verticale aux etiquettes</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>gg_texte_vertical <span class="ot">=</span> gg_base <span class="sc">+</span> <span class="fu">geom_text_repel</span>(<span class="at">direction =</span> <span class="st">&quot;y&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Avec l&#39;option &#39;direction = y&#39;&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># on augmente la force de repulsion</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>gg_texte_repousse <span class="ot">=</span>  gg_base <span class="sc">+</span> <span class="fu">geom_text_repel</span>(<span class="at">force =</span> <span class="dv">100</span>) <span class="sc">+</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Avec l&#39;option &#39;force=100&#39;&quot;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># avec des fleches marquees</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>gg_texte_fleches <span class="ot">=</span>  gg_base <span class="sc">+</span> <span class="fu">geom_text_repel</span>(<span class="at">force =</span> <span class="dv">100</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.02</span>, <span class="st">&quot;npc&quot;</span>), </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">type =</span> <span class="st">&quot;closed&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Avec des fleches&quot;</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># on impose une limite a ne pas franchir</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>gg_texte_limite <span class="ot">=</span> gg_base <span class="sc">+</span> <span class="fu">geom_text_repel</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">3.5</span>, <span class="cn">NA</span>),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">xlim  =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="cn">NA</span>)) <span class="sc">+</span> </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Avec options &#39;xlim&#39; et &#39;ylim&#39;&quot;</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># avec des etiquettes encadrees</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>gg_texte_cadre <span class="ot">=</span> gg_base <span class="sc">+</span> <span class="fu">geom_label_repel</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Avec cadre&quot;</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>gg_texte_padding</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>gg_texte_vertical</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>gg_texte_repousse</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>gg_texte_fleches</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>gg_texte_limite</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>gg_texte_cadre</span></code></pre></div>
 <p><img src="hebdor_ggrepel_files/figure-html/options-1.png" width="50%" height="400" /><img src="hebdor_ggrepel_files/figure-html/options-2.png" width="50%" height="400" /><img src="hebdor_ggrepel_files/figure-html/options-3.png" width="50%" height="400" /><img src="hebdor_ggrepel_files/figure-html/options-4.png" width="50%" height="400" /><img src="hebdor_ggrepel_files/figure-html/options-5.png" width="50%" height="400" /><img src="hebdor_ggrepel_files/figure-html/options-6.png" width="50%" height="400" /></p>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>

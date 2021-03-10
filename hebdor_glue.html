@@ -14,8 +14,7 @@
 
 <title>  Melanger chaines de caracteres et code R avec glue  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -147,17 +146,17 @@ a.sourceLine {
 <div id="intro" class="section level1">
 <h1>Introduction</h1>
 <p>Le package <em>glue</em> est une alternative a la fonction <em>paste</em>, il produit un code plus court et intuitif. Illustration sur quelques exemples inspires de <a href="https://github.com/tidyverse/glue" class="uri">https://github.com/tidyverse/glue</a> :</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;glue&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;glue&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span></code></pre></div>
 </div>
 <div id="exemple-simple" class="section level1">
 <h1>Exemple simple</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">glue</span>(<span class="st">&#39;Infos avec glue : </span><span class="ch">\n</span><span class="st">This dataset has {nrow(mtcars)} rows and {ncol(mtcars)} columns. There {</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="st">     ifelse(sum(is.na(mtcars))&gt;0,&quot;is&quot;,&quot;are&quot;)} {sum(is.na(mtcars))} Missing Value&#39;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">cat</span>(<span class="kw">paste</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">Infos avec paste : </span><span class="ch">\n</span><span class="st">This dataset has&#39;</span>, <span class="kw">nrow</span>(mtcars), <span class="st">&#39;rows and&#39;</span>, <span class="kw">ncol</span>(mtcars), </span>
-<span id="cb2-5"><a href="#cb2-5"></a>          <span class="st">&#39;columns. There&#39;</span>, <span class="kw">ifelse</span>(<span class="kw">sum</span>(<span class="kw">is.na</span>(mtcars))<span class="op">&gt;</span><span class="dv">0</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;are&quot;</span>), <span class="kw">sum</span>(<span class="kw">is.na</span>(mtcars)), </span>
-<span id="cb2-6"><a href="#cb2-6"></a>          <span class="st">&#39;Missing Value&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glue</span>(<span class="st">&#39;Infos avec glue : </span><span class="sc">\n</span><span class="st">This dataset has {nrow(mtcars)} rows and {ncol(mtcars)} columns. There {</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">     ifelse(sum(is.na(mtcars))&gt;0,&quot;is&quot;,&quot;are&quot;)} {sum(is.na(mtcars))} Missing Value&#39;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st">Infos avec paste : </span><span class="sc">\n</span><span class="st">This dataset has&#39;</span>, <span class="fu">nrow</span>(mtcars), <span class="st">&#39;rows and&#39;</span>, <span class="fu">ncol</span>(mtcars), </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;columns. There&#39;</span>, <span class="fu">ifelse</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(mtcars))<span class="sc">&gt;</span><span class="dv">0</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;are&quot;</span>), <span class="fu">sum</span>(<span class="fu">is.na</span>(mtcars)), </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;Missing Value&#39;</span>))</span></code></pre></div>
 <pre><code>Infos avec glue : 
 This dataset has 32 rows and 11 columns. There are 0 Missing Value
 
@@ -166,22 +165,22 @@ This dataset has 32 rows and 11 columns. There are 0 Missing Value</code></pre>
 </div>
 <div id="avec-des-arguments-nommes" class="section level1">
 <h1>Avec des arguments nommes</h1>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Named arguments can be used to assign temporary variables.</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">glue</span>(<span class="st">&#39;My name is {name}, my age next year is {age + 1}, my anniversary is {format(anniversary, </span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="st">                                                                          &quot;%A, %B %d, %Y&quot;)}.&#39;</span>,</span>
-<span id="cb4-4"><a href="#cb4-4"></a>     <span class="dt">name =</span> <span class="st">&quot;Joe&quot;</span>,</span>
-<span id="cb4-5"><a href="#cb4-5"></a>     <span class="dt">age =</span> <span class="dv">40</span>,</span>
-<span id="cb4-6"><a href="#cb4-6"></a>     <span class="dt">anniversary =</span> <span class="kw">as.Date</span>(<span class="st">&quot;2001-10-12&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Named arguments can be used to assign temporary variables.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glue</span>(<span class="st">&#39;My name is {name}, my age next year is {age + 1}, my anniversary is {format(anniversary, </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">                                                                          &quot;%A, %B %d, %Y&quot;)}.&#39;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">name =</span> <span class="st">&quot;Joe&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">age =</span> <span class="dv">40</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">anniversary =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2001-10-12&quot;</span>))</span></code></pre></div>
 <pre><code>My name is Joe, my age next year is 41, my anniversary is vendredi, octobre 12, 2001.</code></pre>
 </div>
 <div id="avec-le-pipe-du-package-magrittr" class="section level1">
 <h1>Avec le pipe du package <em>magrittr</em></h1>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># `glue_data()` is useful in magrittr pipes</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">cat</span>(<span class="st">&quot;Avec glue_data :</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">head</span>(mtcars) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glue_data</span>(<span class="st">&quot;{rownames(.)} has {hp} hp&quot;</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Avec paste0 :</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">cat</span>(<span class="kw">paste</span>(<span class="kw">head</span>(mtcars) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rownames</span>(), <span class="st">&#39;has&#39;</span>, <span class="kw">head</span>(mtcars) <span class="op">%&gt;%</span><span class="st"> </span>.<span class="op">$</span>hp, <span class="st">&#39;hp&#39;</span>, <span class="dt">collapse =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># `glue_data()` is useful in magrittr pipes</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Avec glue_data :</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars) <span class="sc">%&gt;%</span> <span class="fu">glue_data</span>(<span class="st">&quot;{rownames(.)} has {hp} hp&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Avec paste0 :</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="fu">head</span>(mtcars) <span class="sc">%&gt;%</span> <span class="fu">rownames</span>(), <span class="st">&#39;has&#39;</span>, <span class="fu">head</span>(mtcars) <span class="sc">%&gt;%</span> .<span class="sc">$</span>hp, <span class="st">&#39;hp&#39;</span>, <span class="at">collapse =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>))</span></code></pre></div>
 <pre><code>Avec glue_data :
 Mazda RX4 has 110 hp
 Mazda RX4 Wag has 110 hp
@@ -197,8 +196,8 @@ Datsun 710 has 93 hp
 Hornet 4 Drive has 110 hp
 Hornet Sportabout has 175 hp
 Valiant has 105 hp</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Or within dplyr pipelines</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>iris[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">5</span>)] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">texte =</span> <span class="kw">glue</span>(<span class="st">&quot;This {Species} has a petal length of {Petal.Length}&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or within dplyr pipelines</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">5</span>)] <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">texte =</span> <span class="fu">glue</span>(<span class="st">&quot;This {Species} has a petal length of {Petal.Length}&quot;</span>))</span></code></pre></div>
 <pre><code>  Petal.Length Species                                 texte
 1          1.4  setosa This setosa has a petal length of 1.4
 2          1.4  setosa This setosa has a petal length of 1.4

@@ -14,8 +14,7 @@
 
 <title>  Graphiques sur une grille avec patchwork  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -152,47 +151,47 @@ a.sourceLine {
 <h1>Introduction</h1>
 <p>Le package <em>patchwork</em> quitte enfin github pour arriver sur le CRAN ! Et on a droit a quelques bonus sur des changements de themes unifies ou la suppression des legendes en doublon.</p>
 <p>Pour commencer on construit 5 graphiques <em>ggplot2</em> et on va les combiner dans la suite du document.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;patchwork&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))</span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a>donnees =<span class="st"> </span>reshape2<span class="op">::</span>tips</span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># on reordonne les modalites</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>donnees<span class="op">$</span>day =<span class="st"> </span><span class="kw">factor</span>(donnees<span class="op">$</span>day, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Thur&quot;</span>, <span class="st">&quot;Fri&quot;</span>, <span class="st">&quot;Sat&quot;</span>, <span class="st">&quot;Sun&quot;</span>))</span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a>gg_histo =<span class="st"> </span><span class="kw">ggplot</span>(donnees <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day, time, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>), <span class="kw">aes</span>(day, nb, <span class="dt">fill =</span> time)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;histogramme&quot;</span>)</span>
-<span id="cb1-14"><a href="#cb1-14"></a></span>
-<span id="cb1-15"><a href="#cb1-15"></a>gg_points =<span class="st"> </span><span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(total_bill, tip, <span class="dt">col =</span> time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;points&quot;</span>)</span>
-<span id="cb1-16"><a href="#cb1-16"></a></span>
-<span id="cb1-17"><a href="#cb1-17"></a>gg_lignes =<span class="st"> </span><span class="kw">ggplot</span>(donnees <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(day, time) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">size =</span> <span class="kw">mean</span>(size)), </span>
-<span id="cb1-18"><a href="#cb1-18"></a>                   <span class="kw">aes</span>(day, size, <span class="dt">col =</span> time, <span class="dt">group =</span> time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;lignes&quot;</span>)</span>
-<span id="cb1-19"><a href="#cb1-19"></a></span>
-<span id="cb1-20"><a href="#cb1-20"></a>gg_hexa =<span class="st"> </span><span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(total_bill, tip, <span class="dt">fill =</span> time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_hex</span>(<span class="dt">bins =</span> <span class="dv">5</span>) <span class="op">+</span></span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;hexagones&quot;</span>)</span>
-<span id="cb1-22"><a href="#cb1-22"></a></span>
-<span id="cb1-23"><a href="#cb1-23"></a>gg_facettes =<span class="st">  </span><span class="kw">ggplot</span>(donnees <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(day, time, sex, smoker, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>), </span>
-<span id="cb1-24"><a href="#cb1-24"></a>              <span class="kw">aes</span>(day, nb, <span class="dt">fill =</span> time))<span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>()<span class="op">+</span><span class="kw">facet_grid</span>(sex <span class="op">~</span><span class="st"> </span>smoker)<span class="op">+</span><span class="kw">ggtitle</span>(<span class="st">&quot;facettes&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;patchwork&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>donnees <span class="ot">=</span> reshape2<span class="sc">::</span>tips</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># on reordonne les modalites</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>donnees<span class="sc">$</span>day <span class="ot">=</span> <span class="fu">factor</span>(donnees<span class="sc">$</span>day, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Thur&quot;</span>, <span class="st">&quot;Fri&quot;</span>, <span class="st">&quot;Sat&quot;</span>, <span class="st">&quot;Sun&quot;</span>))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>gg_histo <span class="ot">=</span> <span class="fu">ggplot</span>(donnees <span class="sc">%&gt;%</span> <span class="fu">count</span>(day, time, <span class="at">name =</span> <span class="st">&quot;nb&quot;</span>), <span class="fu">aes</span>(day, nb, <span class="at">fill =</span> time)) <span class="sc">+</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;histogramme&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>gg_points <span class="ot">=</span> <span class="fu">ggplot</span>(donnees, <span class="fu">aes</span>(total_bill, tip, <span class="at">col =</span> time)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;points&quot;</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>gg_lignes <span class="ot">=</span> <span class="fu">ggplot</span>(donnees <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(day, time) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">size =</span> <span class="fu">mean</span>(size)), </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">aes</span>(day, size, <span class="at">col =</span> time, <span class="at">group =</span> time)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;lignes&quot;</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>gg_hexa <span class="ot">=</span> <span class="fu">ggplot</span>(donnees, <span class="fu">aes</span>(total_bill, tip, <span class="at">fill =</span> time)) <span class="sc">+</span> <span class="fu">geom_hex</span>(<span class="at">bins =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;hexagones&quot;</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>gg_facettes <span class="ot">=</span>  <span class="fu">ggplot</span>(donnees <span class="sc">%&gt;%</span> <span class="fu">count</span>(day, time, sex, smoker, <span class="at">name =</span> <span class="st">&quot;nb&quot;</span>), </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(day, nb, <span class="at">fill =</span> time))<span class="sc">+</span> <span class="fu">geom_col</span>()<span class="sc">+</span><span class="fu">facet_grid</span>(sex <span class="sc">~</span> smoker)<span class="sc">+</span><span class="fu">ggtitle</span>(<span class="st">&quot;facettes&quot;</span>)</span></code></pre></div>
 </div>
 <div id="grilles-simples" class="section level1">
 <h1>Grilles simples</h1>
 <p>On ecrit <em>gg1 + gg2</em> ou <em>gg1 | gg2</em> pour un alignement horizontal et <em>gg1 / gg2</em> pour un alignement vertical.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>(gg_histo <span class="op">|</span><span class="st"> </span>gg_points) <span class="op">/</span><span class="st"> </span>gg_lignes</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(gg_histo <span class="sc">|</span> gg_points) <span class="sc">/</span> gg_lignes</span></code></pre></div>
 <p><img src="hebdor_patchwork_files/figure-html/simple-1.png" style="display: block; margin: auto;" /></p>
 <p><strong>Note</strong> Le symbole ‘+’ est en fait utile pour les grilles complexes (section suivante) et quand on ne precise pas le ‘design matriciel’ c’est un alignement horizontal par defaut.</p>
 </div>
 <div id="grilles-complexes" class="section level1">
 <h1>Grilles complexes</h1>
 <p>La formulation matricielle est plus legere que celle de <em>gridExtra</em> qui oblige a definir une matrice des positions. Ici on economise quelques virgules et c’est l’ordre alphabetique sur les lettres qui definit la position de chaque graphique dans le design global.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>gg_design =<span class="st"> </span>gg_histo <span class="op">+</span><span class="st"> </span>gg_points <span class="op">+</span><span class="st"> </span>gg_lignes <span class="op">+</span><span class="st"> </span>gg_hexa <span class="op">+</span><span class="st"> </span>gg_facettes <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">plot_layout</span>(<span class="dt">design =</span> <span class="st">&#39;ab</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="st">                      cd</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="st">                      ee</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="st">                      ee&#39;</span>)</span>
-<span id="cb3-6"><a href="#cb3-6"></a>gg_design</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gg_design <span class="ot">=</span> gg_histo <span class="sc">+</span> gg_points <span class="sc">+</span> gg_lignes <span class="sc">+</span> gg_hexa <span class="sc">+</span> gg_facettes <span class="sc">+</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_layout</span>(<span class="at">design =</span> <span class="st">&#39;ab</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">                      cd</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">                      ee</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">                      ee&#39;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gg_design</span></code></pre></div>
 <p><img src="hebdor_patchwork_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="mise-en-forme-commune" class="section level1">
@@ -200,13 +199,13 @@ a.sourceLine {
 <div id="themes" class="section level3">
 <h3>Themes</h3>
 <p>Le symbole ‘&amp;’ permet d’appliquer le meme nouveau theme a tous les graphiques de la grille.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>gg_design <span class="op">&amp;</span><span class="st"> </span><span class="kw">theme_classic</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>gg_design <span class="sc">&amp;</span> <span class="fu">theme_classic</span>()</span></code></pre></div>
 <p><img src="hebdor_patchwork_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="legendes" class="section level3">
 <h3>Legendes</h3>
 <p>Les legendes qui se repetent sont inutiles, elles font perdre de la place et sont placees un peu partout dans la grille. Avec l’option <em>collect</em> elles sont dedupliquees et placees a droite de la grille.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>gg_design <span class="op">+</span><span class="st"> </span><span class="kw">plot_layout</span>(<span class="dt">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gg_design <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
 <p><img src="hebdor_patchwork_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /></p>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>

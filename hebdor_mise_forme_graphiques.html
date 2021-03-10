@@ -14,8 +14,7 @@
 
 <title>  Mise en forme additionnelle des graphiques  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -157,49 +156,49 @@ a.sourceLine {
 <p>Ce package fait partie d’une liste d’extensions du package <em>ggplot2</em> : <a href="http://www.ggplot2-exts.org/gallery/" class="uri">http://www.ggplot2-exts.org/gallery/</a></p>
 <div id="nuage-de-points" class="section level3">
 <h3>Nuage de points</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;tidyr&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(<span class="st">&quot;ggforce&quot;</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">set.seed</span>(<span class="dv">2019</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a>gg_bar_base =<span class="st"> </span><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(Petal.Length, Petal.Width, <span class="dt">col =</span> Species)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Le graphique basique&quot;</span>)</span>
-<span id="cb1-14"><a href="#cb1-14"></a></span>
-<span id="cb1-15"><a href="#cb1-15"></a>gg_bar_force =<span class="st"> </span><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(Petal.Length, Petal.Width, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_mark_rect</span>(<span class="kw">aes</span>(<span class="dt">label =</span> Species, <span class="dt">fill =</span> Species), </span>
-<span id="cb1-17"><a href="#cb1-17"></a>                                                   <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">expand =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;mm&quot;</span>)) <span class="op">+</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="kw">theme_no_axes</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="fl">0.5</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Le graphique avec ggforce&quot;</span>)</span>
-<span id="cb1-19"><a href="#cb1-19"></a></span>
-<span id="cb1-20"><a href="#cb1-20"></a>gg_bar_base</span>
-<span id="cb1-21"><a href="#cb1-21"></a>gg_bar_force</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyr&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggforce&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>gg_bar_base <span class="ot">=</span> <span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a> <span class="fu">ggtitle</span>(<span class="st">&quot;Le graphique basique&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>gg_bar_force <span class="ot">=</span> <span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="fu">geom_mark_rect</span>(<span class="fu">aes</span>(<span class="at">label =</span> Species, <span class="at">fill =</span> Species), </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">show.legend =</span> <span class="cn">FALSE</span>, <span class="at">expand =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">&quot;mm&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_no_axes</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.title=</span><span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Le graphique avec ggforce&quot;</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>gg_bar_base</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>gg_bar_force</span></code></pre></div>
 <p><img src="hebdor_mise_forme_graphiques_files/figure-html/nuage-1.png" width="50%" height="400" /><img src="hebdor_mise_forme_graphiques_files/figure-html/nuage-2.png" width="50%" height="400" /></p>
 </div>
 <div id="diagramme-circulaire" class="section level3">
 <h3>Diagramme circulaire</h3>
 <p>La syntaxe est raccourcie et on evite les coordonnees polaires : le quadrillage n’est plus change en cercles.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># https://rviews.rstudio.com/2019/09/19/intro-to-ggforce/</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>dtf =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">moy =</span> <span class="kw">mean</span>(Petal.Length))</span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a>gg_circ_base =<span class="st"> </span><span class="kw">ggplot</span>(dtf, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">2</span>, <span class="dt">y =</span> moy, <span class="dt">fill =</span> Species)) <span class="op">+</span><span class="st"> </span><span class="kw">xlim</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">width =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> Species), <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">position =</span> <span class="kw">position_stack</span>(<span class="dt">vjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="st">  </span><span class="kw">coord_polar</span>(<span class="st">&quot;y&quot;</span>, <span class="dt">start=</span><span class="dv">0</span>, <span class="dt">direction =</span> <span class="dv">-1</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Dark2&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Le graphique basique&quot;</span>)</span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a>gg_circ_force =<span class="st"> </span><span class="kw">ggplot</span>(dtf) <span class="op">+</span><span class="st"> </span><span class="kw">geom_arc_bar</span>(<span class="kw">aes</span>(<span class="dt">x0 =</span> <span class="dv">0</span>, <span class="dt">y0 =</span> <span class="dv">0</span>, <span class="dt">r0 =</span> <span class="fl">0.5</span>, <span class="dt">r =</span> <span class="dv">1</span>, </span>
-<span id="cb2-11"><a href="#cb2-11"></a>                                               <span class="dt">amount =</span> moy, <span class="dt">fill =</span> Species), </span>
-<span id="cb2-12"><a href="#cb2-12"></a>                           <span class="dt">radius =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&#39;mm&#39;</span>), <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">stat =</span> <span class="st">&quot;pie&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x0 =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">y0 =</span> <span class="st">&quot;y&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Dark2&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Le graphique avec ggforce&quot;</span>)</span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a>gg_circ_base</span>
-<span id="cb2-17"><a href="#cb2-17"></a>gg_circ_force</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># https://rviews.rstudio.com/2019/09/19/intro-to-ggforce/</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dtf <span class="ot">=</span> iris <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">moy =</span> <span class="fu">mean</span>(Petal.Length))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>gg_circ_base <span class="ot">=</span> <span class="fu">ggplot</span>(dtf, <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">2</span>, <span class="at">y =</span> moy, <span class="at">fill =</span> Species)) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>) <span class="sc">+</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Species), <span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">&quot;y&quot;</span>, <span class="at">start=</span><span class="dv">0</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Dark2&quot;</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Le graphique basique&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>gg_circ_force <span class="ot">=</span> <span class="fu">ggplot</span>(dtf) <span class="sc">+</span> <span class="fu">geom_arc_bar</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r0 =</span> <span class="fl">0.5</span>, <span class="at">r =</span> <span class="dv">1</span>, </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">amount =</span> moy, <span class="at">fill =</span> Species), </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                           <span class="at">radius =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&#39;mm&#39;</span>), <span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">stat =</span> <span class="st">&quot;pie&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x0 =</span> <span class="st">&quot;x&quot;</span>, <span class="at">y0 =</span> <span class="st">&quot;y&quot;</span>) <span class="sc">+</span> <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Dark2&quot;</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Le graphique avec ggforce&quot;</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>gg_circ_base</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>gg_circ_force</span></code></pre></div>
 <p><img src="hebdor_mise_forme_graphiques_files/figure-html/circulaire-1.png" width="50%" height="400" /><img src="hebdor_mise_forme_graphiques_files/figure-html/circulaire-2.png" width="50%" height="400" /></p>
 </div>
 </div>
@@ -207,19 +206,19 @@ a.sourceLine {
 <h1>Avec le package <em>magick</em></h1>
 <p>Le package <em>magick</em> est specialise dans le traitement des images : <a href="https://cran.r-project.org/web/packages/magick/vignettes/intro.html" class="uri">https://cran.r-project.org/web/packages/magick/vignettes/intro.html</a></p>
 <p>Ici on rajoute simplement un effet d’ombre au graphique.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(<span class="st">&quot;magick&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>img &lt;-<span class="st"> </span><span class="kw">image_graph</span>()</span>
-<span id="cb3-3"><a href="#cb3-3"></a>  gg_bar_force</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">invisible</span>(<span class="kw">dev.off</span>())</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">image_shadow</span>(img, <span class="dt">geometry =</span> <span class="st">&quot;100x20+30+30&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;magick&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>img <span class="ot">&lt;-</span> <span class="fu">image_graph</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  gg_bar_force</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">image_shadow</span>(img, <span class="at">geometry =</span> <span class="st">&quot;100x20+30+30&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_mise_forme_graphiques_files/figure-html/unnamed-chunk-1-1.png" width="400" height="400" /></p>
 </div>
 <div id="avec-le-package-patchwork-sur-github-pas-sur-le-cran" class="section level1">
 <h1>Avec le package <em>patchwork</em> (sur github, pas sur le CRAN)</h1>
 <p>Ce package, comme quelques autres (<a href="https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html" class="uri">https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html</a>, <a href="https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html" class="uri">https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html</a>), vise a remplacer les parametres <em>mfrow</em> et <em>mfcol</em> de R base par une syntaxe plus intiuitive et rapide pour placer plusieurs graphiques dans une grille.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># installation : remotes::install_github(&quot;thomasp85/patchwork&quot;)</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">library</span>(<span class="st">&quot;patchwork&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>gg_bar_base <span class="op">|</span><span class="st"> </span>(gg_bar_force <span class="op">/</span><span class="st"> </span>gg_circ_base <span class="op">/</span><span class="st"> </span>gg_circ_force)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># installation : remotes::install_github(&quot;thomasp85/patchwork&quot;)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;patchwork&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>gg_bar_base <span class="sc">|</span> (gg_bar_force <span class="sc">/</span> gg_circ_base <span class="sc">/</span> gg_circ_force)</span></code></pre></div>
 <p><img src="hebdor_mise_forme_graphiques_files/figure-html/unnamed-chunk-2-1.png" width="600" height="600" /></p>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>

@@ -14,8 +14,7 @@
 
 <title>  Discretiser une variable numerique avec santoku  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -155,17 +154,17 @@ a.sourceLine {
 <h1>Introduction</h1>
 <p>Le package <em>santoku</em> et ses fonctions <em>chop_xxx</em> permettent de discretiser une variable numerique, comme la fonction usuelle <em>cut</em> mais avec plus de fonctionnalites, cf le recapitulatif <a href="https://hughjonesd.github.io/santoku/tutorials/00-visualintroduction.html" class="uri">https://hughjonesd.github.io/santoku/tutorials/00-visualintroduction.html</a>.</p>
 <p>Le vecteur <em>x</em> qu’on va decouper dans les exemples ci-dessous prend ses valeurs entre <code>4.3</code> et <code>7.9</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;santoku&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>affiche =<span class="st"> </span><span class="cf">function</span>(w) {</span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="co"># pour afficher le nom reel du vecteur w passe en argument de la fonction, purement esthetique</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>  nom =<span class="st"> </span><span class="kw">deparse</span>(<span class="kw">substitute</span>(w))</span>
-<span id="cb1-6"><a href="#cb1-6"></a>  <span class="co"># table de contingence de la variable discretisee</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a>  knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">as.data.frame</span>(<span class="kw">table</span>(w, <span class="dt">useNA =</span> <span class="st">&quot;ifany&quot;</span>, <span class="dt">dnn =</span> nom)))</span>
-<span id="cb1-8"><a href="#cb1-8"></a>}</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a>x =<span class="st"> </span>iris<span class="op">$</span>Sepal.Length</span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">range</span>(x)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;santoku&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>affiche <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pour afficher le nom reel du vecteur w passe en argument de la fonction, purement esthetique</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  nom <span class="ot">=</span> <span class="fu">deparse</span>(<span class="fu">substitute</span>(w))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># table de contingence de la variable discretisee</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">as.data.frame</span>(<span class="fu">table</span>(w, <span class="at">useNA =</span> <span class="st">&quot;ifany&quot;</span>, <span class="at">dnn =</span> nom)))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> iris<span class="sc">$</span>Sepal.Length</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(x)</span></code></pre></div>
 <pre><code>[1] 4.3 7.9</code></pre>
 </div>
 <div id="chop-versus-cut" class="section level1">
@@ -176,48 +175,76 @@ a.sourceLine {
 <li>les intervalles ne contenant aucun point (ici entre 3 et 4) sont conserves dans les modalites de la variable de type <em>facteur</em> quand on utilise <em>cut</em></li>
 <li>la valeur min des intervalles specifies est inclue avec <em>chop</em> (intervalle <em>[4,5]</em>) et exclue avec <em>cut</em> (intervalle <em>(3,4]</em>) sauf si on lui precise l’option <code>include.lowest = TRUE</code></li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>res_chop =<span class="st"> </span><span class="kw">chop</span>(x, <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">affiche</span>(res_chop)</span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a>res_cut =<span class="st"> </span><span class="kw">cut</span>(x, <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>)</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">affiche</span>(res_cut)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>res_chop <span class="ot">=</span> <span class="fu">chop</span>(x, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_chop)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>res_cut <span class="ot">=</span> <span class="fu">cut</span>(x, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_cut)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_chop</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_chop
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[4, 5)</td>
-<td align="right">22</td>
+<tr>
+<td style="text-align:left;">
+[4, 5)
+</td>
+<td style="text-align:right;">
+22
+</td>
 </tr>
-<tr class="even">
-<td align="left">[5, 7.9]</td>
-<td align="right">128</td>
+<tr>
+<td style="text-align:left;">
+[5, 7.9]
+</td>
+<td style="text-align:right;">
+128
+</td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_cut</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_cut
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">(3,4]</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+(3,4]
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">(4,5]</td>
-<td align="right">32</td>
+<tr>
+<td style="text-align:left;">
+(4,5]
+</td>
+<td style="text-align:right;">
+32
+</td>
 </tr>
-<tr class="odd">
-<td align="left">NA</td>
-<td align="right">118</td>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+118
+</td>
 </tr>
 </tbody>
 </table>
@@ -227,65 +254,101 @@ a.sourceLine {
 <div id="etiquettes" class="section level3">
 <h3>Etiquettes</h3>
 <p>On peut personnaliser les labels de plusieurs manieres :</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>res_lab =<span class="st"> </span><span class="kw">chop</span>(x, <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;High&quot;</span>))</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">affiche</span>(res_lab)</span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a>res_dash =<span class="st"> </span><span class="kw">chop</span>(x, <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>, <span class="kw">lbl_dash</span>())</span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">affiche</span>(res_dash)</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a>res_to =<span class="st"> </span><span class="kw">chop</span>(x, <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>, <span class="kw">lbl_format</span>(<span class="st">&quot;%s to %s&quot;</span>))</span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="kw">affiche</span>(res_to)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>res_lab <span class="ot">=</span> <span class="fu">chop</span>(x, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;High&quot;</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_lab)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>res_dash <span class="ot">=</span> <span class="fu">chop</span>(x, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">lbl_dash</span>())</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_dash)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>res_to <span class="ot">=</span> <span class="fu">chop</span>(x, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">lbl_format</span>(<span class="st">&quot;%s to %s&quot;</span>))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_to)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_lab</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_lab
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">Medium</td>
-<td align="right">22</td>
+<tr>
+<td style="text-align:left;">
+Medium
+</td>
+<td style="text-align:right;">
+22
+</td>
 </tr>
-<tr class="even">
-<td align="left">High</td>
-<td align="right">128</td>
+<tr>
+<td style="text-align:left;">
+High
+</td>
+<td style="text-align:right;">
+128
+</td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_dash</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_dash
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">4 - 5</td>
-<td align="right">22</td>
+<tr>
+<td style="text-align:left;">
+4 - 5
+</td>
+<td style="text-align:right;">
+22
+</td>
 </tr>
-<tr class="even">
-<td align="left">5 - 7.9</td>
-<td align="right">128</td>
+<tr>
+<td style="text-align:left;">
+5 - 7.9
+</td>
+<td style="text-align:right;">
+128
+</td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_to</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_to
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">4 to 5</td>
-<td align="right">22</td>
+<tr>
+<td style="text-align:left;">
+4 to 5
+</td>
+<td style="text-align:right;">
+22
+</td>
 </tr>
-<tr class="even">
-<td align="left">5 to 7.9</td>
-<td align="right">128</td>
+<tr>
+<td style="text-align:left;">
+5 to 7.9
+</td>
+<td style="text-align:right;">
+128
+</td>
 </tr>
 </tbody>
 </table>
@@ -293,23 +356,35 @@ a.sourceLine {
 <div id="gestion-des-depassements" class="section level3">
 <h3>Gestion des depassements</h3>
 <p>On peut empecher <em>chop</em> d’etendre le dernier intervalle pour retrouver le comportement de la fonction <em>cut</em>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>res_extend =<span class="st">  </span><span class="kw">chop</span>(x, <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">extend =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">affiche</span>(res_extend)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>res_extend <span class="ot">=</span>  <span class="fu">chop</span>(x, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">extend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_extend)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_extend</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_extend
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[4, 5)</td>
-<td align="right">22</td>
+<tr>
+<td style="text-align:left;">
+[4, 5)
+</td>
+<td style="text-align:right;">
+22
+</td>
 </tr>
-<tr class="even">
-<td align="left">NA</td>
-<td align="right">128</td>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+128
+</td>
 </tr>
 </tbody>
 </table>
@@ -317,27 +392,43 @@ a.sourceLine {
 <div id="classes-ponctuelles" class="section level3">
 <h3>Classes ponctuelles</h3>
 <p>On peut reduire une classe a un seul point.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>res_point =<span class="st"> </span><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>))</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">affiche</span>(res_point)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>res_point <span class="ot">=</span> <span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_point)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_point</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_point
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[4, 5)</td>
-<td align="right">22</td>
+<tr>
+<td style="text-align:left;">
+[4, 5)
+</td>
+<td style="text-align:right;">
+22
+</td>
 </tr>
-<tr class="even">
-<td align="left">{5}</td>
-<td align="right">10</td>
+<tr>
+<td style="text-align:left;">
+{5}
+</td>
+<td style="text-align:right;">
+10
+</td>
 </tr>
-<tr class="odd">
-<td align="left">(5, 7.9]</td>
-<td align="right">118</td>
+<tr>
+<td style="text-align:left;">
+(5, 7.9]
+</td>
+<td style="text-align:right;">
+118
+</td>
 </tr>
 </tbody>
 </table>
@@ -345,7 +436,7 @@ a.sourceLine {
 <div id="table-de-contingence" class="section level3">
 <h3>Table de contingence</h3>
 <p>Le package contient une fonction <em>tab</em> basee sur <em>table</em> :</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">tab</span>(x, <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(x, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div>
 <pre><code>x
   [4, 5) [5, 7.9] 
       22      128 </code></pre>
@@ -361,151 +452,255 @@ a.sourceLine {
 <li><em>equally</em> pour le nombre de quantiles</li>
 <li><em>quantiles</em> pour les valeurs des quantiles</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>res_large =<span class="st"> </span><span class="kw">chop_width</span>(x, <span class="dv">1</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">affiche</span>(res_large)</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a>res_nb_int =<span class="st"> </span><span class="kw">chop_evenly</span>(x, <span class="dv">6</span>)</span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="kw">affiche</span>(res_nb_int)</span>
-<span id="cb9-6"><a href="#cb9-6"></a></span>
-<span id="cb9-7"><a href="#cb9-7"></a>res_nb_points =<span class="st"> </span><span class="kw">chop_n</span>(x, <span class="dv">50</span>)</span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="kw">affiche</span>(res_nb_points)</span>
-<span id="cb9-9"><a href="#cb9-9"></a></span>
-<span id="cb9-10"><a href="#cb9-10"></a>res_nb_quantiles =<span class="st"> </span><span class="kw">chop_equally</span>(x, <span class="dv">4</span>)</span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="kw">affiche</span>(res_nb_quantiles)</span>
-<span id="cb9-12"><a href="#cb9-12"></a></span>
-<span id="cb9-13"><a href="#cb9-13"></a>res_val_quantiles =<span class="st"> </span><span class="kw">chop_quantiles</span>(x, <span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>))</span>
-<span id="cb9-14"><a href="#cb9-14"></a><span class="kw">affiche</span>(res_val_quantiles)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_large <span class="ot">=</span> <span class="fu">chop_width</span>(x, <span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_large)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>res_nb_int <span class="ot">=</span> <span class="fu">chop_evenly</span>(x, <span class="dv">6</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_nb_int)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>res_nb_points <span class="ot">=</span> <span class="fu">chop_n</span>(x, <span class="dv">50</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_nb_points)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>res_nb_quantiles <span class="ot">=</span> <span class="fu">chop_equally</span>(x, <span class="dv">4</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_nb_quantiles)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>res_val_quantiles <span class="ot">=</span> <span class="fu">chop_quantiles</span>(x, <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_val_quantiles)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_large</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_large
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[4.3, 5.3)</td>
-<td align="right">45</td>
+<tr>
+<td style="text-align:left;">
+[4.3, 5.3)
+</td>
+<td style="text-align:right;">
+45
+</td>
 </tr>
-<tr class="even">
-<td align="left">[5.3, 6.3)</td>
-<td align="right">54</td>
+<tr>
+<td style="text-align:left;">
+[5.3, 6.3)
+</td>
+<td style="text-align:right;">
+54
+</td>
 </tr>
-<tr class="odd">
-<td align="left">[6.3, 7.3)</td>
-<td align="right">43</td>
+<tr>
+<td style="text-align:left;">
+[6.3, 7.3)
+</td>
+<td style="text-align:right;">
+43
+</td>
 </tr>
-<tr class="even">
-<td align="left">[7.3, 8.3)</td>
-<td align="right">8</td>
+<tr>
+<td style="text-align:left;">
+[7.3, 8.3)
+</td>
+<td style="text-align:right;">
+8
+</td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_nb_int</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_nb_int
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[4.3, 4.9)</td>
-<td align="right">16</td>
+<tr>
+<td style="text-align:left;">
+[4.3, 4.9)
+</td>
+<td style="text-align:right;">
+16
+</td>
 </tr>
-<tr class="even">
-<td align="left">[4.9, 5.5)</td>
-<td align="right">36</td>
+<tr>
+<td style="text-align:left;">
+[4.9, 5.5)
+</td>
+<td style="text-align:right;">
+36
+</td>
 </tr>
-<tr class="odd">
-<td align="left">[5.5, 6.1)</td>
-<td align="right">37</td>
+<tr>
+<td style="text-align:left;">
+[5.5, 6.1)
+</td>
+<td style="text-align:right;">
+37
+</td>
 </tr>
-<tr class="even">
-<td align="left">[6.1, 6.7)</td>
-<td align="right">33</td>
+<tr>
+<td style="text-align:left;">
+[6.1, 6.7)
+</td>
+<td style="text-align:right;">
+33
+</td>
 </tr>
-<tr class="odd">
-<td align="left">[6.7, 7.3)</td>
-<td align="right">21</td>
+<tr>
+<td style="text-align:left;">
+[6.7, 7.3)
+</td>
+<td style="text-align:right;">
+21
+</td>
 </tr>
-<tr class="even">
-<td align="left">[7.3, 7.9]</td>
-<td align="right">7</td>
+<tr>
+<td style="text-align:left;">
+[7.3, 7.9]
+</td>
+<td style="text-align:right;">
+7
+</td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_nb_points</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_nb_points
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[4.3, 5.4)</td>
-<td align="right">46</td>
+<tr>
+<td style="text-align:left;">
+[4.3, 5.4)
+</td>
+<td style="text-align:right;">
+46
+</td>
 </tr>
-<tr class="even">
-<td align="left">[5.4, 6.3)</td>
-<td align="right">53</td>
+<tr>
+<td style="text-align:left;">
+[5.4, 6.3)
+</td>
+<td style="text-align:right;">
+53
+</td>
 </tr>
-<tr class="odd">
-<td align="left">[6.3, 7.9]</td>
-<td align="right">51</td>
+<tr>
+<td style="text-align:left;">
+[6.3, 7.9]
+</td>
+<td style="text-align:right;">
+51
+</td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_nb_quantiles</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_nb_quantiles
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[0%, 25%)</td>
-<td align="right">32</td>
+<tr>
+<td style="text-align:left;">
+[0%, 25%)
+</td>
+<td style="text-align:right;">
+32
+</td>
 </tr>
-<tr class="even">
-<td align="left">[25%, 50%)</td>
-<td align="right">41</td>
+<tr>
+<td style="text-align:left;">
+[25%, 50%)
+</td>
+<td style="text-align:right;">
+41
+</td>
 </tr>
-<tr class="odd">
-<td align="left">[50%, 75%)</td>
-<td align="right">35</td>
+<tr>
+<td style="text-align:left;">
+[50%, 75%)
+</td>
+<td style="text-align:right;">
+35
+</td>
 </tr>
-<tr class="even">
-<td align="left">[75%, 100%]</td>
-<td align="right">42</td>
+<tr>
+<td style="text-align:left;">
+[75%, 100%]
+</td>
+<td style="text-align:right;">
+42
+</td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_val_quantiles</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_val_quantiles
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">[0%, 20%)</td>
-<td align="right">22</td>
+<tr>
+<td style="text-align:left;">
+[0%, 20%)
+</td>
+<td style="text-align:right;">
+22
+</td>
 </tr>
-<tr class="even">
-<td align="left">[20%, 50%)</td>
-<td align="right">51</td>
+<tr>
+<td style="text-align:left;">
+[20%, 50%)
+</td>
+<td style="text-align:right;">
+51
+</td>
 </tr>
-<tr class="odd">
-<td align="left">[50%, 70%]</td>
-<td align="right">35</td>
+<tr>
+<td style="text-align:left;">
+[50%, 70%]
+</td>
+<td style="text-align:right;">
+35
+</td>
 </tr>
-<tr class="even">
-<td align="left">(70%, 100%]</td>
-<td align="right">42</td>
+<tr>
+<td style="text-align:left;">
+(70%, 100%]
+</td>
+<td style="text-align:right;">
+42
+</td>
 </tr>
 </tbody>
 </table>
@@ -513,36 +708,56 @@ a.sourceLine {
 <div id="fonction-de-decoupage-personnalisee-avec-knife" class="section level1">
 <h1>Fonction de decoupage personnalisee avec <em>knife</em></h1>
 <p>On decoupe en quartiles et on personnalise les etiquettes d’intervalles.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>chop_by_quartiles &lt;-<span class="st"> </span><span class="kw">knife</span>(</span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="dt">breaks =</span> <span class="kw">brk_quantiles</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>)), </span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="dt">labels =</span> <span class="kw">lbl_dash</span>()</span>
-<span id="cb10-4"><a href="#cb10-4"></a>)</span>
-<span id="cb10-5"><a href="#cb10-5"></a></span>
-<span id="cb10-6"><a href="#cb10-6"></a>res_perso =<span class="st"> </span><span class="kw">chop_by_quartiles</span>(x)</span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="kw">affiche</span>(res_perso)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>chop_by_quartiles <span class="ot">&lt;-</span> <span class="fu">knife</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">brk_quantiles</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>)), </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">lbl_dash</span>()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>res_perso <span class="ot">=</span> <span class="fu">chop_by_quartiles</span>(x)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">affiche</span>(res_perso)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">res_perso</th>
-<th align="right">Freq</th>
+<tr>
+<th style="text-align:left;">
+res_perso
+</th>
+<th style="text-align:right;">
+Freq
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">0% - 25%</td>
-<td align="right">32</td>
+<tr>
+<td style="text-align:left;">
+0% - 25%
+</td>
+<td style="text-align:right;">
+32
+</td>
 </tr>
-<tr class="even">
-<td align="left">25% - 50%</td>
-<td align="right">41</td>
+<tr>
+<td style="text-align:left;">
+25% - 50%
+</td>
+<td style="text-align:right;">
+41
+</td>
 </tr>
-<tr class="odd">
-<td align="left">50% - 75%</td>
-<td align="right">35</td>
+<tr>
+<td style="text-align:left;">
+50% - 75%
+</td>
+<td style="text-align:right;">
+35
+</td>
 </tr>
-<tr class="even">
-<td align="left">75% - 100%</td>
-<td align="right">42</td>
+<tr>
+<td style="text-align:left;">
+75% - 100%
+</td>
+<td style="text-align:right;">
+42
+</td>
 </tr>
 </tbody>
 </table>

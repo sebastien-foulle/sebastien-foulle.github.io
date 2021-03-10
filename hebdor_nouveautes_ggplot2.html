@@ -14,8 +14,7 @@
 
 <title>  Nouveautes de ggplot2 3.3.0  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -149,55 +148,55 @@ a.sourceLine {
 <h1>Introduction</h1>
 <p>La nouvelle version de <em>ggplot2</em> apporte des nouveautes et des changements dont les details sont presentes ici <a href="https://www.tidyverse.org/blog/2020/03/ggplot2-3-3-0/" class="uri">https://www.tidyverse.org/blog/2020/03/ggplot2-3-3-0/</a>.</p>
 <p>Vous trouverez ci-dessous quelques exemples de ces evolutions.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(<span class="st">&quot;ggtext&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co"># pour mettre du markdown dans le titre avec le package ggtext</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_markdown</span>())</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a></span>
-<span id="cb1-11"><a href="#cb1-11"></a>donnees =<span class="st"> </span>ggplot2<span class="op">::</span>mpg</span>
-<span id="cb1-12"><a href="#cb1-12"></a>tab =<span class="st"> </span>donnees <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(<span class="dt">displ =</span> <span class="kw">round</span>(displ)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pct =</span> n<span class="op">/</span><span class="kw">sum</span>(n),</span>
-<span id="cb1-13"><a href="#cb1-13"></a>                                                         <span class="dt">pct_char =</span> scales<span class="op">::</span><span class="kw">percent</span>(pct))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggtext&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># pour mettre du markdown dans le titre avec le package ggtext</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_markdown</span>())</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>donnees <span class="ot">=</span> ggplot2<span class="sc">::</span>mpg</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">=</span> donnees <span class="sc">%&gt;%</span> <span class="fu">count</span>(<span class="at">displ =</span> <span class="fu">round</span>(displ)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">pct =</span> n<span class="sc">/</span><span class="fu">sum</span>(n),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">pct_char =</span> scales<span class="sc">::</span><span class="fu">percent</span>(pct))</span></code></pre></div>
 </div>
 <div id="echelle-discretisee-avec-scale_colour_binned" class="section level1">
 <h1>Echelle discretisee avec <em>scale_colour_binned</em></h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>gg =<span class="st"> </span><span class="kw">ggplot</span>(iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Sepal.Length <span class="op">&gt;</span><span class="st"> </span><span class="dv">6</span>), <span class="kw">aes</span>(Sepal.Width, Sepal.Length, <span class="dt">col =</span> Petal.Length)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw">geom_point</span>() </span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a>gg  <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Echelle usuelle&quot;</span>)</span>
-<span id="cb2-5"><a href="#cb2-5"></a>gg <span class="op">+</span><span class="st"> </span><span class="kw">scale_colour_binned</span>(<span class="dt">type =</span> <span class="st">&quot;viridis&quot;</span>, <span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>)<span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Echelle discrete&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gg <span class="ot">=</span> <span class="fu">ggplot</span>(iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Sepal.Length <span class="sc">&gt;</span> <span class="dv">6</span>), <span class="fu">aes</span>(Sepal.Width, Sepal.Length, <span class="at">col =</span> Petal.Length)) <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>gg  <span class="sc">+</span> <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Echelle usuelle&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gg <span class="sc">+</span> <span class="fu">scale_colour_binned</span>(<span class="at">type =</span> <span class="st">&quot;viridis&quot;</span>, <span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>)<span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Echelle discrete&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_nouveautes_ggplot2_files/figure-html/discret-1.png" width="50%" /><img src="hebdor_nouveautes_ggplot2_files/figure-html/discret-2.png" width="50%" /></p>
 </div>
 <div id="axe-discretise-avec-scale_x_binned" class="section level1">
 <h1>Axe discretise avec <em>scale_x_binned</em></h1>
 <p>Cette methode permet en particulier de voir nettement les valeurs qui separent les barres, contrairement a l’histogramme classique a la fin de ce document.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>gg1 =<span class="st"> </span><span class="kw">ggplot</span>(tab, <span class="kw">aes</span>(displ, pct)) <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_binned</span>(<span class="dt">breaks =</span> <span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">7</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent) <span class="op">+</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Un diagramme en barres reconverti en histogramme&quot;</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>gg2 =<span class="st"> </span><span class="kw">ggplot</span>(tab, <span class="kw">aes</span>(displ, pct)) <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_binned</span>(<span class="dt">n.breaks =</span> <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent) <span class="op">+</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Un 2nd diagramme en barres reconverti en histogramme&quot;</span>)</span>
-<span id="cb3-7"><a href="#cb3-7"></a></span>
-<span id="cb3-8"><a href="#cb3-8"></a>gg1</span>
-<span id="cb3-9"><a href="#cb3-9"></a>gg2</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gg1 <span class="ot">=</span> <span class="fu">ggplot</span>(tab, <span class="fu">aes</span>(displ, pct)) <span class="sc">+</span> <span class="fu">scale_x_binned</span>(<span class="at">breaks =</span> <span class="fl">0.5</span> <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Un diagramme en barres reconverti en histogramme&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>gg2 <span class="ot">=</span> <span class="fu">ggplot</span>(tab, <span class="fu">aes</span>(displ, pct)) <span class="sc">+</span> <span class="fu">scale_x_binned</span>(<span class="at">n.breaks =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Un 2nd diagramme en barres reconverti en histogramme&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>gg1</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>gg2</span></code></pre></div>
 <p><img src="hebdor_nouveautes_ggplot2_files/figure-html/x_disc-1.png" width="50%" /><img src="hebdor_nouveautes_ggplot2_files/figure-html/x_disc-2.png" width="50%" /></p>
 </div>
 <div id="plus-besoin-de-coord_flip-pour-permuter-les-axes-x-et-y" class="section level1">
 <h1>Plus besoin de <em>coord_flip</em> pour permuter les axes <em>x</em> et <em>y</em></h1>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>donnees<span class="op">$</span>long_libelle =<span class="st"> </span><span class="kw">paste</span>(donnees<span class="op">$</span>manufacturer, <span class="st">&quot;-&quot;</span>, donnees<span class="op">$</span>class)</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">ggplot</span>(donnees) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long_libelle)) <span class="op">+</span><span class="st"> </span><span class="kw">coord_flip</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Avec *coord_flip*&quot;</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="kw">ggplot</span>(donnees) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">y =</span> long_libelle)) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Sans *coord_flip*&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>donnees<span class="sc">$</span>long_libelle <span class="ot">=</span> <span class="fu">paste</span>(donnees<span class="sc">$</span>manufacturer, <span class="st">&quot;-&quot;</span>, donnees<span class="sc">$</span>class)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(donnees) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> long_libelle)) <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Avec *coord_flip*&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(donnees) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> long_libelle)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Sans *coord_flip*&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_nouveautes_ggplot2_files/figure-html/coord_flip-1.png" width="50%" /><img src="hebdor_nouveautes_ggplot2_files/figure-html/coord_flip-2.png" width="50%" /></p>
 </div>
 <div id="changement-de-syntaxe-pour-les-calculs-de-densite-et-autres" class="section level1">
 <h1>Changement de syntaxe pour les calculs de densite et autres</h1>
 <p>On va produire cette fois un veritable histogramme plutot que la combinaison equivalente de <em>scale_x_binned</em> et <em>geom_col</em> vue plus haut. Les chiffres qu’on veut retrouver dans l’histogramme sont les suivants (pas tout a fait a cause du traitement des valeurs “limites” entre 2 barres, 3.5 par exemple)</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>knitr<span class="op">::</span><span class="kw">kable</span>(tab <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>pct))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>pct))</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -281,15 +280,15 @@ pct_char
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(displ)) <span class="op">+</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">stat</span>(density<span class="op">*</span>width)), <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlim</span>(<span class="fl">1.5</span>,<span class="fl">7.5</span>) <span class="op">+</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent) <span class="op">+</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Répartition de la cylindree en % avec l&#39;ancien *stats*&quot;</span>)</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(displ)) <span class="op">+</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">after_stat</span>(density<span class="op">*</span>width)),  <span class="dt">binwidth =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlim</span>(<span class="fl">1.5</span>,<span class="fl">7.5</span>) <span class="op">+</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent) <span class="op">+</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Repartition de la cylindree en % avec le nouveau *after_stats*&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(displ)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">stat</span>(density<span class="sc">*</span>width)), <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="fl">1.5</span>,<span class="fl">7.5</span>) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Répartition de la cylindree en % avec l&#39;ancien *stats*&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(displ)) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density<span class="sc">*</span>width)),  <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="fl">1.5</span>,<span class="fl">7.5</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repartition de la cylindree en % avec le nouveau *after_stats*&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_nouveautes_ggplot2_files/figure-html/after_stats-1.png" width="50%" /><img src="hebdor_nouveautes_ggplot2_files/figure-html/after_stats-2.png" width="50%" /></p>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>

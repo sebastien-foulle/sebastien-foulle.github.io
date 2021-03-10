@@ -14,8 +14,7 @@
 
 <title>  Les manchots ou les iris ?  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -161,12 +160,12 @@ a.sourceLine {
 <li>une quelconque des variables <em>Petal.Length</em> ou <em>Petal.Width</em> suffit a isoler exactement une des especes (<em>setosa</em>) des autres</li>
 </ul>
 <p>On voit tous ces problemes dans le graphique suivant.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># pour installer le package palmerpenguins</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># remotes::install_github(&quot;allisonhorst/palmerpenguins&quot;)</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(<span class="st">&quot;GGally&quot;</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">ggpairs</span>(iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(Species), <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> Species, <span class="dt">alpha =</span> <span class="fl">0.8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pour installer le package palmerpenguins</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;allisonhorst/palmerpenguins&quot;)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;GGally&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(iris <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(Species), <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> Species, <span class="at">alpha =</span> <span class="fl">0.8</span>))</span></code></pre></div>
 <p><img src="hebdor_penguins_files/figure-html/unnamed-chunk-1-1.png" width="100%" height="600px" style="display: block; margin: auto;" /></p>
 </div>
 <div id="les-manchots" class="section level1">
@@ -178,8 +177,8 @@ a.sourceLine {
 <li>il faut combiner <em>flipper_length_mm</em> et <em>bill_depth_mm</em> pour separer l’espece <em>Gentoo</em> des autres</li>
 <li>on a meme 11 lignes avec des valeurs manquantes</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>manchots =<span class="st"> </span>palmerpenguins<span class="op">::</span>penguins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(species, island, sex)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">ggpairs</span>(manchots, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> species, <span class="dt">alpha =</span> <span class="fl">0.8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>manchots <span class="ot">=</span> palmerpenguins<span class="sc">::</span>penguins <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(species, island, sex)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(manchots, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> species, <span class="at">alpha =</span> <span class="fl">0.8</span>))</span></code></pre></div>
 <p><img src="hebdor_penguins_files/figure-html/unnamed-chunk-2-1.png" width="100%" height="600px" style="display: block; margin: auto;" /></p>
 <p>Un lien si vous voulez creuser l’origine de ces donnees : <a href="https://github.com/allisonhorst/palmerpenguins" class="uri">https://github.com/allisonhorst/palmerpenguins</a></p>
 <p>Et un apercu du travail d’Allison Horst pour Rstudio : <a href="https://blog.rstudio.com/2019/11/18/artist-in-residence/" class="uri">https://blog.rstudio.com/2019/11/18/artist-in-residence/</a></p>

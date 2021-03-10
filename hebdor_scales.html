@@ -14,8 +14,7 @@
 
 <title>  Mise en forme des nombres et dates avec scales  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -155,23 +154,23 @@ a.sourceLine {
 <li>de formatter les dates avec des fonctions comme <em>label_date_short</em></li>
 <li>de controler l’ecart</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;scales&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">theme_update</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))</span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a>donnees =<span class="st"> </span>ggplot2<span class="op">::</span>diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="dt">qualite_taille =</span> cut) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(qualite_taille) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pct =</span> nb <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(nb)) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;scales&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pour centrer les titres des graphiques ggplot2</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>donnees <span class="ot">=</span> ggplot2<span class="sc">::</span>diamonds <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="at">qualite_taille =</span> cut) <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(qualite_taille) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">nb =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">pct =</span> nb <span class="sc">/</span> <span class="fu">sum</span>(nb)) <span class="sc">%&gt;%</span> as.data.frame</span></code></pre></div>
 </div>
 <div id="dans-des-tableaux" class="section level1">
 <h1>Dans des tableaux</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>donnees <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">nb_milliers =</span> <span class="kw">number</span>(nb),</span>
-<span id="cb2-2"><a href="#cb2-2"></a>                             <span class="dt">nb_arrondi =</span> <span class="kw">number</span>(nb, <span class="dt">accuracy =</span> <span class="dv">100</span>),</span>
-<span id="cb2-3"><a href="#cb2-3"></a>                             <span class="dt">nb_suffixe =</span> <span class="kw">number</span>(nb, <span class="dt">suffix =</span> <span class="st">&quot; passagers&quot;</span>),</span>
-<span id="cb2-4"><a href="#cb2-4"></a>                             <span class="dt">pct_pct =</span> <span class="kw">percent</span>(pct), </span>
-<span id="cb2-5"><a href="#cb2-5"></a>                             <span class="dt">pct_virgule =</span> <span class="kw">percent</span>(pct, <span class="dt">decimal.mark =</span> <span class="st">&quot;,&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>donnees <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">nb_milliers =</span> <span class="fu">number</span>(nb),</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nb_arrondi =</span> <span class="fu">number</span>(nb, <span class="at">accuracy =</span> <span class="dv">100</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nb_suffixe =</span> <span class="fu">number</span>(nb, <span class="at">suffix =</span> <span class="st">&quot; passagers&quot;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">pct_pct =</span> <span class="fu">percent</span>(pct), </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">pct_virgule =</span> <span class="fu">percent</span>(pct, <span class="at">decimal.mark =</span> <span class="st">&quot;,&quot;</span>)) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -339,34 +338,34 @@ Ideal
 <h1>Dans des graphiques</h1>
 <div id="et-separateur-decimal" class="section level3">
 <h3>% et separateur decimal</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(qualite_taille, pct)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;% de diamants par couleur&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> percent)</span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">ggplot</span>(donnees, <span class="kw">aes</span>(qualite_taille, pct)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;% de diamants par couleur&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels=</span> <span class="cf">function</span>(x) <span class="kw">percent</span>(x, <span class="dt">decimal.mark=</span><span class="st">&quot;,&quot;</span>)) <span class="op">+</span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;pct a virgule&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(donnees, <span class="fu">aes</span>(qualite_taille, pct)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;% de diamants par couleur&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> percent)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(donnees, <span class="fu">aes</span>(qualite_taille, pct)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;% de diamants par couleur&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span> <span class="cf">function</span>(x) <span class="fu">percent</span>(x, <span class="at">decimal.mark=</span><span class="st">&quot;,&quot;</span>)) <span class="sc">+</span><span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;pct a virgule&quot;</span>)</span></code></pre></div>
 <p><img src="hebdor_scales_files/figure-html/graphique-1.png" width="50%" /><img src="hebdor_scales_files/figure-html/graphique-2.png" width="50%" /></p>
 </div>
 <div id="marques-etiquettes-format-scientifique" class="section level3">
 <h3>Marques, etiquettes, format scientifique</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>dtf =<span class="st"> </span>ggplot2<span class="op">::</span>economics <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">dates =</span> date)</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">ggplot</span>(dtf, <span class="kw">aes</span>(<span class="dt">x =</span> dates, <span class="dt">y =</span> unemploy, <span class="dt">group =</span> <span class="dv">0</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Sans scales&quot;</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">ggplot</span>(dtf, <span class="kw">aes</span>(<span class="dt">x =</span> dates, <span class="dt">y =</span> unemploy, <span class="dt">group =</span> <span class="dv">0</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">breaks_width</span>(<span class="st">&quot;15 years&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Une marque tous les 15 ans&quot;</span>)</span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="kw">ggplot</span>(dtf, <span class="kw">aes</span>(<span class="dt">x =</span> dates, <span class="dt">y =</span> unemploy, <span class="dt">group =</span> <span class="dv">0</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">breaks_width</span>(<span class="st">&quot;15 years&quot;</span>),</span>
-<span id="cb4-10"><a href="#cb4-10"></a>               <span class="dt">labels =</span> <span class="kw">label_date_short</span>()) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Une marque tous les 15 ans et une etiquette courte&quot;</span>)</span>
-<span id="cb4-12"><a href="#cb4-12"></a></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="kw">ggplot</span>(dtf, <span class="kw">aes</span>(<span class="dt">x =</span> dates, <span class="dt">y =</span> unemploy, <span class="dt">group =</span> <span class="dv">0</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">breaks_width</span>(<span class="st">&quot;15 years&quot;</span>),</span>
-<span id="cb4-15"><a href="#cb4-15"></a>               <span class="dt">labels =</span> <span class="kw">label_date_short</span>()) <span class="op">+</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">label_number_si</span>()) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="st">  </span><span class="co"># titre long mis sur deux lignes</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="st">  </span><span class="kw">ggtitle</span>(stringr<span class="op">::</span><span class="kw">str_wrap</span>(<span class="st">&quot;Une marque tous les 15 ans et des etiquettes courtes sur chaque axe&quot;</span>, </span>
-<span id="cb4-19"><a href="#cb4-19"></a>    <span class="dt">width =</span> <span class="dv">40</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dtf <span class="ot">=</span> ggplot2<span class="sc">::</span>economics <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">dates =</span> date)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dtf, <span class="fu">aes</span>(<span class="at">x =</span> dates, <span class="at">y =</span> unemploy, <span class="at">group =</span> <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Sans scales&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dtf, <span class="fu">aes</span>(<span class="at">x =</span> dates, <span class="at">y =</span> unemploy, <span class="at">group =</span> <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> <span class="fu">breaks_width</span>(<span class="st">&quot;15 years&quot;</span>)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Une marque tous les 15 ans&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dtf, <span class="fu">aes</span>(<span class="at">x =</span> dates, <span class="at">y =</span> unemploy, <span class="at">group =</span> <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> <span class="fu">breaks_width</span>(<span class="st">&quot;15 years&quot;</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">labels =</span> <span class="fu">label_date_short</span>()) <span class="sc">+</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Une marque tous les 15 ans et une etiquette courte&quot;</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dtf, <span class="fu">aes</span>(<span class="at">x =</span> dates, <span class="at">y =</span> unemploy, <span class="at">group =</span> <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> <span class="fu">breaks_width</span>(<span class="st">&quot;15 years&quot;</span>),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">labels =</span> <span class="fu">label_date_short</span>()) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number_si</span>()) <span class="sc">+</span> </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># titre long mis sur deux lignes</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(stringr<span class="sc">::</span><span class="fu">str_wrap</span>(<span class="st">&quot;Une marque tous les 15 ans et des etiquettes courtes sur chaque axe&quot;</span>, </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="dv">40</span>))</span></code></pre></div>
 <p><img src="hebdor_scales_files/figure-html/graphique2-1.png" width="50%" /><img src="hebdor_scales_files/figure-html/graphique2-2.png" width="50%" /><img src="hebdor_scales_files/figure-html/graphique2-3.png" width="50%" /><img src="hebdor_scales_files/figure-html/graphique2-4.png" width="50%" /></p>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>

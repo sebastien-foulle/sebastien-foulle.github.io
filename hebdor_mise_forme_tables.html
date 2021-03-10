@@ -14,20 +14,19 @@
 
 <title>  Mise en forme des tables  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
-<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
 <link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="site_libs/datatables-binding-0.16/datatables.js"></script>
+<script src="site_libs/datatables-binding-0.17/datatables.js"></script>
 <link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
 <script src="site_libs/core-js-2.5.3/shim.min.js"></script>
-<script src="site_libs/react-16.12.0/react.min.js"></script>
-<script src="site_libs/react-16.12.0/react-dom.min.js"></script>
+<script src="site_libs/react-17.0.0/react.min.js"></script>
+<script src="site_libs/react-17.0.0/react-dom.min.js"></script>
 <script src="site_libs/reactwidget-1.0.0/react-tools.js"></script>
 <script src="site_libs/reactable-binding-0.2.3/reactable.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
@@ -177,33 +176,33 @@ a.sourceLine {
 <div id="intro" class="section level1">
 <h1>Introduction</h1>
 <p>Plusieurs packages permettent de mettre en forme les tables, dont <em>kable</em>, <em>formattable</em>, <em>DT</em> et <em>reactable</em>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;knitr&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(<span class="st">&quot;kableExtra&quot;</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(<span class="st">&quot;DT&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">library</span>(<span class="st">&quot;formattable&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">library</span>(<span class="st">&quot;reactable&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">library</span>(<span class="st">&quot;htmltools&quot;</span>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">library</span>(<span class="st">&quot;sparkline&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co"># une table avec des rownames et pas mal de colonnes</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a>mtcars2 =<span class="st"> </span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>tibble<span class="op">::</span><span class="kw">rownames_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;modeles&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(modeles, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;marque&quot;</span>, <span class="st">&quot;modeles&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>, <span class="dt">extra =</span> <span class="st">&quot;merge&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(modeles)) <span class="op">%&gt;%</span><span class="st"> </span>tibble<span class="op">::</span><span class="kw">column_to_rownames</span>(<span class="dt">var =</span> <span class="st">&quot;modeles&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="st">  </span><span class="kw">select</span>(marque, mpg, cyl, disp, hp, drat)</span>
-<span id="cb1-16"><a href="#cb1-16"></a></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="co"># une table a 3 lignes</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a>lignes_gardees =<span class="st"> </span><span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">131</span>, <span class="dv">140</span>)</span>
-<span id="cb1-19"><a href="#cb1-19"></a>ma_table =<span class="st"> </span><span class="kw">cbind</span>(iris[lignes_gardees,<span class="op">-</span><span class="dv">5</span>]<span class="op">-</span><span class="fl">1.5</span>, <span class="dt">Species =</span> iris[lignes_gardees, <span class="st">&quot;Species&quot;</span>])</span>
-<span id="cb1-20"><a href="#cb1-20"></a>ma_table<span class="op">$</span>Petal.Width =<span class="st"> </span><span class="kw">abs</span>(ma_table<span class="op">$</span>Petal.Width)</span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="kw">rownames</span>(ma_table) =<span class="st"> </span><span class="ot">NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;knitr&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;kableExtra&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;DT&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;formattable&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;reactable&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;htmltools&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sparkline&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># une table avec des rownames et pas mal de colonnes</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>mtcars2 <span class="ot">=</span> mtcars <span class="sc">%&gt;%</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;modeles&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(modeles, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;marque&quot;</span>, <span class="st">&quot;modeles&quot;</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>, <span class="at">extra =</span> <span class="st">&quot;merge&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(modeles)) <span class="sc">%&gt;%</span> tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">&quot;modeles&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(marque, mpg, cyl, disp, hp, drat)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># une table a 3 lignes</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>lignes_gardees <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">131</span>, <span class="dv">140</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>ma_table <span class="ot">=</span> <span class="fu">cbind</span>(iris[lignes_gardees,<span class="sc">-</span><span class="dv">5</span>]<span class="sc">-</span><span class="fl">1.5</span>, <span class="at">Species =</span> iris[lignes_gardees, <span class="st">&quot;Species&quot;</span>])</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>ma_table<span class="sc">$</span>Petal.Width <span class="ot">=</span> <span class="fu">abs</span>(ma_table<span class="sc">$</span>Petal.Width)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ma_table) <span class="ot">=</span> <span class="cn">NULL</span></span></code></pre></div>
 </div>
 <div id="mises-en-forme-simples-avec" class="section level1">
 <h1>Mises en forme simples avec</h1>
 <div id="kable" class="section level3">
 <h3>kable</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">kable</span>(ma_table)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(ma_table)</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -281,24 +280,24 @@ virginica
 </div>
 <div id="dt" class="section level3">
 <h3>DT</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">datatable</span>(ma_table)</span></code></pre></div>
-<div id="htmlwidget-3f5032271fa75ee52ea4" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3f5032271fa75ee52ea4">{"x":{"filter":"none","data":[["1","2","3"],[4.3,5.9,5.4],[2.5,1.3,1.6],[-0.3,4.6,3.9],[1.3,0.4,0.6],["setosa","virginica","virginica"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(ma_table)</span></code></pre></div>
+<div id="htmlwidget-45fcea36cc8e370c91b9" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-45fcea36cc8e370c91b9">{"x":{"filter":"none","data":[["1","2","3"],[4.3,5.9,5.4],[2.5,1.3,1.6],[-0.3,4.6,3.9],[1.3,0.4,0.6],["setosa","virginica","virginica"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="reactable" class="section level3">
 <h3>reactable</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">reactable</span>(ma_table)</span></code></pre></div>
-<div id="htmlwidget-de465df344c610be7acc" class="reactable html-widget" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-de465df344c610be7acc">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Sepal.Length":[4.3,5.9,5.4],"Sepal.Width":[2.5,1.3,1.6],"Petal.Length":[-0.3,4.6,3.9],"Petal.Width":[1.3,0.4,0.6],"Species":["setosa","virginica","virginica"]},"columns":[{"accessor":"Sepal.Length","name":"Sepal.Length","type":"numeric"},{"accessor":"Sepal.Width","name":"Sepal.Width","type":"numeric"},{"accessor":"Petal.Length","name":"Petal.Length","type":"numeric"},{"accessor":"Petal.Width","name":"Petal.Width","type":"numeric"},{"accessor":"Species","name":"Species","type":"factor"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"7f7115495bb88e98f4a6a7a644b09b5d","key":"7f7115495bb88e98f4a6a7a644b09b5d"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">reactable</span>(ma_table)</span></code></pre></div>
+<div id="htmlwidget-c7b7deb8cc3518dd2580" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-c7b7deb8cc3518dd2580">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Sepal.Length":[4.3,5.9,5.4],"Sepal.Width":[2.5,1.3,1.6],"Petal.Length":[-0.3,4.6,3.9],"Petal.Width":[1.3,0.4,0.6],"Species":["setosa","virginica","virginica"]},"columns":[{"accessor":"Sepal.Length","name":"Sepal.Length","type":"numeric"},{"accessor":"Sepal.Width","name":"Sepal.Width","type":"numeric"},{"accessor":"Petal.Length","name":"Petal.Length","type":"numeric"},{"accessor":"Petal.Width","name":"Petal.Width","type":"numeric"},{"accessor":"Species","name":"Species","type":"factor"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"7f7115495bb88e98f4a6a7a644b09b5d","key":"7f7115495bb88e98f4a6a7a644b09b5d"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="mises-en-forme-complexes-avec" class="section level1">
 <h1>Mises en forme complexes avec</h1>
 <div id="kable-et-kableextra" class="section level3">
 <h3>kable et kableExtra</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">kable</span>(ma_table, <span class="dt">format =</span> <span class="st">&quot;html&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot;Sepal&quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Petal&quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Species&quot;</span> =<span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot;numeric&quot;</span> =<span class="st"> </span><span class="dv">4</span>, <span class="st">&quot;character&quot;</span> =<span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">add_header_above</span>(<span class="kw">c</span>( <span class="st">&quot;all&quot;</span> =<span class="st"> </span><span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(ma_table, <span class="at">format =</span> <span class="st">&quot;html&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">kable_styling</span>(<span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Sepal&quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot;Petal&quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot;Species&quot;</span> <span class="ot">=</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;numeric&quot;</span> <span class="ot">=</span> <span class="dv">4</span>, <span class="st">&quot;character&quot;</span> <span class="ot">=</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> <span class="fu">add_header_above</span>(<span class="fu">c</span>( <span class="st">&quot;all&quot;</span> <span class="ot">=</span> <span class="dv">5</span>))</span></code></pre></div>
 <table class="table table-striped table-bordered" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -423,40 +422,40 @@ virginica
 <li><a href="https://datatables.net/reference/button/colvis" class="uri">https://datatables.net/reference/button/colvis</a></li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">datatable</span>(<span class="dt">data =</span> mtcars2,</span>
-<span id="cb6-2"><a href="#cb6-2"></a>          <span class="co"># on enleve les rownames et  on ajoute un bouton</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>          <span class="dt">rownames =</span> <span class="ot">FALSE</span>, </span>
-<span id="cb6-4"><a href="#cb6-4"></a>          <span class="dt">extensions =</span> <span class="st">&#39;Buttons&#39;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5"></a>          <span class="co">### parametrage des options</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>          <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">5</span>,</span>
-<span id="cb6-7"><a href="#cb6-7"></a>          <span class="co"># texte a afficher en francais plutot qu&#39;en anglais</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a>          <span class="dt">language =</span> <span class="kw">list</span>(</span>
-<span id="cb6-9"><a href="#cb6-9"></a>            <span class="dt">info =</span> <span class="st">&#39;Extrait des enregistrements de _START_ a _END_&#39;</span>,</span>
-<span id="cb6-10"><a href="#cb6-10"></a>            <span class="dt">paginate =</span> <span class="kw">list</span>(<span class="dt">previous =</span> <span class="st">&#39;Precedent&#39;</span>, <span class="st">`</span><span class="dt">next</span><span class="st">`</span> =<span class="st"> &#39;Suivant&#39;</span>),</span>
-<span id="cb6-11"><a href="#cb6-11"></a>            <span class="dt">sLengthMenu =</span> <span class="st">&quot;Afficher _MENU_ elements&quot;</span>),</span>
-<span id="cb6-12"><a href="#cb6-12"></a>          <span class="co">#  on masque les colonnes 4 et 5</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a>          <span class="dt">columnDefs =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">visible =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb6-14"><a href="#cb6-14"></a>                                 <span class="dt">targets =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>))),</span>
-<span id="cb6-15"><a href="#cb6-15"></a>          <span class="co"># elements a afficher parmi les 5 &quot;lftip &quot; qui constituent le</span></span>
-<span id="cb6-16"><a href="#cb6-16"></a>          <span class="co"># Document Object Model :</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a>          <span class="co"># l = Length menu, f = Filtering box, t = Table, i = Information summary, </span></span>
-<span id="cb6-18"><a href="#cb6-18"></a>          <span class="co"># p = Pagination control. On peut mettre un B pour ajouter un bouton</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a>          <span class="dt">dom =</span> <span class="st">&#39;Btip&#39;</span>,</span>
-<span id="cb6-20"><a href="#cb6-20"></a>          <span class="co"># extend pour le type du bouton qui va masquer certaines des 5 1eres colonnes</span></span>
-<span id="cb6-21"><a href="#cb6-21"></a>          <span class="dt">buttons =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">extend =</span> <span class="st">&#39;colvis&#39;</span>, </span>
-<span id="cb6-22"><a href="#cb6-22"></a>                              <span class="dt">className =</span> <span class="st">&quot;btn btn-default&quot;</span>, </span>
-<span id="cb6-23"><a href="#cb6-23"></a>                              <span class="dt">text =</span> <span class="st">&quot;Afficher / cacher des colonnes&quot;</span>, </span>
-<span id="cb6-24"><a href="#cb6-24"></a>                              <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">4</span>))),</span>
-<span id="cb6-25"><a href="#cb6-25"></a>          <span class="co"># echappement du code HTML pour eviter pb de securite</span></span>
-<span id="cb6-26"><a href="#cb6-26"></a>          <span class="dt">escape =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb6-27"><a href="#cb6-27"></a>          <span class="co"># jolies couleurs pr l&#39;entete, avec du javascript,</span></span>
-<span id="cb6-28"><a href="#cb6-28"></a>          <span class="co"># mais ca ne marche pas dans ce markdown qui impose son vert cayman :-)</span></span>
-<span id="cb6-29"><a href="#cb6-29"></a>          <span class="dt">initComplete =</span> DT<span class="op">::</span><span class="kw">JS</span>(</span>
-<span id="cb6-30"><a href="#cb6-30"></a>            <span class="st">&quot;function(settings, json) {&quot;</span>,</span>
-<span id="cb6-31"><a href="#cb6-31"></a>            <span class="st">&quot;$(this.api().table().header()).css({&#39;background-color&#39;: &#39;#428bca&#39;,</span></span>
-<span id="cb6-32"><a href="#cb6-32"></a><span class="st">            &#39;color&#39;: &#39;#fff&#39;});&quot;</span>,<span class="st">&quot;}&quot;</span>)))</span></code></pre></div>
-<div id="htmlwidget-3af4c4d5e411c80a348a" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3af4c4d5e411c80a348a">{"x":{"filter":"none","extensions":["Buttons"],"data":[["Mazda","Mazda","Datsun","Hornet","Hornet","Duster","Merc","Merc","Merc","Merc","Merc","Merc","Merc","Cadillac","Lincoln","Chrysler","Fiat","Honda","Toyota","Toyota","Dodge","AMC","Camaro","Pontiac","Fiat","Porsche","Lotus","Ford","Ferrari","Maserati","Volvo"],[21,21,22.8,21.4,18.7,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>marque<\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"language":{"info":"Extrait des enregistrements de _START_ a _END_","paginate":{"previous":"Precedent","next":"Suivant"},"sLengthMenu":"Afficher _MENU_ elements"},"columnDefs":[{"visible":false,"targets":[4,5]},{"className":"dt-right","targets":[1,2,3,4,5]}],"dom":"Btip","buttons":[{"extend":"colvis","className":"btn btn-default","text":"Afficher / cacher des colonnes","columns":[0,1,2,3,4]}],"escape":true,"initComplete":"function(settings, json) {\n$(this.api().table().header()).css({'background-color': '#428bca',\n            'color': '#fff'});\n}","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":["options.initComplete"],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="at">data =</span> mtcars2,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>          <span class="co"># on enleve les rownames et  on ajoute un bouton</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">rownames =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">extensions =</span> <span class="st">&#39;Buttons&#39;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>          <span class="do">### parametrage des options</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">5</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>          <span class="co"># texte a afficher en francais plutot qu&#39;en anglais</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">language =</span> <span class="fu">list</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">info =</span> <span class="st">&#39;Extrait des enregistrements de _START_ a _END_&#39;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">paginate =</span> <span class="fu">list</span>(<span class="at">previous =</span> <span class="st">&#39;Precedent&#39;</span>, <span class="st">`</span><span class="at">next</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&#39;Suivant&#39;</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">sLengthMenu =</span> <span class="st">&quot;Afficher _MENU_ elements&quot;</span>),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>          <span class="co">#  on masque les colonnes 4 et 5</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">columnDefs =</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="at">visible =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">targets =</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>))),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>          <span class="co"># elements a afficher parmi les 5 &quot;lftip &quot; qui constituent le</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>          <span class="co"># Document Object Model :</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>          <span class="co"># l = Length menu, f = Filtering box, t = Table, i = Information summary, </span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>          <span class="co"># p = Pagination control. On peut mettre un B pour ajouter un bouton</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">dom =</span> <span class="st">&#39;Btip&#39;</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>          <span class="co"># extend pour le type du bouton qui va masquer certaines des 5 1eres colonnes</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">buttons =</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="at">extend =</span> <span class="st">&#39;colvis&#39;</span>, </span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>                              <span class="at">className =</span> <span class="st">&quot;btn btn-default&quot;</span>, </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>                              <span class="at">text =</span> <span class="st">&quot;Afficher / cacher des colonnes&quot;</span>, </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                              <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">4</span>))),</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>          <span class="co"># echappement du code HTML pour eviter pb de securite</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">escape =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>          <span class="co"># jolies couleurs pr l&#39;entete, avec du javascript,</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>          <span class="co"># mais ca ne marche pas dans ce markdown qui impose son vert cayman :-)</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">initComplete =</span> DT<span class="sc">::</span><span class="fu">JS</span>(</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;function(settings, json) {&quot;</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;$(this.api().table().header()).css({&#39;background-color&#39;: &#39;#428bca&#39;,</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="st">            &#39;color&#39;: &#39;#fff&#39;});&quot;</span>,<span class="st">&quot;}&quot;</span>)))</span></code></pre></div>
+<div id="htmlwidget-3b68bb481d10d63633fd" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3b68bb481d10d63633fd">{"x":{"filter":"none","extensions":["Buttons"],"data":[["Mazda","Mazda","Datsun","Hornet","Hornet","Duster","Merc","Merc","Merc","Merc","Merc","Merc","Merc","Cadillac","Lincoln","Chrysler","Fiat","Honda","Toyota","Toyota","Dodge","AMC","Camaro","Pontiac","Fiat","Porsche","Lotus","Ford","Ferrari","Maserati","Volvo"],[21,21,22.8,21.4,18.7,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>marque<\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"language":{"info":"Extrait des enregistrements de _START_ a _END_","paginate":{"previous":"Precedent","next":"Suivant"},"sLengthMenu":"Afficher _MENU_ elements"},"columnDefs":[{"visible":false,"targets":[4,5]},{"className":"dt-right","targets":[1,2,3,4,5]}],"dom":"Btip","buttons":[{"extend":"colvis","className":"btn btn-default","text":"Afficher / cacher des colonnes","columns":[0,1,2,3,4]}],"escape":true,"initComplete":"function(settings, json) {\n$(this.api().table().header()).css({'background-color': '#428bca',\n            'color': '#fff'});\n}","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":["options.initComplete"],"jsHooks":[]}</script>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>
 </div>

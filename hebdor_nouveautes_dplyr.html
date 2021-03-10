@@ -14,8 +14,7 @@
 
 <title>  Nouveautes de dplyr 1.0.0  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -168,24 +167,24 @@ a.sourceLine {
 <li><a href="https://www.tidyverse.org/blog/2020/04/dplyr-1-0-0-colwise/" class="uri">https://www.tidyverse.org/blog/2020/04/dplyr-1-0-0-colwise/</a></li>
 </ul>
 <p>Vous trouverez ci-dessous quelques exemples de ces evolutions. La plupart d’entre elles permettent de supprimer des fonctions specifiques (<em>summarise_at</em>, <em>select_if</em>, …) pour les remplacer par une syntaxe plus generale et plus puissante.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># donnees</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>tips =<span class="st"> </span>reshape2<span class="op">::</span>tips[, <span class="kw">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;smoker&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;size&quot;</span>, <span class="st">&quot;total_bill&quot;</span>, <span class="st">&quot;tip&quot;</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># donnees</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>tips <span class="ot">=</span> reshape2<span class="sc">::</span>tips[, <span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;smoker&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;size&quot;</span>, <span class="st">&quot;total_bill&quot;</span>, <span class="st">&quot;tip&quot;</span>)]</span></code></pre></div>
 </div>
 <div id="selection-de-variables" class="section level1">
 <h1>Selection de variables</h1>
 <div id="par-type-de-donnees-avec-where" class="section level3">
 <h3>Par type de donnees avec <em>where</em></h3>
 <p>Avant avec <em>select_if</em>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select_if</span>(is.numeric)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">select_if</span>(is.numeric)</span></code></pre></div>
 <pre><code>    size total_bill tip
 126    6      29.80 4.2
 142    6      34.30 6.7
 144    6      27.05 5.0
 157    6      48.17 5.0</code></pre>
 <p>Apres avec <em>where</em>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">where</span>(is.numeric))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric))</span></code></pre></div>
 <pre><code>    size total_bill tip
 126    6      29.80 4.2
 142    6      34.30 6.7
@@ -195,7 +194,7 @@ a.sourceLine {
 <div id="par-plusieurs-conditions" class="section level3">
 <h3>Par plusieurs conditions</h3>
 <p>Combinaison de criteres avec les operateurs booleens usuels <em>&amp;</em>, <em>|</em>, <em>!</em>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;t&quot;</span>) <span class="op">&amp;</span><span class="st"> </span><span class="kw">ends_with</span>(<span class="st">&quot;l&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">&quot;t&quot;</span>) <span class="sc">&amp;</span> <span class="fu">ends_with</span>(<span class="st">&quot;l&quot;</span>))</span></code></pre></div>
 <pre><code>    total_bill
 126      29.80
 142      34.30
@@ -206,8 +205,8 @@ a.sourceLine {
 <h3>Remplacement du mal-nomme <em>one_of</em></h3>
 <p>La fonction <em>one_of</em> est renommee <em>any_of</em>, elle permet de selectionner un ensemble de champ en utilisant le vecteur des noms des champs (alors que les fonctions du package <em>dplyr</em> attendent d’habitude des noms de variable sans guillemets).</p>
 <p>Un point d’attention : si l’un des champs n’existe pas la fonction <em>one_of</em> ne signale pas d’erreur, alors que sa variante <em>all_of</em> declenchera une erreur, ca peut etre une exigence utile dans une chaine de production.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>mes_champs =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;toto&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">any_of</span>(mes_champs))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mes_champs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;toto&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">any_of</span>(mes_champs))</span></code></pre></div>
 <pre><code>     day   time
 126 Thur  Lunch
 142 Thur  Lunch
@@ -217,20 +216,20 @@ a.sourceLine {
 <div id="changer-lordre-des-variables-avec-relocate" class="section level3">
 <h3>Changer l’ordre des variables avec <em>relocate</em></h3>
 <p>Avant avec <em>everything</em> les possibilites etaient limitees.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(size, tip, <span class="kw">everything</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(size, tip, <span class="fu">everything</span>())</span></code></pre></div>
 <pre><code>    size tip    sex smoker  day   time total_bill
 126    6 4.2 Female     No Thur  Lunch      29.80
 142    6 6.7   Male     No Thur  Lunch      34.30
 144    6 5.0 Female     No Thur  Lunch      27.05
 157    6 5.0   Male     No  Sun Dinner      48.17</code></pre>
 <p>Apres avec <em>relocate</em>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(size, tip)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(size, tip)</span></code></pre></div>
 <pre><code>    size tip    sex smoker  day   time total_bill
 126    6 4.2 Female     No Thur  Lunch      29.80
 142    6 6.7   Male     No Thur  Lunch      34.30
 144    6 5.0 Female     No Thur  Lunch      27.05
 157    6 5.0   Male     No  Sun Dinner      48.17</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(<span class="kw">where</span>(is.numeric))</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(<span class="fu">where</span>(is.numeric))</span></code></pre></div>
 <pre><code>    size total_bill tip    sex smoker  day   time
 126    6      29.80 4.2 Female     No Thur  Lunch
 142    6      34.30 6.7   Male     No Thur  Lunch
@@ -241,20 +240,20 @@ a.sourceLine {
 <div id="renommer-des-champs-avec-rename_with" class="section level1">
 <h1>Renommer des champs avec <em>rename_with</em></h1>
 <p>Avec cette nouvelle fonction, <em>rename_at</em> et <em>rename_if</em> deviennent obsoletes.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(size <span class="op">==</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_with</span>(toupper, <span class="kw">where</span>(is.numeric))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">filter</span>(size <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">rename_with</span>(toupper, <span class="fu">where</span>(is.numeric))</span></code></pre></div>
 <pre><code>       sex smoker  day   time SIZE TOTAL_BILL TIP
 126 Female     No Thur  Lunch    6      29.80 4.2
 142   Male     No Thur  Lunch    6      34.30 6.7
 144 Female     No Thur  Lunch    6      27.05 5.0
 157   Male     No  Sun Dinner    6      48.17 5.0</code></pre>
 <p>A noter : dans toutes les versions recentes de <em>dplyr</em> il est possible de renommer des champs dans des operateurs tels que <em>group_by</em>, <em>count</em> et <em>select</em>.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(<span class="dt">mon_groupe =</span> sex) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">mon_calcul =</span> <span class="kw">mean</span>(size))</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(<span class="at">mon_groupe =</span> sex) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mon_calcul =</span> <span class="fu">mean</span>(size))</span></code></pre></div>
 <pre><code># A tibble: 2 x 2
   mon_groupe mon_calcul
   &lt;fct&gt;           &lt;dbl&gt;
 1 Female           2.46
 2 Male             2.63</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(<span class="dt">groupe1 =</span> sex, <span class="dt">groupe2 =</span> day, <span class="dt">name =</span> <span class="st">&quot;frequence&quot;</span>, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">count</span>(<span class="at">groupe1 =</span> sex, <span class="at">groupe2 =</span> day, <span class="at">name =</span> <span class="st">&quot;frequence&quot;</span>, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>  groupe1 groupe2 frequence
 1    Male     Sat        59
 2    Male     Sun        58
@@ -264,7 +263,7 @@ a.sourceLine {
 6  Female     Sun        18
 7    Male     Fri        10
 8  Female     Fri         9</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="dt">nb =</span> n, <span class="kw">everything</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">count</span>(sex) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="at">nb =</span> n, <span class="fu">everything</span>())</span></code></pre></div>
 <pre><code>   nb    sex
 1  87 Female
 2 157   Male</code></pre>
@@ -275,7 +274,7 @@ a.sourceLine {
 <div id="plusieurs-lignes-renvoyees" class="section level3">
 <h3>Plusieurs lignes renvoyees</h3>
 <p>Avant pour calculer des quantiles.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">quartiles =</span> <span class="kw">list</span>(<span class="kw">quantile</span>(total_bill))) <span class="op">%&gt;%</span><span class="st"> </span>tidyr<span class="op">::</span><span class="kw">unnest</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">quartiles =</span> <span class="fu">list</span>(<span class="fu">quantile</span>(total_bill))) <span class="sc">%&gt;%</span> tidyr<span class="sc">::</span><span class="fu">unnest</span>()</span></code></pre></div>
 <pre><code># A tibble: 5 x 1
   quartiles
       &lt;dbl&gt;
@@ -285,7 +284,7 @@ a.sourceLine {
 4     24.1 
 5     50.8 </code></pre>
 <p>Apres.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">quartiles =</span> <span class="kw">quantile</span>(total_bill))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">quartiles =</span> <span class="fu">quantile</span>(total_bill))</span></code></pre></div>
 <pre><code>  quartiles
 1    3.0700
 2   13.3475
@@ -295,12 +294,12 @@ a.sourceLine {
 </div>
 <div id="plusieurs-lignes-et-colonnes-renvoyees" class="section level3">
 <h3>Plusieurs lignes et colonnes renvoyees</h3>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>ma_fonction =<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb28-2"><a href="#cb28-2"></a>  vecteur_nomme =<span class="st"> </span><span class="kw">quantile</span>(x)</span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="kw">data.frame</span>(<span class="dt">valeurs =</span> <span class="kw">unname</span>(vecteur_nomme), <span class="dt">seuils =</span> <span class="kw">names</span>(vecteur_nomme))</span>
-<span id="cb28-4"><a href="#cb28-4"></a>}</span>
-<span id="cb28-5"><a href="#cb28-5"></a></span>
-<span id="cb28-6"><a href="#cb28-6"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">quartiles =</span> <span class="kw">ma_fonction</span>(total_bill))</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ma_fonction <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  vecteur_nomme <span class="ot">=</span> <span class="fu">quantile</span>(x)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">valeurs =</span> <span class="fu">unname</span>(vecteur_nomme), <span class="at">seuils =</span> <span class="fu">names</span>(vecteur_nomme))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">quartiles =</span> <span class="fu">ma_fonction</span>(total_bill))</span></code></pre></div>
 <pre><code>  quartiles.valeurs quartiles.seuils
 1            3.0700               0%
 2           13.3475              25%
@@ -308,19 +307,19 @@ a.sourceLine {
 4           24.1275              75%
 5           50.8100             100%</code></pre>
 <p>On peut renommer les champs avec les doubles accolades “curly-curly” deja vues dans un precedent hebdomadR, cf <a href="https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/" class="uri">https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/</a>.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>ma_fonction =<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="co"># pour que le {{}}:= fonctionne, il faut l&#39;utiliser a la premiere ligne de code,</span></span>
-<span id="cb30-3"><a href="#cb30-3"></a><span class="co"># sans aucune operation prealable sur x, sinon il &quot;se passe des choses&quot; ...</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a><span class="co"># on commence donc par initialiser le dataframe resultat rempli de valeurs par defaut</span></span>
-<span id="cb30-5"><a href="#cb30-5"></a>  resultat =<span class="st"> </span><span class="kw">tibble</span>(<span class="st">&quot;{{x}}_valeurs&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">numeric</span>(<span class="dv">5</span>), <span class="st">&quot;{{x}}_seuils&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">character</span>(<span class="dv">5</span>))</span>
-<span id="cb30-6"><a href="#cb30-6"></a>  </span>
-<span id="cb30-7"><a href="#cb30-7"></a>  vecteur_nomme =<span class="st"> </span><span class="kw">quantile</span>(x)</span>
-<span id="cb30-8"><a href="#cb30-8"></a>  resultat[[<span class="dv">1</span>]] =<span class="st"> </span><span class="kw">unname</span>(vecteur_nomme)</span>
-<span id="cb30-9"><a href="#cb30-9"></a>  resultat[[<span class="dv">2</span>]] =<span class="st"> </span><span class="kw">names</span>(vecteur_nomme)</span>
-<span id="cb30-10"><a href="#cb30-10"></a>  <span class="kw">return</span>(resultat)</span>
-<span id="cb30-11"><a href="#cb30-11"></a>}</span>
-<span id="cb30-12"><a href="#cb30-12"></a></span>
-<span id="cb30-13"><a href="#cb30-13"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="kw">ma_fonction</span>(total_bill))</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ma_fonction <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pour que le {{}}:= fonctionne, il faut l&#39;utiliser a la premiere ligne de code,</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># sans aucune operation prealable sur x, sinon il &quot;se passe des choses&quot; ...</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># on commence donc par initialiser le dataframe resultat rempli de valeurs par defaut</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  resultat <span class="ot">=</span> <span class="fu">tibble</span>(<span class="st">&quot;{{x}}_valeurs&quot;</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">numeric</span>(<span class="dv">5</span>), <span class="st">&quot;{{x}}_seuils&quot;</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">character</span>(<span class="dv">5</span>))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  vecteur_nomme <span class="ot">=</span> <span class="fu">quantile</span>(x)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  resultat[[<span class="dv">1</span>]] <span class="ot">=</span> <span class="fu">unname</span>(vecteur_nomme)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  resultat[[<span class="dv">2</span>]] <span class="ot">=</span> <span class="fu">names</span>(vecteur_nomme)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(resultat)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">ma_fonction</span>(total_bill))</span></code></pre></div>
 <pre><code>  total_bill_valeurs total_bill_seuils
 1             3.0700                0%
 2            13.3475               25%
@@ -335,43 +334,43 @@ a.sourceLine {
 <div id="avec-summarise" class="section level3">
 <h3>Avec <em>summarise</em></h3>
 <p>En utilisant l’ordre des variables dans le dataframe.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="kw">across</span>(size<span class="op">:</span>tip, mean))</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(size<span class="sc">:</span>tip, mean))</span></code></pre></div>
 <pre><code>      size total_bill      tip
 1 2.569672   19.78594 2.998279</code></pre>
 <p>En utilisant le type des variables avec <em>where</em>.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="kw">across</span>(<span class="kw">where</span>(is.numeric), mean))</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), mean))</span></code></pre></div>
 <pre><code>      size total_bill      tip
 1 2.569672   19.78594 2.998279</code></pre>
 <p>Avec plusieurs fonctions nommees ou pas (dans ce second cas la fonction est designee par un numero …).</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>tips <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">across</span>(total_bill<span class="op">:</span>tip, <span class="kw">list</span>(<span class="dt">unique =</span> n_distinct, <span class="dt">moy =</span> mean, sum)))</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span>  <span class="fu">summarise</span>(<span class="fu">across</span>(total_bill<span class="sc">:</span>tip, <span class="fu">list</span>(<span class="at">unique =</span> n_distinct, <span class="at">moy =</span> mean, sum)))</span></code></pre></div>
 <pre><code>  total_bill_unique total_bill_moy total_bill_3 tip_unique  tip_moy  tip_3
 1               229       19.78594      4827.77        123 2.998279 731.58</code></pre>
 <p>Pour controler le nom des colonnes et leur agencement.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="kw">across</span>(total_bill<span class="op">:</span>tip, <span class="kw">list</span>(<span class="dt">moy=</span>mean, <span class="dt">somme=</span>sum), <span class="dt">.names =</span> <span class="st">&quot;{fn}.{col}&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(total_bill<span class="sc">:</span>tip, <span class="fu">list</span>(<span class="at">moy=</span>mean, <span class="at">somme=</span>sum), <span class="at">.names =</span> <span class="st">&quot;{fn}.{col}&quot;</span>))</span></code></pre></div>
 <pre><code>  moy.total_bill somme.total_bill  moy.tip somme.tip
 1       19.78594          4827.77 2.998279    731.58</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="kw">across</span>(total_bill<span class="op">:</span>tip, mean, <span class="dt">.names =</span> <span class="st">&quot;{col}_moy&quot;</span>),</span>
-<span id="cb40-2"><a href="#cb40-2"></a>                    <span class="kw">across</span>(total_bill<span class="op">:</span>tip, sum, <span class="dt">.names =</span> <span class="st">&quot;{col}_somme&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(total_bill<span class="sc">:</span>tip, mean, <span class="at">.names =</span> <span class="st">&quot;{col}_moy&quot;</span>),</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">across</span>(total_bill<span class="sc">:</span>tip, sum, <span class="at">.names =</span> <span class="st">&quot;{col}_somme&quot;</span>))</span></code></pre></div>
 <pre><code>  total_bill_moy  tip_moy total_bill_somme tip_somme
 1       19.78594 2.998279          4827.77    731.58</code></pre>
 <p>Avec <em>group_by</em>, plusieurs fonctions dans le <em>across</em> et la fonction de comptage en-dehors.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>(), <span class="kw">across</span>(total_bill<span class="op">:</span>tip,<span class="kw">list</span>(<span class="dt">sum=</span>sum,<span class="dt">mean=</span>mean)))</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">nb =</span> <span class="fu">n</span>(), <span class="fu">across</span>(total_bill<span class="sc">:</span>tip,<span class="fu">list</span>(<span class="at">sum=</span>sum,<span class="at">mean=</span>mean)))</span></code></pre></div>
 <pre><code># A tibble: 2 x 6
   sex       nb total_bill_sum total_bill_mean tip_sum tip_mean
   &lt;fct&gt;  &lt;int&gt;          &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
 1 Female    87          1571.            18.1    247.     2.83
 2 Male     157          3257.            20.7    485.     3.09</code></pre>
 <p>Note : si le <em>nb = n()</em> precede un <em>across(where(is.numeric))</em>, le <em>across</em> va s’appliquer au champ <em>nb</em>.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>(), <span class="kw">across</span>(<span class="kw">where</span>(is.numeric), sd))</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">nb =</span> <span class="fu">n</span>(), <span class="fu">across</span>(<span class="fu">where</span>(is.numeric), sd))</span></code></pre></div>
 <pre><code>  nb      size total_bill      tip
 1 NA 0.9510998   8.902412 1.383638</code></pre>
 <p>On peut eviter ca comme suit.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># solution 1 : nb a la fin puis deplace</span></span>
-<span id="cb46-2"><a href="#cb46-2"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="kw">across</span>(<span class="kw">where</span>(is.numeric), sd), <span class="dt">nb =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(nb)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># solution 1 : nb a la fin puis deplace</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), sd), <span class="at">nb =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(nb)</span></code></pre></div>
 <pre><code>   nb      size total_bill      tip
 1 244 0.9510998   8.902412 1.383638</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="co"># solution 2 : on exclut nb du across</span></span>
-<span id="cb48-2"><a href="#cb48-2"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>(), <span class="kw">across</span>(<span class="kw">where</span>(is.numeric) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span>nb, sd))</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># solution 2 : on exclut nb du across</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">nb =</span> <span class="fu">n</span>(), <span class="fu">across</span>(<span class="fu">where</span>(is.numeric) <span class="sc">&amp;</span> <span class="sc">!</span>nb, sd))</span></code></pre></div>
 <pre><code>   nb      size total_bill      tip
 1 244 0.9510998   8.902412 1.383638</code></pre>
 </div>
@@ -382,22 +381,22 @@ a.sourceLine {
 <li><em>mutate</em> et <em>filter</em>, voir <a href="https://dplyr.tidyverse.org/dev/articles/colwise.html#other-verbs" class="uri">https://dplyr.tidyverse.org/dev/articles/colwise.html#other-verbs</a></li>
 <li>les operateurs <em>distinct</em>, <em>count</em>, <em>group_by</em> mais pour ceux-ci, par construction il n’y a pas de fonction a appliquer, <em>across</em> permet simplement de definir de facon pratique un ensemble de variables auxquelles on applique ces operateurs.</li>
 </ul>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="co"># deduplication</span></span>
-<span id="cb50-2"><a href="#cb50-2"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(<span class="kw">across</span>(smoker<span class="op">:</span>time))</span></code></pre></div>
-<pre><code>   smoker  day   time
-1      No  Sun Dinner
-2      No  Sat Dinner
-3     Yes  Sat Dinner
-4      No Thur  Lunch
-5     Yes Thur  Lunch
-6     Yes  Fri Dinner
-7      No  Fri Dinner
-8     Yes  Sun Dinner
-9     Yes  Fri  Lunch
-10     No  Fri  Lunch
-11     No Thur Dinner</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># table de contingence</span></span>
-<span id="cb52-2"><a href="#cb52-2"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(<span class="kw">across</span>(smoker<span class="op">:</span>time))</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># deduplication</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(<span class="fu">across</span>(smoker<span class="sc">:</span>time))</span></code></pre></div>
+<pre><code>    smoker  day   time
+1       No  Sun Dinner
+20      No  Sat Dinner
+57     Yes  Sat Dinner
+78      No Thur  Lunch
+81     Yes Thur  Lunch
+91     Yes  Fri Dinner
+92      No  Fri Dinner
+165    Yes  Sun Dinner
+221    Yes  Fri  Lunch
+224     No  Fri  Lunch
+244     No Thur Dinner</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table de contingence</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">count</span>(<span class="fu">across</span>(smoker<span class="sc">:</span>time))</span></code></pre></div>
 <pre><code>   smoker  day   time  n
 1      No  Fri Dinner  3
 2      No  Fri  Lunch  1
@@ -410,8 +409,8 @@ a.sourceLine {
 9     Yes  Sat Dinner 42
 10    Yes  Sun Dinner 19
 11    Yes Thur  Lunch 17</code></pre>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="co"># groupes</span></span>
-<span id="cb54-2"><a href="#cb54-2"></a>tips <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(<span class="kw">across</span>(smoker<span class="op">:</span>time)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">comptage_distinct =</span> <span class="kw">n_distinct</span>(size))</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># groupes</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>tips <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(<span class="fu">across</span>(smoker<span class="sc">:</span>time)) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">comptage_distinct =</span> <span class="fu">n_distinct</span>(size))</span></code></pre></div>
 <pre><code># A tibble: 11 x 4
 # Groups:   smoker, day [8]
    smoker day   time   comptage_distinct

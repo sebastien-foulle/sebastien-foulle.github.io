@@ -14,8 +14,7 @@
 
 <title>  Hachage et chiffrement avec openssl  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -164,17 +163,17 @@ a.sourceLine {
 <li>si on ne choisit pas une cle aleatoire, alors un attaquant qui connait un identifiant mais pas sa version hachee peut simplement appliquer tous les algorithmes de hachage standards pour obtenir une short liste d’identifiants haches qui contient le vrai hache. Pour eviter ca il suffit d’utiliser une cle aleatoire secrete dans l’algorithme de hachage</li>
 <li>l’algorithme MD5 est suffisant dans le cadre du RGPD, mais il n’est plus considere comme assez sur pour des applications cryptographiques (signatures electroniques par exemple)</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;openssl&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># le hache fait 256 bits soit 64 characteres hexadecimaux </span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># (chacun des 16 groupes possibles de 4 bits est remplace par un chiffre ou une lettre entre a et f)</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Use a salt to prevent dictionary attacks</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">sha256</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="st">&quot;random_salt_value&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">sha256</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="ot">NULL</span>)</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># MD5 n&#39;est plus considere comme sur,  preferer shaY avec Y &gt;= 224</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">md5</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="st">&quot;random_salt_value&quot;</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">md5</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="dt">key =</span> <span class="ot">NULL</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;openssl&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># le hache fait 256 bits soit 64 characteres hexadecimaux </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># (chacun des 16 groupes possibles de 4 bits est remplace par un chiffre ou une lettre entre a et f)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a salt to prevent dictionary attacks</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sha256</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="at">key =</span> <span class="st">&quot;random_salt_value&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sha256</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="at">key =</span> <span class="cn">NULL</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># MD5 n&#39;est plus considere comme sur,  preferer shaY avec Y &gt;= 224</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">md5</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="at">key =</span> <span class="st">&quot;random_salt_value&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">md5</span>(<span class="st">&quot;identifiant_a_hasher&quot;</span>, <span class="at">key =</span> <span class="cn">NULL</span>)</span></code></pre></div>
 <pre><code>[1] &quot;0e000572656c206efa68a0366c99d51b420339eb76a571ace703d6285639bcca&quot;
 [1] &quot;084385f2203befd723dce46e4607e09fa634680968f5dd021531f1341850a3c9&quot;
 [1] &quot;a0221a3d2d4e7b065376df5ebdaa7970&quot;
@@ -190,43 +189,43 @@ a.sourceLine {
 </ul>
 <div id="generation-des-cles-secretes-et-publiques" class="section level3">
 <h3>Generation des cles secretes et publiques</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># generation de la cle secrete (couple de grands nombres premiers)</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># chaque nombre premier fait 1024 bits soit 309 chiffres en base 10, n fait 2048 bits</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>key &lt;-<span class="st"> </span><span class="kw">rsa_keygen</span>(<span class="dt">bits =</span> <span class="dv">2048</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">### key$data pour voir les differentes cles</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># cle publique : n</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># cles secretes : p, q</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>key<span class="op">$</span>data</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generation de la cle secrete (couple de grands nombres premiers)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># chaque nombre premier fait 1024 bits soit 309 chiffres en base 10, n fait 2048 bits</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">rsa_keygen</span>(<span class="at">bits =</span> <span class="dv">2048</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">### key$data pour voir les differentes cles</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># cle publique : n</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># cles secretes : p, q</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>key<span class="sc">$</span>data</span></code></pre></div>
 <pre><code>$e
 [b] 65537
 $n
-[b] 23641989786064580967902479751113512555151255293494873290639641405624520787074227552946225561094935716053392936805347325515668786453140902346792401671332022090685021746909774280874167370020694727778040869391342629445931574018987492270472247850734955968200919182331816005829921464418328184854457970656319292851374447188665945315783278303289594103724997034828138121757168757329416994584650121658442934512754744940754211359730343820193808896888381988503076206429007409374744755054179446070567054894278054979928870682937484880609189729426551019930208064940942356386368138725733900514881859431274900491418970564529223166789
+[b] 24785117240990300993048436788034821608029502510196330793194406520700511738090479647078618390817897499353166914961173795332376819882366136145505363600370442661819071819660414344093085873837144541706670183049172362676799605593740914956563986729170386822084757701487157290189177233469812205408961469804493231008906424652259229696611348237020985444768974128048505384239513914559191037247845506103795097942289777308112749804183324274175819259675419212766216825932183745756405582865181789394997014092180293140585503457945900568505424642593042327282899852823392434911447596347918717167052056449042886531363582388837157152273
 $p
-[b] 168209684362765243829011502769478789342277452004116492574270230394854702172017555624418837060423884977594641394171600034132964058315327970456957962421367149928464400493837138052961022512695140634452863947914959910455012758390647029144551365408888039820816128684837490856921232831877347831176262607888376345821
+[b] 159994526790619207885993512872480605460281818579024379896520787318907408866134019584248468078069888955494949047875807435783521349530897602151078265018184151391410388619367793873050800906004604642818387813323574534662374162452816302477639558947566347113810409831245197549323442734188785716027212994432150033673
 $q
-[b] 140550705362942540612436287214964726197956640108980203016502069642488704612794572186342619113038099643044822611435725595809822495863113483117598895213034961854199902051878336921115149726490716288994983494385618336971843656316262611030083712349122388124573664812392862893690037446393661685863262435004846806409
+[b] 154912281927155903846289887892663975271660653918560071018789917674935827021929289049633123492013185245892366385944978395451177279095279001710934805855352423625840467697434109914490905811930335966029879765825576583347660214340680028989020783574435971655001987814933625733682653479426839418195002923677747008201
 $d
-[b] 5948285237078579666138883205152977837281063346421669678034652900458408582298044434754876074231264705769327191281007248583668196893752236733391212767728057620173418429052218870520990368254134845451151500608722532568380696766697968476552434423467181728789309190189805974031914415166910500023882043397653978970981615112497147819617856223719252148383028764856925371561983477795581143311892956353730257661116595585980012346035589772785588406685448059576061698617181847689027794702413330170896412165644067530605850011670689129416108366669395405813351892605083610297439491195397942881060435243356900045417743827246532557793
+[b] 6837208517324010126391545061429139872920111934965583783361485504184575914566394274067081829921979475575719130500069594974045814221787652400546126135329618885256069082009256312111614805577028795482168702249812886534840778026599356111810432520204944128606288577218766752358669685885846695173544935114445780603389322841957763666936671089226991576985908651612144278095858367421943679155034596457856879040894837808665168194787438126706021329763938799859302374043750586688331450955462714983859262737369451278228748454350465131383892467085615637858946764525975127176140222428990578475207393000843637316308631222428218190273
 $dp
-[b] 140428406252040447161400527198780734566489559050631332807666617568605296549088248178568256589208722077286656615336538942391578230962762092369372125638345680669485523356566692620834893643851400423162786596613686949062744908217151699125468649093130465579997754684125206177498686420350417808064861926322485542653
+[b] 68002007167747959712289993455039859393871401750442102965005821608681597783941332613931688638702362892035213783489946383321634911442134255579570091277927270656388549597822449888365809531055102649277601851475169273281053943499446085501543401658367953962726230462934448902702358932524049409035171246164876927353
 $dq
-[b] 4145513427019362055080936618803528018381222596863737010099615493826856066291284435299148309283345997070443293222229543261064541930564389014851437576434633585061391437909590388155020590220891322255020875149112718698850630752999612846501240764314106172769594184694987624906584713732379389333867682177462637545
+[b] 28289213575601596918265977666042120573893139846152965957442021068001769653759704157132752825921445916395926589666745524463428134888876498656887983222864302698537600399818292376163497882984913267947046722269870463242211230987522446662810332145488040477395422283124427922863634234734278562597582968255722358273
 $qi
-[b] 153549810993399462942147264349577647118561299875276761219192976320368841821592171386931415978262690613100681140287044440163054113701820345785408606992642260592232252049877241381698201771772725771220675507495471735962882256754209812754580243790309350729567536156269902804034231392485023438548213013382155198182</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>(<span class="dt">p =</span> <span class="kw">as.numeric</span>(openssl<span class="op">:::</span><span class="kw">as.character.bignum</span>(key<span class="op">$</span>data<span class="op">$</span>p)))</span>
-<span id="cb5-2"><a href="#cb5-2"></a>(<span class="dt">q =</span> <span class="kw">as.numeric</span>(openssl<span class="op">:::</span><span class="kw">as.character.bignum</span>(key<span class="op">$</span>data<span class="op">$</span>q)))</span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># n et p*q sont trop grand pour le type numerique de R --&gt; la conversion en numerique donne Inf </span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">as.numeric</span>(openssl<span class="op">:::</span><span class="kw">as.character.bignum</span>(key<span class="op">$</span>data<span class="op">$</span>n))</span>
-<span id="cb5-6"><a href="#cb5-6"></a>p <span class="op">*</span><span class="st"> </span>q</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co"># la classe &quot;bignum&quot; de openssl permet de faire les calculs sur les nombres trop grands pour R</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co"># on a bien n = p * q</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="kw">class</span>(key<span class="op">$</span>data<span class="op">$</span>n)</span>
-<span id="cb5-11"><a href="#cb5-11"></a>key<span class="op">$</span>data<span class="op">$</span>n <span class="op">-</span><span class="st"> </span>key<span class="op">$</span>data<span class="op">$</span>p <span class="op">*</span><span class="st"> </span>key<span class="op">$</span>data<span class="op">$</span>q</span></code></pre></div>
-<pre><code>[1] 1.682097e+308
-[1] 1.405507e+308
+[b] 37757184704213262848080604740186727921442155710204432371055726766425603351588223910877874877232660217369076763930327065404216986044253292600043834765316881394412292704494672117050883895366260937106604447341193275431856854421207025127993270297253282124561750279629735696476542139936634757793198436996450686931</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(<span class="at">p =</span> <span class="fu">as.numeric</span>(openssl<span class="sc">:::</span><span class="fu">as.character.bignum</span>(key<span class="sc">$</span>data<span class="sc">$</span>p)))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">q =</span> <span class="fu">as.numeric</span>(openssl<span class="sc">:::</span><span class="fu">as.character.bignum</span>(key<span class="sc">$</span>data<span class="sc">$</span>q)))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># n et p*q sont trop grand pour le type numerique de R --&gt; la conversion en numerique donne Inf </span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(openssl<span class="sc">:::</span><span class="fu">as.character.bignum</span>(key<span class="sc">$</span>data<span class="sc">$</span>n))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>p <span class="sc">*</span> q</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># la classe &quot;bignum&quot; de openssl permet de faire les calculs sur les nombres trop grands pour R</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># on a bien n = p * q</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(key<span class="sc">$</span>data<span class="sc">$</span>n)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>key<span class="sc">$</span>data<span class="sc">$</span>n <span class="sc">-</span> key<span class="sc">$</span>data<span class="sc">$</span>p <span class="sc">*</span> key<span class="sc">$</span>data<span class="sc">$</span>q</span></code></pre></div>
+<pre><code>[1] 1.599945e+308
+[1] 1.549123e+308
 [1] Inf
 [1] Inf
 [1] &quot;bignum&quot;
@@ -234,28 +233,28 @@ $qi
 </div>
 <div id="chiffrement-et-dechiffrement" class="section level3">
 <h3>Chiffrement et dechiffrement</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># la cle publique n sous une autre forme</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>pubkey &lt;-<span class="st"> </span>key<span class="op">$</span>pubkey</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># phrase a chiffrer (convertie au prealable en hexadecimal avec charToRaw) </span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>msg1 &lt;-<span class="st"> </span><span class="kw">charToRaw</span>(<span class="st">&quot;En mathematiques, une extension de Galois parfois nommee extension galoisienne</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="st">est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une </span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="st">structure de groupe appelee groupe de Galois.&quot;</span>)</span>
-<span id="cb7-8"><a href="#cb7-8"></a></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co"># phrase trop longue a chiffrer avec RSA (max 2048 bits ici, soit 2048/8 = 256 caracteres ASCII)</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a>msg2 &lt;-<span class="st"> </span><span class="kw">charToRaw</span>(<span class="st">&quot;En mathematiques, une extension de Galois parfois nommee extension galoisienne</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="st">est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une </span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="st">structure de groupe appelee groupe de Galois.Le theoreme fondamental de la theorie de Galois ..&quot;</span>)</span>
-<span id="cb7-13"><a href="#cb7-13"></a></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># le message chiffre puis dechiffre : OK</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a>ciphertext &lt;-<span class="st"> </span><span class="kw">rsa_encrypt</span>(msg1, pubkey)</span>
-<span id="cb7-16"><a href="#cb7-16"></a></span>
-<span id="cb7-17"><a href="#cb7-17"></a><span class="kw">c</span>(ciphertext[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>], <span class="st">&quot;...&quot;</span>)</span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="kw">cat</span>(<span class="kw">rawToChar</span>(<span class="kw">rsa_decrypt</span>(ciphertext, key)), <span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-19"><a href="#cb7-19"></a></span>
-<span id="cb7-20"><a href="#cb7-20"></a><span class="co"># echec du chiffrement car le message est trop long</span></span>
-<span id="cb7-21"><a href="#cb7-21"></a><span class="kw">try</span>(<span class="kw">cat</span>(<span class="kw">rsa_encrypt</span>(msg2, pubkey)), <span class="dt">outFile =</span> <span class="kw">stdout</span>())</span></code></pre></div>
-<pre><code> [1] &quot;61&quot;  &quot;16&quot;  &quot;48&quot;  &quot;49&quot;  &quot;52&quot;  &quot;83&quot;  &quot;02&quot;  &quot;18&quot;  &quot;a6&quot;  &quot;f4&quot;  &quot;...&quot;
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># la cle publique n sous une autre forme</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pubkey <span class="ot">&lt;-</span> key<span class="sc">$</span>pubkey</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># phrase a chiffrer (convertie au prealable en hexadecimal avec charToRaw) </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>msg1 <span class="ot">&lt;-</span> <span class="fu">charToRaw</span>(<span class="st">&quot;En mathematiques, une extension de Galois parfois nommee extension galoisienne</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une </span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">structure de groupe appelee groupe de Galois.&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># phrase trop longue a chiffrer avec RSA (max 2048 bits ici, soit 2048/8 = 256 caracteres ASCII)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>msg2 <span class="ot">&lt;-</span> <span class="fu">charToRaw</span>(<span class="st">&quot;En mathematiques, une extension de Galois parfois nommee extension galoisienne</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une </span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">structure de groupe appelee groupe de Galois.Le theoreme fondamental de la theorie de Galois ..&quot;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># le message chiffre puis dechiffre : OK</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>ciphertext <span class="ot">&lt;-</span> <span class="fu">rsa_encrypt</span>(msg1, pubkey)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(ciphertext[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="st">&quot;...&quot;</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">rawToChar</span>(<span class="fu">rsa_decrypt</span>(ciphertext, key)), <span class="st">&quot;</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># echec du chiffrement car le message est trop long</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(<span class="fu">cat</span>(<span class="fu">rsa_encrypt</span>(msg2, pubkey)), <span class="at">outFile =</span> <span class="fu">stdout</span>())</span></code></pre></div>
+<pre><code> [1] &quot;2d&quot;  &quot;02&quot;  &quot;05&quot;  &quot;8b&quot;  &quot;00&quot;  &quot;98&quot;  &quot;22&quot;  &quot;5e&quot;  &quot;eb&quot;  &quot;f4&quot;  &quot;...&quot;
 En mathematiques, une extension de Galois parfois nommee extension galoisienne
 est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une 
 structure de groupe appelee groupe de Galois. 
@@ -267,16 +266,16 @@ Error : OpenSSL error in RSA_padding_add_PKCS1_type_2: data too large for key si
 <h1>Cryptographie symetrique avec AES</h1>
 <p>On a une seule cle utilisee pour chiffrer et dechiffrer, cette cle est connue uniquement par la personne qui envoie le message et par celle qui le recoit. Et avec le chiffrement symetrique il n’y a pas de limite a la longueur du message a chiffrer.</p>
 <p>Point d’attention : la cle secrete n’est pas obtenue par un algorithme mathematique comme pour RSA (deux grands nombres premiers fournis par un generateur pseudo-aleatoire de nombres premiers), c’est l’utilisateur qui choisit sa cle secrete, elle doit donc verifier les criteres usuels des bons mots de passe (de meme pour la cle secrete d’un algorithme de hachage). Sinon un attaquant peut simplement essayer par force brute tous les mots de passe simples pour tenter de dechiffrer les messages.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># aes-256 requires 32 byte key</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>passphrase &lt;-<span class="st"> </span><span class="kw">charToRaw</span>(<span class="st">&quot;This is super secret&quot;</span>)</span>
-<span id="cb9-3"><a href="#cb9-3"></a>key &lt;-<span class="st"> </span><span class="kw">sha256</span>(passphrase)</span>
-<span id="cb9-4"><a href="#cb9-4"></a></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="co"># symmetric encryption uses same key for decryption</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a>ciphertext &lt;-<span class="st"> </span><span class="kw">aes_cbc_encrypt</span>(msg2, <span class="dt">key =</span> key)</span>
-<span id="cb9-7"><a href="#cb9-7"></a></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="kw">c</span>(ciphertext[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>], <span class="st">&quot;...&quot;</span>)</span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="kw">cat</span>(<span class="kw">rawToChar</span>(<span class="kw">aes_cbc_decrypt</span>(ciphertext, key)))</span></code></pre></div>
-<pre><code> [1] &quot;97&quot;  &quot;0b&quot;  &quot;db&quot;  &quot;b4&quot;  &quot;04&quot;  &quot;02&quot;  &quot;59&quot;  &quot;cf&quot;  &quot;77&quot;  &quot;f8&quot;  &quot;...&quot;
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aes-256 requires 32 byte key</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>passphrase <span class="ot">&lt;-</span> <span class="fu">charToRaw</span>(<span class="st">&quot;This is super secret&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">sha256</span>(passphrase)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># symmetric encryption uses same key for decryption</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>ciphertext <span class="ot">&lt;-</span> <span class="fu">aes_cbc_encrypt</span>(msg2, <span class="at">key =</span> key)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(ciphertext[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="st">&quot;...&quot;</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">rawToChar</span>(<span class="fu">aes_cbc_decrypt</span>(ciphertext, key)))</span></code></pre></div>
+<pre><code> [1] &quot;e2&quot;  &quot;30&quot;  &quot;cf&quot;  &quot;9c&quot;  &quot;8d&quot;  &quot;b0&quot;  &quot;33&quot;  &quot;75&quot;  &quot;7d&quot;  &quot;dc&quot;  &quot;...&quot;
 En mathematiques, une extension de Galois parfois nommee extension galoisienne
 est une extension normale separable. L&#39;ensemble des automorphismes de l&#39;extension possede une 
 structure de groupe appelee groupe de Galois.Le theoreme fondamental de la theorie de Galois ..</code></pre>

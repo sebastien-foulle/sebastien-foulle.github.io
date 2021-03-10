@@ -14,8 +14,7 @@
 
 <title>  Echantillonnage avec R base, dplyr et themis  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -166,19 +165,19 @@ a.sourceLine {
 <blockquote>
 <p>Sur le CRAN, la version 0.1.0 du package <em>themis</em> a un bug dans la fonction <em>step_smote</em>, il a ete corrige dans la version en developpement sur github. En attendant le passage en production sur le CRAN de la nouvelle version, il faut donc installer la version de github avec la commande <code>remotes::install_github("tidymodels/themis")</code>.</p>
 </blockquote>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;recipes&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(<span class="st">&quot;themis&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># remotes::install_github(&quot;tidymodels/themis&quot;)</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">data</span>(<span class="st">&quot;bankData&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;otvPlots&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8"></a>bankData =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(y, <span class="kw">everything</span>())</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># frequence de la cible y</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y, <span class="dt">name =</span> <span class="st">&quot;nb&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq =</span> scales<span class="op">::</span><span class="kw">percent</span>(nb <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(nb)), </span>
-<span id="cb1-13"><a href="#cb1-13"></a>         <span class="dt">nb =</span> scales<span class="op">::</span><span class="kw">number</span>(nb, <span class="dt">trim =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;recipes&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;themis&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;tidymodels/themis&quot;)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;bankData&quot;</span>, <span class="at">package =</span> <span class="st">&quot;otvPlots&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>bankData <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">select</span>(y, <span class="fu">everything</span>())</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># frequence de la cible y</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>bankData <span class="sc">%&gt;%</span> <span class="fu">count</span>(y, <span class="at">name =</span> <span class="st">&quot;nb&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">freq =</span> scales<span class="sc">::</span><span class="fu">percent</span>(nb <span class="sc">/</span> <span class="fu">sum</span>(nb)), </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">nb =</span> scales<span class="sc">::</span><span class="fu">number</span>(nb, <span class="at">trim =</span> <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span> as.data.frame</span></code></pre></div>
 <pre><code>    y     nb freq
 1  no 39 922  88%
 2 yes  5 289  12%</code></pre>
@@ -188,21 +187,21 @@ a.sourceLine {
 <div id="echantillonnage-simple-equilibre" class="section level3">
 <h3>Echantillonnage simple / equilibre</h3>
 <p>Echantillonnage simple : 70% pour l’echantillon d’apprentissage, 30% pour l’echantillon test.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>bankData =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">simple =</span> <span class="kw">sample</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;train&quot;</span>, <span class="st">&quot;test&quot;</span>), </span>
-<span id="cb3-2"><a href="#cb3-2"></a>                                               <span class="dt">size =</span> <span class="kw">nrow</span>(.),</span>
-<span id="cb3-3"><a href="#cb3-3"></a>                                               <span class="dt">replace =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb3-4"><a href="#cb3-4"></a>                                               <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>)</span>
-<span id="cb3-5"><a href="#cb3-5"></a>                                               )</span>
-<span id="cb3-6"><a href="#cb3-6"></a>                               )</span>
-<span id="cb3-7"><a href="#cb3-7"></a></span>
-<span id="cb3-8"><a href="#cb3-8"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(simple) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">freq =</span> scales<span class="op">::</span><span class="kw">percent</span>(n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bankData <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">simple =</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="st">&quot;train&quot;</span>, <span class="st">&quot;test&quot;</span>), </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">size =</span> <span class="fu">nrow</span>(.),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                                               )</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                               )</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>bankData <span class="sc">%&gt;%</span> <span class="fu">count</span>(simple) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">freq =</span> scales<span class="sc">::</span><span class="fu">percent</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n)))</span></code></pre></div>
 <pre><code>  simple     n freq
-1   test 13515  30%
-2  train 31696  70%</code></pre>
+1   test 13616  30%
+2  train 31595  70%</code></pre>
 <p>Echantillonnage equilibre : 3000 modalites ‘no’ et 3000 modalites ‘yes’.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># echantillon (d&#39;apprentissage) equilibre 3000 / 3000</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>dtf_train =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(y) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">3000</span>) <span class="op">%&gt;%</span><span class="st"> </span>ungroup</span>
-<span id="cb5-3"><a href="#cb5-3"></a>dtf_train <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># echantillon (d&#39;apprentissage) equilibre 3000 / 3000</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dtf_train <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(y) <span class="sc">%&gt;%</span> <span class="fu">sample_n</span>(<span class="dv">3000</span>) <span class="sc">%&gt;%</span> ungroup</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dtf_train <span class="sc">%&gt;%</span> <span class="fu">count</span>(y)</span></code></pre></div>
 <pre><code># A tibble: 2 x 2
   y         n
   &lt;chr&gt; &lt;int&gt;
@@ -212,16 +211,16 @@ a.sourceLine {
 <div id="echantillonnage-stratifie" class="section level3">
 <h3>Echantillonnage stratifie</h3>
 <p>Le probleme : certaines modalites rares peuvent etre presentes dans l’echantillon test mais absentes de l’echantillon d’apprentissage, ce qui declenche une erreur quand on applique le modele predictif a l’echantillon test ou qu’on le met en production.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># zoom sur les modalites de la variable &#39;job&#39;</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(job) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>(), </span>
-<span id="cb7-3"><a href="#cb7-3"></a>                                         <span class="dt">freq_cible =</span> scales<span class="op">::</span><span class="kw">percent</span>(<span class="kw">mean</span>(y <span class="op">==</span><span class="st"> &#39;yes&#39;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq_modalite =</span> scales<span class="op">::</span><span class="kw">percent</span>(nb <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(nb)),</span>
-<span id="cb7-5"><a href="#cb7-5"></a>         <span class="dt">nb =</span> scales<span class="op">::</span><span class="kw">number</span>(nb, <span class="dt">trim =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span>
-<span id="cb7-6"><a href="#cb7-6"></a></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># echantillon qui perd la modalite &#39;unknown&#39; car il n&#39;est pas stratifie</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="kw">set.seed</span>(<span class="dv">2014</span>)</span>
-<span id="cb7-9"><a href="#cb7-9"></a>dtf_train2 =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(y) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">200</span>) <span class="op">%&gt;%</span><span class="st"> </span>ungroup</span>
-<span id="cb7-10"><a href="#cb7-10"></a>dtf_train2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(job)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># zoom sur les modalites de la variable &#39;job&#39;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>bankData <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(job) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">nb =</span> <span class="fu">n</span>(), </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">freq_cible =</span> scales<span class="sc">::</span><span class="fu">percent</span>(<span class="fu">mean</span>(y <span class="sc">==</span> <span class="st">&#39;yes&#39;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">freq_modalite =</span> scales<span class="sc">::</span><span class="fu">percent</span>(nb <span class="sc">/</span> <span class="fu">sum</span>(nb)),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nb =</span> scales<span class="sc">::</span><span class="fu">number</span>(nb, <span class="at">trim =</span> <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span> as.data.frame</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># echantillon qui perd la modalite &#39;unknown&#39; car il n&#39;est pas stratifie</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2014</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>dtf_train2 <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(y) <span class="sc">%&gt;%</span> <span class="fu">sample_n</span>(<span class="dv">200</span>) <span class="sc">%&gt;%</span> ungroup</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>dtf_train2 <span class="sc">%&gt;%</span> <span class="fu">count</span>(job)</span></code></pre></div>
 <pre><code>             job    nb freq_cible freq_modalite
 1         admin. 5 171        12%        11.44%
 2    blue-collar 9 732         7%        21.53%
@@ -250,12 +249,12 @@ a.sourceLine {
 10 technician       74
 11 unemployed       16</code></pre>
 <p>La stratification preserve les frequences relatives des modalites de la cible et de la variable ‘job’.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>dtf_strat =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(job, y) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_frac</span>(<span class="fl">0.5</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3"></a>dtf_strat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(job) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">nb =</span> <span class="kw">n</span>(), </span>
-<span id="cb9-4"><a href="#cb9-4"></a>                                          <span class="dt">freq_cible =</span> scales<span class="op">::</span><span class="kw">percent</span>(<span class="kw">mean</span>(y <span class="op">==</span><span class="st"> &#39;yes&#39;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq_modalite =</span> scales<span class="op">::</span><span class="kw">percent</span>(nb <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(nb)),</span>
-<span id="cb9-6"><a href="#cb9-6"></a>         <span class="dt">nb =</span> scales<span class="op">::</span><span class="kw">number</span>(nb, <span class="dt">trim =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dtf_strat <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(job, y) <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.5</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dtf_strat <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(job) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">nb =</span> <span class="fu">n</span>(), </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">freq_cible =</span> scales<span class="sc">::</span><span class="fu">percent</span>(<span class="fu">mean</span>(y <span class="sc">==</span> <span class="st">&#39;yes&#39;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">freq_modalite =</span> scales<span class="sc">::</span><span class="fu">percent</span>(nb <span class="sc">/</span> <span class="fu">sum</span>(nb)),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">nb =</span> scales<span class="sc">::</span><span class="fu">number</span>(nb, <span class="at">trim =</span> <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span> as.data.frame</span></code></pre></div>
 <pre><code>             job    nb freq_cible freq_modalite
 1         admin. 2 586        12%        11.44%
 2    blue-collar 4 866         7%        21.53%
@@ -278,12 +277,12 @@ a.sourceLine {
 <div id="algorithme-rose" class="section level3">
 <h3>Algorithme ROSE</h3>
 <p>Cet algorithme cree des cibles supplementaires dans le voisinage de chaque cible reelle a partir d’une estimation par noyau de la distribution des autres cibles dans son voisinage.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span>
-<span id="cb11-2"><a href="#cb11-2"></a></span>
-<span id="cb11-3"><a href="#cb11-3"></a>bankData_num =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.integer</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">recipe</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="st">  </span><span class="kw">step_dummy</span>(<span class="kw">all_nominal</span>(), <span class="op">-</span><span class="st"> </span><span class="kw">all_outcomes</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">step_rose</span>(y) <span class="op">%&gt;%</span><span class="st"> </span>prep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">juice</span>()</span>
-<span id="cb11-5"><a href="#cb11-5"></a></span>
-<span id="cb11-6"><a href="#cb11-6"></a>bankData_num <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bankData <span class="sc">%&gt;%</span> <span class="fu">count</span>(y)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>bankData_num <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.integer</span>(date)) <span class="sc">%&gt;%</span> <span class="fu">recipe</span>(<span class="at">formula =</span> y <span class="sc">~</span> .) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(), <span class="sc">-</span> <span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span> <span class="fu">step_rose</span>(y) <span class="sc">%&gt;%</span> prep <span class="sc">%&gt;%</span> <span class="fu">juice</span>()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>bankData_num <span class="sc">%&gt;%</span> <span class="fu">count</span>(y)</span></code></pre></div>
 <pre><code>    y     n
 1  no 39922
 2 yes  5289
@@ -296,10 +295,10 @@ a.sourceLine {
 <div id="algorithme-smote" class="section level3">
 <h3>Algorithme SMOTE</h3>
 <p>La methode SMOTE relie chaque cible reelle aux cibles les plus proches par des segments et elle choisit comme cibles artificielles supplementaires des points situes sur ces segments.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>bankData_num =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.integer</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">recipe</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>.) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="st">  </span><span class="kw">step_dummy</span>(<span class="kw">all_nominal</span>(), <span class="op">-</span><span class="st"> </span><span class="kw">all_outcomes</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">step_smote</span>(y) <span class="op">%&gt;%</span><span class="st"> </span>prep <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">juice</span>()</span>
-<span id="cb13-3"><a href="#cb13-3"></a></span>
-<span id="cb13-4"><a href="#cb13-4"></a>bankData_num <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>bankData_num <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.integer</span>(date)) <span class="sc">%&gt;%</span> <span class="fu">recipe</span>(<span class="at">formula =</span> y <span class="sc">~</span> .) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(), <span class="sc">-</span> <span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span> <span class="fu">step_smote</span>(y) <span class="sc">%&gt;%</span> prep <span class="sc">%&gt;%</span> <span class="fu">juice</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>bankData_num <span class="sc">%&gt;%</span> <span class="fu">count</span>(y)</span></code></pre></div>
 <pre><code># A tibble: 2 x 2
   y         n
   &lt;fct&gt; &lt;int&gt;

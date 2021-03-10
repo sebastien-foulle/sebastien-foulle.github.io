@@ -14,8 +14,7 @@
 
 <title>  Quelques trucs a connaitre sur le package formattable  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -145,25 +144,25 @@ a.sourceLine {
 <div id="intro" class="section level1">
 <h1>Controler la largeur des barres</h1>
 <p>La largeur des barres de la 1ere colonne ci-dessous est un % de la largeur de la colonne, qui est elle-meme proportionnelle a la longueur du nom de la colonne, ce qui peut donner un resultat assez laid.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># pour la manip de donnees</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># pour les widgets javascript (notamment leur export en html)</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(<span class="st">&quot;htmlwidgets&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># pour faire de jolies tables</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">library</span>(<span class="st">&quot;formattable&quot;</span>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">set.seed</span>(<span class="dv">2018</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a>ma_table =<span class="st"> </span>iris[<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">150</span>,<span class="dv">3</span>),<span class="op">-</span><span class="dv">5</span>]<span class="op">-</span><span class="dv">2</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="kw">names</span>(ma_table) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;un_nom_de_champ_tres_long&quot;</span>, <span class="kw">colnames</span>(ma_table)[<span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="kw">rownames</span>(ma_table) =<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="kw">formattable</span>(ma_table,</span>
-<span id="cb1-16"><a href="#cb1-16"></a>            <span class="kw">list</span>(<span class="dt">un_nom_de_champ_tres_long =</span> <span class="kw">color_bar</span>(<span class="st">&quot;cornflowerblue&quot;</span>),</span>
-<span id="cb1-17"><a href="#cb1-17"></a>                 <span class="dt">Sepal.Width =</span> <span class="kw">color_bar</span>(<span class="st">&quot;gold&quot;</span>),</span>
-<span id="cb1-18"><a href="#cb1-18"></a>                 <span class="dt">Petal.Length =</span> <span class="kw">formatter</span>(<span class="st">&quot;span&quot;</span>, <span class="dt">style =</span> x <span class="op">~</span><span class="st"> </span><span class="kw">ifelse</span>(x <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="st">&quot;color:green&quot;</span>, <span class="st">&quot;color:orange&quot;</span>)),</span>
-<span id="cb1-19"><a href="#cb1-19"></a>                 <span class="dt">Petal.Width =</span> <span class="kw">color_tile</span>(<span class="st">&quot;pink&quot;</span>, <span class="st">&quot;transparent&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pour la manip de donnees</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pour les widgets javascript (notamment leur export en html)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;htmlwidgets&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># pour faire de jolies tables</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;formattable&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2018</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>ma_table <span class="ot">=</span> iris[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">150</span>,<span class="dv">3</span>),<span class="sc">-</span><span class="dv">5</span>]<span class="sc">-</span><span class="dv">2</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ma_table) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;un_nom_de_champ_tres_long&quot;</span>, <span class="fu">colnames</span>(ma_table)[<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ma_table) <span class="ot">=</span> <span class="cn">NULL</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">formattable</span>(ma_table,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">list</span>(<span class="at">un_nom_de_champ_tres_long =</span> <span class="fu">color_bar</span>(<span class="st">&quot;cornflowerblue&quot;</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Sepal.Width =</span> <span class="fu">color_bar</span>(<span class="st">&quot;gold&quot;</span>),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Petal.Length =</span> <span class="fu">formatter</span>(<span class="st">&quot;span&quot;</span>, <span class="at">style =</span> x <span class="sc">~</span> <span class="fu">ifelse</span>(x <span class="sc">&lt;=</span> <span class="dv">0</span>, <span class="st">&quot;color:green&quot;</span>, <span class="st">&quot;color:orange&quot;</span>)),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Petal.Width =</span> <span class="fu">color_tile</span>(<span class="st">&quot;pink&quot;</span>, <span class="st">&quot;transparent&quot;</span>)))</span></code></pre></div>
 <table class="table table-condensed">
 <thead>
 <tr>
@@ -184,10 +183,10 @@ Petal.Width
 <tbody>
 <tr>
 <td style="text-align:right;">
-<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 70.37%">3.8</span>
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 70.37%">3.8</span>
 </td>
 <td style="text-align:right;">
-<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 100.00%">2.0</span>
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: gold; width: 100.00%">2.0</span>
 </td>
 <td style="text-align:right;">
 <span style="color:green">-0.8</span>
@@ -198,10 +197,10 @@ Petal.Width
 </tr>
 <tr>
 <td style="text-align:right;">
-<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 100.00%">5.4</span>
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 100.00%">5.4</span>
 </td>
 <td style="text-align:right;">
-<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 40.00%">0.8</span>
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: gold; width: 40.00%">0.8</span>
 </td>
 <td style="text-align:right;">
 <span style="color:orange">4.1</span>
@@ -212,10 +211,10 @@ Petal.Width
 </tr>
 <tr>
 <td style="text-align:right;">
-<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 90.74%">4.9</span>
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: cornflowerblue; width: 90.74%">4.9</span>
 </td>
 <td style="text-align:right;">
-<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: gold; width: 55.00%">1.1</span>
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: gold; width: 55.00%">1.1</span>
 </td>
 <td style="text-align:right;">
 <span style="color:orange">3.4</span>
@@ -227,20 +226,20 @@ Petal.Width
 </tbody>
 </table>
 <p>Solution : on redefinit la fonction <em>formattable::color_bar</em> en modifiant un peu son code : on remplace <em>width = percent(fun(as.numeric(x), …))</em> par <em>width = paste0(fixedWidth * fun(as.numeric(x), …),“px”)</em>. La largeur des barres des deux 1eres colonnes devient proportionnelle a une largeur fixe exprimee en pixels.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>my_color_bar &lt;-<span class="st"> </span><span class="cf">function</span> (<span class="dt">color =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="dt">fun =</span> <span class="st">&quot;proportion&quot;</span>, <span class="dt">fixedWidth=</span><span class="dv">100</span>,...) {</span>
-<span id="cb2-2"><a href="#cb2-2"></a>  fun &lt;-<span class="st"> </span><span class="kw">match.fun</span>(fun)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="kw">formatter</span>(<span class="st">&quot;span&quot;</span>, </span>
-<span id="cb2-4"><a href="#cb2-4"></a>            <span class="dt">style =</span> <span class="cf">function</span>(x) <span class="kw">style</span>(<span class="dt">display =</span> <span class="st">&quot;inline-block&quot;</span>, </span>
-<span id="cb2-5"><a href="#cb2-5"></a>                                      <span class="dt">direction =</span> <span class="st">&quot;rtl&quot;</span>, <span class="st">`</span><span class="dt">border-radius</span><span class="st">`</span> =<span class="st"> &quot;4px&quot;</span>, <span class="st">`</span><span class="dt">padding-right</span><span class="st">`</span> =<span class="st"> &quot;2px&quot;</span>, </span>
-<span id="cb2-6"><a href="#cb2-6"></a>                                      <span class="st">`</span><span class="dt">background-color</span><span class="st">`</span> =<span class="st"> </span><span class="kw">csscolor</span>(color), </span>
-<span id="cb2-7"><a href="#cb2-7"></a>                                      <span class="dt">width =</span> <span class="kw">paste0</span>(fixedWidth <span class="op">*</span><span class="st"> </span><span class="kw">fun</span>(<span class="kw">as.numeric</span>(x), ...),<span class="st">&quot;px&quot;</span>)))</span>
-<span id="cb2-8"><a href="#cb2-8"></a>}</span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a>(<span class="dt">widget =</span> <span class="kw">formattable</span>(ma_table,</span>
-<span id="cb2-11"><a href="#cb2-11"></a>                     <span class="kw">list</span>(<span class="dt">un_nom_de_champ_tres_long =</span> <span class="kw">my_color_bar</span>(<span class="st">&quot;cornflowerblue&quot;</span>),</span>
-<span id="cb2-12"><a href="#cb2-12"></a>                          <span class="dt">Sepal.Width =</span> <span class="kw">my_color_bar</span>(<span class="st">&quot;gold&quot;</span>),</span>
-<span id="cb2-13"><a href="#cb2-13"></a>                          <span class="dt">Petal.Length =</span> <span class="kw">formatter</span>(<span class="st">&quot;span&quot;</span>, <span class="dt">style =</span> x <span class="op">~</span><span class="st"> </span><span class="kw">ifelse</span>(x <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="st">&quot;color:green&quot;</span>, <span class="st">&quot;color:orange&quot;</span>)),</span>
-<span id="cb2-14"><a href="#cb2-14"></a>                          <span class="dt">Petal.Width =</span> <span class="kw">color_tile</span>(<span class="st">&quot;pink&quot;</span>, <span class="st">&quot;transparent&quot;</span>))))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>my_color_bar <span class="ot">&lt;-</span> <span class="cf">function</span> (<span class="at">color =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;proportion&quot;</span>, <span class="at">fixedWidth=</span><span class="dv">100</span>,...) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  fun <span class="ot">&lt;-</span> <span class="fu">match.fun</span>(fun)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatter</span>(<span class="st">&quot;span&quot;</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">style =</span> <span class="cf">function</span>(x) <span class="fu">style</span>(<span class="at">display =</span> <span class="st">&quot;inline-block&quot;</span>, </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">direction =</span> <span class="st">&quot;rtl&quot;</span>, <span class="st">`</span><span class="at">border-radius</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;4px&quot;</span>, <span class="st">`</span><span class="at">padding-right</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;2px&quot;</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">`</span><span class="at">background-color</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">csscolor</span>(color), </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">width =</span> <span class="fu">paste0</span>(fixedWidth <span class="sc">*</span> <span class="fu">fun</span>(<span class="fu">as.numeric</span>(x), ...),<span class="st">&quot;px&quot;</span>)))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>(<span class="at">widget =</span> <span class="fu">formattable</span>(ma_table,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">list</span>(<span class="at">un_nom_de_champ_tres_long =</span> <span class="fu">my_color_bar</span>(<span class="st">&quot;cornflowerblue&quot;</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Sepal.Width =</span> <span class="fu">my_color_bar</span>(<span class="st">&quot;gold&quot;</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Petal.Length =</span> <span class="fu">formatter</span>(<span class="st">&quot;span&quot;</span>, <span class="at">style =</span> x <span class="sc">~</span> <span class="fu">ifelse</span>(x <span class="sc">&lt;=</span> <span class="dv">0</span>, <span class="st">&quot;color:green&quot;</span>, <span class="st">&quot;color:orange&quot;</span>)),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Petal.Width =</span> <span class="fu">color_tile</span>(<span class="st">&quot;pink&quot;</span>, <span class="st">&quot;transparent&quot;</span>))))</span></code></pre></div>
 <table class="table table-condensed">
 <thead>
 <tr>
@@ -307,15 +306,15 @@ Petal.Width
 <div id="exporter-le-tableau-en-html" class="section level1">
 <h1>Exporter le tableau en html</h1>
 <p>Appliquer la fonction <em>saveWidget</em> marche avec les htmlwidgets mais avec <em>formattable</em> on a une erreur.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># pour exporter le message d&#39;erreur dans le html plutot que dans la console de Rstudio</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">options</span>(<span class="dt">try.outFile =</span> <span class="kw">stdout</span>())</span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># try : pour intercepter le message d&#39;erreur en empechant le plantage du script</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">try</span>(<span class="kw">saveWidget</span>(widget, <span class="dt">file =</span> <span class="kw">file.path</span>(<span class="kw">getwd</span>(), <span class="st">&quot;ma_table.html&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pour exporter le message d&#39;erreur dans le html plutot que dans la console de Rstudio</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">try.outFile =</span> <span class="fu">stdout</span>())</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># try : pour intercepter le message d&#39;erreur en empechant le plantage du script</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(<span class="fu">saveWidget</span>(widget, <span class="at">file =</span> <span class="fu">file.path</span>(<span class="fu">getwd</span>(), <span class="st">&quot;ma_table.html&quot;</span>)))</span></code></pre></div>
 <pre><code>Error in .getNamespace(pkg) : 
   type / longueur incorrect (symbol / 0) dans l&#39;allocation de vecteur</code></pre>
 <p>Si on convertit en htmlwidget plus de probleme, <em>ma_table.html</em> est cree dans le repertoire de travail.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">saveWidget</span>(<span class="kw">as.htmlwidget</span>(widget, <span class="dt">width =</span> <span class="st">&#39;40%&#39;</span>), <span class="dt">file =</span> <span class="kw">file.path</span>(<span class="kw">getwd</span>(), <span class="st">&quot;ma_table.html&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveWidget</span>(<span class="fu">as.htmlwidget</span>(widget, <span class="at">width =</span> <span class="st">&#39;40%&#39;</span>), <span class="at">file =</span> <span class="fu">file.path</span>(<span class="fu">getwd</span>(), <span class="st">&quot;ma_table.html&quot;</span>))</span></code></pre></div>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>
 </section>

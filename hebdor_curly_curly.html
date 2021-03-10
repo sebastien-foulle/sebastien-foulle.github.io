@@ -14,8 +14,7 @@
 
 <title>  Programmation non interactive sous dplyr avec curly curly  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -162,15 +161,15 @@ a.sourceLine {
 <div id="fonctions-a-la-dplyr-avec" class="section level1">
 <h1>Fonctions “a la dplyr” avec <em>{{}}</em></h1>
 <p>Le code <em>dplyr</em> classique ne fonctionne pas bien a l’interieur d’une fonction, mais en entourant tous les parametres avec 2 accolades on regle la plupart des difficultes :</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>max_by &lt;-<span class="st"> </span><span class="cf">function</span>(data, var, by) {</span>
-<span id="cb1-4"><a href="#cb1-4"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>({{ by }}) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">maximum =</span> <span class="kw">max</span>({{ var }}, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb1-5"><a href="#cb1-5"></a>}</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by</span>(height)</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by</span>(height, <span class="dt">by =</span> gender)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>max_by <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var, by) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>({{ by }}) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">maximum =</span> <span class="fu">max</span>({{ var }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">max_by</span>(height)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">max_by</span>(height, <span class="at">by =</span> gender)</span></code></pre></div>
 <pre><code># A tibble: 1 x 1
   maximum
     &lt;int&gt;
@@ -182,13 +181,13 @@ a.sourceLine {
 2 masculine     264
 3 &lt;NA&gt;          183</code></pre>
 <p>On peut passer des formules de calculs si on veut :</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>summarise_by &lt;-<span class="st"> </span><span class="cf">function</span>(data, ..., by) {</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>({{ by }}) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(...)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>}</span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_by</span>(<span class="dt">average =</span> <span class="kw">mean</span>(height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb3-6"><a href="#cb3-6"></a>                          <span class="dt">maximum =</span> <span class="kw">max</span>(height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb3-7"><a href="#cb3-7"></a>                          <span class="dt">by =</span> gender)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>summarise_by <span class="ot">&lt;-</span> <span class="cf">function</span>(data, ..., by) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>({{ by }}) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(...)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">summarise_by</span>(<span class="at">average =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">maximum =</span> <span class="fu">max</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">by =</span> gender)</span></code></pre></div>
 <pre><code># A tibble: 3 x 3
   gender    average maximum
   &lt;chr&gt;       &lt;dbl&gt;   &lt;int&gt;
@@ -196,13 +195,13 @@ a.sourceLine {
 2 masculine    177.     264
 3 &lt;NA&gt;         181.     183</code></pre>
 <p>Et on peut utiliser les <em>{}</em> simples suivis de <em>:=</em> pour nommer le champ calcule avec une chaine de caracteres :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>max_by_nom &lt;-<span class="st"> </span><span class="cf">function</span>(data, var, by, <span class="dt">nom =</span> <span class="st">&quot;mon_champ&quot;</span>) {</span>
-<span id="cb5-2"><a href="#cb5-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>({{ by }}) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="st">&quot;{nom}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">max</span>({{ var }}, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb5-3"><a href="#cb5-3"></a>}</span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by_nom</span>(height, <span class="dt">by =</span> gender)</span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by_nom</span>(height, <span class="dt">by =</span> gender, <span class="dt">nom =</span> <span class="st">&quot;ma_variable&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>max_by_nom <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var, by, <span class="at">nom =</span> <span class="st">&quot;mon_champ&quot;</span>) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>({{ by }}) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="st">&quot;{nom}&quot;</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">max</span>({{ var }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">max_by_nom</span>(height, <span class="at">by =</span> gender)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">max_by_nom</span>(height, <span class="at">by =</span> gender, <span class="at">nom =</span> <span class="st">&quot;ma_variable&quot;</span>)</span></code></pre></div>
 <pre><code># A tibble: 3 x 2
   gender    mon_champ
   &lt;chr&gt;         &lt;int&gt;
@@ -219,11 +218,11 @@ a.sourceLine {
 <div id="exemples-de-fonctions-et-boucles-avec-les-noms-entre-guillemets" class="section level1">
 <h1>Exemples de fonctions et boucles avec les noms entre guillemets</h1>
 <p>On utilise ici la notation classique de R base <em>.data[[ma_variable]]</em> dans les fonctions de <em>dplyr</em>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>max_by_char &lt;-<span class="st"> </span><span class="cf">function</span>(data, var_char, by_char) {</span>
-<span id="cb7-2"><a href="#cb7-2"></a>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(.data[[by_char]]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">maximum =</span> <span class="kw">max</span>(.data[[var_char]], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb7-3"><a href="#cb7-3"></a>}</span>
-<span id="cb7-4"><a href="#cb7-4"></a></span>
-<span id="cb7-5"><a href="#cb7-5"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max_by_char</span>(<span class="st">&quot;height&quot;</span>, <span class="dt">by =</span> <span class="st">&quot;gender&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>max_by_char <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var_char, by_char) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(.data[[by_char]]) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">maximum =</span> <span class="fu">max</span>(.data[[var_char]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">max_by_char</span>(<span class="st">&quot;height&quot;</span>, <span class="at">by =</span> <span class="st">&quot;gender&quot;</span>)</span></code></pre></div>
 <pre><code># A tibble: 3 x 2
   gender    maximum
   &lt;chr&gt;       &lt;int&gt;
@@ -231,22 +230,22 @@ a.sourceLine {
 2 masculine     264
 3 &lt;NA&gt;          183</code></pre>
 <p>Et pour finir on realise une boucle sur 2 champs.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># fonction qui calcule un ratio</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>ratio_char &lt;-<span class="st"> </span><span class="cf">function</span>(data, num_char, denom_char, ratio_char) {</span>
-<span id="cb9-3"><a href="#cb9-3"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;{ratio_char}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span>.data[[num_char]] <span class="op">/</span><span class="st"> </span>.data[[denom_char]])</span>
-<span id="cb9-4"><a href="#cb9-4"></a>}</span>
-<span id="cb9-5"><a href="#cb9-5"></a></span>
-<span id="cb9-6"><a href="#cb9-6"></a>vect_numerateur =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Sepal.Width&quot;</span>, <span class="st">&quot;Sepal.Length&quot;</span>)</span>
-<span id="cb9-7"><a href="#cb9-7"></a>vect_denom =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Petal.Width&quot;</span>, <span class="st">&quot;Petal.Length&quot;</span>)</span>
-<span id="cb9-8"><a href="#cb9-8"></a>vect_ratio =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;ratio_W&quot;</span>, <span class="st">&quot;ratio_L&quot;</span>)</span>
-<span id="cb9-9"><a href="#cb9-9"></a></span>
-<span id="cb9-10"><a href="#cb9-10"></a>dtf =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Sepal.Length <span class="op">&gt;</span><span class="st"> </span><span class="fl">7.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>Species)</span>
-<span id="cb9-11"><a href="#cb9-11"></a></span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(vect_ratio)) {</span>
-<span id="cb9-13"><a href="#cb9-13"></a>  dtf =<span class="st"> </span>dtf <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">ratio_char</span>(vect_numerateur[i], vect_denom[i], vect_ratio[i])</span>
-<span id="cb9-14"><a href="#cb9-14"></a>}</span>
-<span id="cb9-15"><a href="#cb9-15"></a></span>
-<span id="cb9-16"><a href="#cb9-16"></a>dtf</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fonction qui calcule un ratio</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ratio_char <span class="ot">&lt;-</span> <span class="cf">function</span>(data, num_char, denom_char, ratio_char) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="st">&quot;{ratio_char}&quot;</span> <span class="sc">:</span><span class="er">=</span> .data[[num_char]] <span class="sc">/</span> .data[[denom_char]])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>vect_numerateur <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Sepal.Width&quot;</span>, <span class="st">&quot;Sepal.Length&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>vect_denom <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Petal.Width&quot;</span>, <span class="st">&quot;Petal.Length&quot;</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>vect_ratio <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;ratio_W&quot;</span>, <span class="st">&quot;ratio_L&quot;</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>dtf <span class="ot">=</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Sepal.Length <span class="sc">&gt;</span> <span class="fl">7.2</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Species)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vect_ratio)) {</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  dtf <span class="ot">=</span> dtf <span class="sc">%&gt;%</span>  <span class="fu">ratio_char</span>(vect_numerateur[i], vect_denom[i], vect_ratio[i])</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>dtf</span></code></pre></div>
 <pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width  ratio_W  ratio_L
 1          7.6         3.0          6.6         2.1 1.428571 1.151515
 2          7.3         2.9          6.3         1.8 1.611111 1.158730

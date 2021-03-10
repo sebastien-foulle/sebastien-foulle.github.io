@@ -14,8 +14,7 @@
 
 <title>  Gestion des erreurs  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -155,30 +154,30 @@ a.sourceLine {
 <div id="gestion-des-erreurs-et-warnings-avec-du-r-basique" class="section level1">
 <h1>Gestion des erreurs et warnings avec du R basique</h1>
 <p>La solution proposee quand on execute la commande <code>demo("error.catching", ask = FALSE)</code> est <del>totalement incompre</del> peu intuitive.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>tryCatch.W.E &lt;-<span class="st"> </span><span class="cf">function</span>(expr) {</span>
-<span id="cb1-2"><a href="#cb1-2"></a>  W &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>  <span class="co"># warning handler</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>  w_handler &lt;-<span class="st"> </span><span class="cf">function</span>(ww){ </span>
-<span id="cb1-5"><a href="#cb1-5"></a>    W &lt;&lt;-<span class="st"> </span>ww</span>
-<span id="cb1-6"><a href="#cb1-6"></a>    <span class="kw">invokeRestart</span>(<span class="st">&quot;muffleWarning&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a>  }</span>
-<span id="cb1-8"><a href="#cb1-8"></a>  <span class="kw">list</span>(<span class="dt">value =</span> <span class="kw">withCallingHandlers</span>(<span class="kw">tryCatch</span>(expr, <span class="dt">error =</span> <span class="cf">function</span>(e) e),</span>
-<span id="cb1-9"><a href="#cb1-9"></a>                                   <span class="dt">warning =</span> w_handler),</span>
-<span id="cb1-10"><a href="#cb1-10"></a>       <span class="dt">warning =</span> W)</span>
-<span id="cb1-11"><a href="#cb1-11"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">tryCatch.W.E</span>(<span class="kw">log</span>(<span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tryCatch.W.E <span class="ot">&lt;-</span> <span class="cf">function</span>(expr) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  W <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># warning handler</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  w_handler <span class="ot">&lt;-</span> <span class="cf">function</span>(ww){ </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    W <span class="ot">&lt;&lt;-</span> ww</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invokeRestart</span>(<span class="st">&quot;muffleWarning&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">value =</span> <span class="fu">withCallingHandlers</span>(<span class="fu">tryCatch</span>(expr, <span class="at">error =</span> <span class="cf">function</span>(e) e),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">warning =</span> w_handler),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">warning =</span> W)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tryCatch.W.E</span>(<span class="fu">log</span>(<span class="dv">2</span>))</span></code></pre></div>
 <pre><code>$value
 [1] 0.6931472
 
 $warning
 NULL</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">tryCatch.W.E</span>(<span class="kw">log</span>(<span class="op">-</span><span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tryCatch.W.E</span>(<span class="fu">log</span>(<span class="sc">-</span><span class="dv">1</span>))</span></code></pre></div>
 <pre><code>$value
 [1] NaN
 
 $warning
 &lt;simpleWarning in log(-1): production de NaN&gt;</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">tryCatch.W.E</span>(<span class="kw">log</span>(<span class="st">&quot;a&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tryCatch.W.E</span>(<span class="fu">log</span>(<span class="st">&quot;a&quot;</span>))</span></code></pre></div>
 <pre><code>$value
 &lt;simpleError in log(&quot;a&quot;): argument non numérique pour une fonction mathématique&gt;
 
@@ -189,10 +188,10 @@ NULL</code></pre>
 <div id="gestion-des-erreurs-et-warnings-avec-le-package-catchr" class="section level1">
 <h1>Gestion des erreurs et warnings avec le package <em>catchr</em></h1>
 <p>La gestion devient beaucoup plus simple : on intercepte les warnings et erreurs avec <em>muffle</em>, ce qui evite les messages rouges dans la console et les plantages en cas d’erreur. Et avec <em>collect</em> on stocke les messages generes.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">library</span>(<span class="st">&quot;catchr&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>collect_warnings_errors &lt;-<span class="st"> </span><span class="kw">make_catch_fn</span>(<span class="dt">warning =</span> <span class="kw">c</span>(collect, muffle),</span>
-<span id="cb8-3"><a href="#cb8-3"></a>                                         <span class="dt">error =</span> <span class="kw">c</span>(collect, muffle))</span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">collect_warnings_errors</span>(<span class="kw">log</span>(<span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;catchr&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>collect_warnings_errors <span class="ot">&lt;-</span> <span class="fu">make_catch_fn</span>(<span class="at">warning =</span> <span class="fu">c</span>(collect, muffle),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">error =</span> <span class="fu">c</span>(collect, muffle))</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_warnings_errors</span>(<span class="fu">log</span>(<span class="dv">2</span>))</span></code></pre></div>
 <pre><code>$value
 [1] 0.6931472
 
@@ -201,7 +200,7 @@ list()
 
 $error
 list()</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">collect_warnings_errors</span>(<span class="kw">log</span>(<span class="op">-</span><span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_warnings_errors</span>(<span class="fu">log</span>(<span class="sc">-</span><span class="dv">1</span>))</span></code></pre></div>
 <pre><code>$value
 [1] NaN
 
@@ -212,7 +211,7 @@ $warning[[1]]
 
 $error
 list()</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">collect_warnings_errors</span>(<span class="kw">log</span>(<span class="st">&quot;a&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_warnings_errors</span>(<span class="fu">log</span>(<span class="st">&quot;a&quot;</span>))</span></code></pre></div>
 <pre><code>$value
 NULL
 

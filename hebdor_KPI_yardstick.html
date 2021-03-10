@@ -14,8 +14,7 @@
 
 <title>  Mesures de performance d’un modele avec yardstick  </title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -149,42 +148,42 @@ a.sourceLine {
 <div id="intro" class="section level1">
 <h1>Introduction</h1>
 <p>Le package <em>yardstick</em> de Rstudio permet d’obtenir facilement l’AUC, l’indice de Youden, le F-score ou encore le coefficient de correlation de Matthews. On va les calculer sur le jeu de donnees qui suit.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># pour la manip de donnees</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># pour le jeu de donnees</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(<span class="st">&quot;otvPlots&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># pour les KPI</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">library</span>(<span class="st">&quot;yardstick&quot;</span>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># pour la courbe ROC</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-12"><a href="#cb1-12"></a></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">### les donnees</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co"># on prend une des variables comme score predicitf de la cible</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="co"># on met en premier la modalite cible &quot;yes&quot;, c&#39;est la convention du package yardstick</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="kw">set.seed</span>(<span class="dv">2019</span>)</span>
-<span id="cb1-18"><a href="#cb1-18"></a>donnees =<span class="st"> </span>bankData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">partition =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;train&quot;</span>, <span class="st">&quot;test&quot;</span>), <span class="dt">size =</span> <span class="kw">nrow</span>(.), <span class="dt">replace =</span> T, </span>
-<span id="cb1-19"><a href="#cb1-19"></a>                                                 <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>)),</span>
-<span id="cb1-20"><a href="#cb1-20"></a>                              <span class="dt">cible =</span> <span class="kw">factor</span>(y, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">score =</span> duration)</span>
-<span id="cb1-22"><a href="#cb1-22"></a></span>
-<span id="cb1-23"><a href="#cb1-23"></a>dtf_test =<span class="st"> </span>donnees <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(partition <span class="op">==</span><span class="st"> &quot;test&quot;</span>)</span>
-<span id="cb1-24"><a href="#cb1-24"></a></span>
-<span id="cb1-25"><a href="#cb1-25"></a><span class="co"># frequence cible : 0.12</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a>(<span class="dt">freq_cible =</span> donnees <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">freq_cible =</span> <span class="kw">mean</span>(cible <span class="op">==</span><span class="st"> &quot;yes&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>.<span class="op">$</span>freq_cible)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pour la manip de donnees</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pour le jeu de donnees</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;otvPlots&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># pour les KPI</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;yardstick&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># pour la courbe ROC</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">### les donnees</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># on prend une des variables comme score predicitf de la cible</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># on met en premier la modalite cible &quot;yes&quot;, c&#39;est la convention du package yardstick</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>donnees <span class="ot">=</span> bankData <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">partition =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;train&quot;</span>, <span class="st">&quot;test&quot;</span>), <span class="at">size =</span> <span class="fu">nrow</span>(.), <span class="at">replace =</span> T, </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                                                 <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>)),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                              <span class="at">cible =</span> <span class="fu">factor</span>(y, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">score =</span> duration)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>dtf_test <span class="ot">=</span> donnees <span class="sc">%&gt;%</span> <span class="fu">filter</span>(partition <span class="sc">==</span> <span class="st">&quot;test&quot;</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># frequence cible : 0.12</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>(<span class="at">freq_cible =</span> donnees <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">freq_cible =</span> <span class="fu">mean</span>(cible <span class="sc">==</span> <span class="st">&quot;yes&quot;</span>)) <span class="sc">%&gt;%</span> .<span class="sc">$</span>freq_cible)</span></code></pre></div>
 <pre><code>[1] 0.1169848</code></pre>
 </div>
 <div id="auc-et-courbe-roc" class="section level1">
 <h1>AUC et courbe ROC</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># qualite du score : auc 0.81 (!)</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># si le dernier contact avec le client a dure longtemps, </span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co"># il y a de fortes chances qu&#39;il ouvre un compte a terme</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">roc_auc_vec</span>(dtf_test<span class="op">$</span>cible, dtf_test<span class="op">$</span>score)</span>
-<span id="cb3-5"><a href="#cb3-5"></a></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">autoplot</span>(<span class="kw">roc_curve</span>(dtf_test, cible, score))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># qualite du score : auc 0.81 (!)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># si le dernier contact avec le client a dure longtemps, </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># il y a de fortes chances qu&#39;il ouvre un compte a terme</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc_vec</span>(dtf_test<span class="sc">$</span>cible, dtf_test<span class="sc">$</span>score)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">roc_curve</span>(dtf_test, cible, score))</span></code></pre></div>
 <pre><code>[1] 0.8112117</code></pre>
 <p><img src="hebdor_KPI_yardstick_files/figure-html/ROC-1.png" style="display: block; margin: auto;" /></p>
 </div>
@@ -197,60 +196,60 @@ a.sourceLine {
 <li>on calcule les valeurs des KPI (indices de Youden, F-score, …) pour chaque seuil</li>
 <li>pour chaque KPI on retient le seuil qui le maximise</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># on exclut les valeurs min et max des seuils pour eviter le declenchement d&#39;erreurs </span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># (prevision constante toujours &quot;oui&quot; ou toujours &quot;non&quot;)</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>vect_seuils =<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(dtf_test<span class="op">$</span>score), <span class="kw">max</span>(dtf_test<span class="op">$</span>score), <span class="dt">length.out =</span> <span class="dv">102</span>)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">102</span>)]</span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a>KPI =<span class="st"> </span><span class="kw">vapply</span>(vect_seuils,</span>
-<span id="cb5-6"><a href="#cb5-6"></a>             <span class="cf">function</span>(seuil) {</span>
-<span id="cb5-7"><a href="#cb5-7"></a>               dtf_test =<span class="st"> </span>dtf_test <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="st">                 </span><span class="kw">mutate</span>(<span class="dt">prev =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="kw">as.integer</span>(score <span class="op">&gt;=</span><span class="st"> </span>seuil) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>], </span>
-<span id="cb5-9"><a href="#cb5-9"></a>                                      <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
-<span id="cb5-10"><a href="#cb5-10"></a>               Youden =<span class="st"> </span><span class="kw">j_index</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate</span>
-<span id="cb5-11"><a href="#cb5-11"></a>               Fscore =<span class="st"> </span><span class="kw">f_meas</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate</span>
-<span id="cb5-12"><a href="#cb5-12"></a>               Matthews =<span class="st"> </span><span class="kw">mcc</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate</span>
-<span id="cb5-13"><a href="#cb5-13"></a>               <span class="kw">return</span>(<span class="kw">c</span>(<span class="st">&quot;Youden&quot;</span> =<span class="st"> </span>Youden, <span class="st">&quot;Fscore&quot;</span> =<span class="st"> </span>Fscore, <span class="st">&quot;Matthews&quot;</span> =<span class="st"> </span>Matthews))},</span>
-<span id="cb5-14"><a href="#cb5-14"></a>             <span class="kw">numeric</span>(<span class="dv">3</span>))</span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="co"># seuil qui maximise chaque KPI</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a>index_Youden =<span class="st"> </span><span class="kw">which.max</span>(KPI[<span class="st">&quot;Youden&quot;</span>,])</span>
-<span id="cb5-18"><a href="#cb5-18"></a>index_Fscore =<span class="st"> </span><span class="kw">which.max</span>(KPI[<span class="st">&quot;Fscore&quot;</span>,])</span>
-<span id="cb5-19"><a href="#cb5-19"></a>index_Matthews =<span class="st"> </span><span class="kw">which.max</span>(KPI[<span class="st">&quot;Matthews&quot;</span>,])</span>
-<span id="cb5-20"><a href="#cb5-20"></a></span>
-<span id="cb5-21"><a href="#cb5-21"></a>seuil_Youden =<span class="st"> </span>vect_seuils[index_Youden]</span>
-<span id="cb5-22"><a href="#cb5-22"></a>seuil_Fscore =<span class="st"> </span>vect_seuils[index_Fscore]</span>
-<span id="cb5-23"><a href="#cb5-23"></a>seuil_Matthews =<span class="st"> </span>vect_seuils[index_Matthews]</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on exclut les valeurs min et max des seuils pour eviter le declenchement d&#39;erreurs </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (prevision constante toujours &quot;oui&quot; ou toujours &quot;non&quot;)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>vect_seuils <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(dtf_test<span class="sc">$</span>score), <span class="fu">max</span>(dtf_test<span class="sc">$</span>score), <span class="at">length.out =</span> <span class="dv">102</span>)[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">102</span>)]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>KPI <span class="ot">=</span> <span class="fu">vapply</span>(vect_seuils,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>             <span class="cf">function</span>(seuil) {</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>               dtf_test <span class="ot">=</span> dtf_test <span class="sc">%&gt;%</span> </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">prev =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="fu">as.integer</span>(score <span class="sc">&gt;=</span> seuil) <span class="sc">+</span> <span class="dv">1</span>], </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>               Youden <span class="ot">=</span> <span class="fu">j_index</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>               Fscore <span class="ot">=</span> <span class="fu">f_meas</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>               Matthews <span class="ot">=</span> <span class="fu">mcc</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>               <span class="fu">return</span>(<span class="fu">c</span>(<span class="st">&quot;Youden&quot;</span> <span class="ot">=</span> Youden, <span class="st">&quot;Fscore&quot;</span> <span class="ot">=</span> Fscore, <span class="st">&quot;Matthews&quot;</span> <span class="ot">=</span> Matthews))},</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>             <span class="fu">numeric</span>(<span class="dv">3</span>))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># seuil qui maximise chaque KPI</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>index_Youden <span class="ot">=</span> <span class="fu">which.max</span>(KPI[<span class="st">&quot;Youden&quot;</span>,])</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>index_Fscore <span class="ot">=</span> <span class="fu">which.max</span>(KPI[<span class="st">&quot;Fscore&quot;</span>,])</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>index_Matthews <span class="ot">=</span> <span class="fu">which.max</span>(KPI[<span class="st">&quot;Matthews&quot;</span>,])</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>seuil_Youden <span class="ot">=</span> vect_seuils[index_Youden]</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>seuil_Fscore <span class="ot">=</span> vect_seuils[index_Fscore]</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>seuil_Matthews <span class="ot">=</span> vect_seuils[index_Matthews]</span></code></pre></div>
 </div>
 <div id="indice-de-youden-maximal" class="section level1">
 <h1>Indice de Youden maximal</h1>
 <p>On rappelle que l’indice de Youden peut s’interpreter comme le taux de bien classes qui serait calcule sur un echantillon equilibre.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">### perf avec le seuil de Youden </span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>dtf_test =<span class="st"> </span>dtf_test <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prev =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="kw">as.integer</span>(score <span class="op">&gt;=</span><span class="st"> </span>seuil_Youden) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>], </span>
-<span id="cb6-4"><a href="#cb6-4"></a>                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co"># taux erreur sur echantillon equilibre : 28%</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">bal_accuracy</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate</span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># specificite : 0.69</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="kw">spec</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate</span>
-<span id="cb6-11"><a href="#cb6-11"></a></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="co"># sensibilite : 0.75</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="kw">sens</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate</span>
-<span id="cb6-14"><a href="#cb6-14"></a></span>
-<span id="cb6-15"><a href="#cb6-15"></a><span class="co"># precision : 0.25</span></span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="co"># lift 2.16</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="kw">precision</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate</span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="kw">precision</span>(dtf_test, cible, prev)<span class="op">$</span>.estimate <span class="op">/</span><span class="st"> </span>freq_cible</span>
-<span id="cb6-19"><a href="#cb6-19"></a></span>
-<span id="cb6-20"><a href="#cb6-20"></a></span>
-<span id="cb6-21"><a href="#cb6-21"></a><span class="co"># matrice de confusion et les autres KPI</span></span>
-<span id="cb6-22"><a href="#cb6-22"></a><span class="co">#             Truth</span></span>
-<span id="cb6-23"><a href="#cb6-23"></a><span class="co"># Prediction  yes   no</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a><span class="co">#         yes 1225 3629</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a><span class="co">#         no   407 8095</span></span>
-<span id="cb6-26"><a href="#cb6-26"></a>(<span class="dt">conf_Youden =</span> <span class="kw">conf_mat</span>(dtf_test, cible, prev))</span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="kw">summary</span>(conf_Youden)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">### perf avec le seuil de Youden </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dtf_test <span class="ot">=</span> dtf_test <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prev =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="fu">as.integer</span>(score <span class="sc">&gt;=</span> seuil_Youden) <span class="sc">+</span> <span class="dv">1</span>], </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># taux erreur sur echantillon equilibre : 28%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">bal_accuracy</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># specificite : 0.69</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># sensibilite : 0.75</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sens</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># precision : 0.25</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># lift 2.16</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">precision</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">precision</span>(dtf_test, cible, prev)<span class="sc">$</span>.estimate <span class="sc">/</span> freq_cible</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># matrice de confusion et les autres KPI</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#             Truth</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction  yes   no</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#         yes 1225 3629</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#         no   407 8095</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>(<span class="at">conf_Youden =</span> <span class="fu">conf_mat</span>(dtf_test, cible, prev))</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(conf_Youden)</span></code></pre></div>
 <pre><code>[1] 0.2794616
 [1] 0.690464
 [1] 0.7506127
@@ -280,19 +279,19 @@ Prediction  yes   no
 <div id="f-score-maximal" class="section level1">
 <h1>F-score maximal</h1>
 <p>Quand la cible est rare comme ici, le F-score maximal va correspondre en general a un seuil plus eleve. Autrement dit on va detecter moins de cibles potentielles (sensibilite plus faible) mais elles auront plus de chances de faire partie de la population cible (precision plus elevee, c’est-a-dire lift plus eleve).</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># matrice de confusion avec le seuil du Fscore : </span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># on perd en sensibilite (0.51) mais on gagne en precision (0.40)</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># en detectant 2 061 individus a score eleve (versus 4 854 individus avec le seuil de Youden)</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>dtf_test =<span class="st"> </span>dtf_test <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prev =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="kw">as.integer</span>(score <span class="op">&gt;=</span><span class="st"> </span>seuil_Fscore) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>], </span>
-<span id="cb8-6"><a href="#cb8-6"></a>                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
-<span id="cb8-7"><a href="#cb8-7"></a></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#             Truth</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># Prediction   yes    no</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#         yes   830  1231</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#         no    802 10493</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a>(<span class="dt">conf_Fscore =</span> <span class="kw">conf_mat</span>(dtf_test, cible, prev))</span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="kw">summary</span>(conf_Fscore)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrice de confusion avec le seuil du Fscore : </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># on perd en sensibilite (0.51) mais on gagne en precision (0.40)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># en detectant 2 061 individus a score eleve (versus 4 854 individus avec le seuil de Youden)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>dtf_test <span class="ot">=</span> dtf_test <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prev =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="fu">as.integer</span>(score <span class="sc">&gt;=</span> seuil_Fscore) <span class="sc">+</span> <span class="dv">1</span>], </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#             Truth</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction   yes    no</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         yes   830  1231</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         no    802 10493</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>(<span class="at">conf_Fscore =</span> <span class="fu">conf_mat</span>(dtf_test, cible, prev))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(conf_Fscore)</span></code></pre></div>
 <pre><code>          Truth
 Prediction   yes    no
        yes   830  1231
@@ -317,22 +316,22 @@ Prediction   yes    no
 <div id="coefficient-de-correlation-de-matthews-maximal" class="section level1">
 <h1>Coefficient de correlation de Matthews maximal</h1>
 <p>Le coefficient de Matthews fait jouer des roles plus symetriques aux differents nombres dans la matrice de confusion, sur notre exemple on voit qu’en dehors des vrais negatifs tres nombreux, les trois autres nombres dans la matrice de confusion ont des ordres de grandeur proches.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># matrice de confusion avec le seuil de Matthews : </span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="co"># sur cet exemple on a encore moins d&#39;individus vises (1 490) et un lift qui frole 4</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co"># et la matrice de confusion est davantage equilibree</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a></span>
-<span id="cb10-5"><a href="#cb10-5"></a>dtf_test =<span class="st"> </span>dtf_test <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prev =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="kw">as.integer</span>(score <span class="op">&gt;=</span><span class="st"> </span>seuil_Matthews) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>], </span>
-<span id="cb10-7"><a href="#cb10-7"></a>                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
-<span id="cb10-8"><a href="#cb10-8"></a></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#             Truth</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co"># Prediction   yes    no</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#         yes   695  795</span></span>
-<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#         no    937 10929</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a>(<span class="dt">conf_Matthews =</span> <span class="kw">conf_mat</span>(dtf_test, cible, prev))</span>
-<span id="cb10-14"><a href="#cb10-14"></a><span class="kw">summary</span>(conf_Matthews)</span>
-<span id="cb10-15"><a href="#cb10-15"></a></span>
-<span id="cb10-16"><a href="#cb10-16"></a><span class="kw">summary</span>(conf_Matthews) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(.metric <span class="op">==</span><span class="st"> &quot;precision&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>.<span class="op">$</span>.estimate <span class="op">/</span><span class="st"> </span>freq_cible</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrice de confusion avec le seuil de Matthews : </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sur cet exemple on a encore moins d&#39;individus vises (1 490) et un lift qui frole 4</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># et la matrice de confusion est davantage equilibree</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>dtf_test <span class="ot">=</span> dtf_test <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prev =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)[<span class="fu">as.integer</span>(score <span class="sc">&gt;=</span> seuil_Matthews) <span class="sc">+</span> <span class="dv">1</span>], </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#             Truth</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction   yes    no</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         yes   695  795</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         no    937 10929</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>(<span class="at">conf_Matthews =</span> <span class="fu">conf_mat</span>(dtf_test, cible, prev))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(conf_Matthews)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(conf_Matthews) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">&quot;precision&quot;</span>) <span class="sc">%&gt;%</span> .<span class="sc">$</span>.estimate <span class="sc">/</span> freq_cible</span></code></pre></div>
 <pre><code>          Truth
 Prediction   yes    no
        yes   695   795
