@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  JupyterLab   </title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+
+
+
+
+
+<link rel="stylesheet" href="hebdor_JupyterLab_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg style="height:60px;fill:gold;" viewBox="0 0 448 512"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg> JupyterLab <svg style="height:60px;fill:lightblue;" viewBox="0 0 581 512"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#execution-ligne-par-ligne-du-code">Execution ligne par ligne du code</a></li>
+<li><a href="#position-des-differentes-fenetres">Position des differentes fenetres</a></li>
+<li><a href="#ajouter-r-au-launcher">Ajouter R au Launcher</a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<style>
+.r{background-color:lightgrey !important;}
+</style>
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>JupyterLab est un des environnements disponibles dans Anaconda, et il apporte beaucoup de fonctionnalites supplementaires aux Jupyter Notebooks. Parmi celles qui m’interessent le plus :</p>
+<ul>
+<li>une table des matieres pour naviguer dans le document, elle reprend les titres Markdown du Notebook</li>
+<li>la possibilite d’executer ligne par ligne le contenu d’une cellule, ou le code selectionne a la souris. C’est tres appreciable quand le code d’une cellule plante et qu’on veut relancer une partie du code de la cellule pour identifier l’erreur</li>
+<li>l’ajout d’autres langages et logiciels au Laucher via des extensions</li>
+<li>la personnalisation de la disposition des fenetres</li>
+</ul>
+<p>Dans l’impression d’ecran ci-dessous, on peut voir :</p>
+<ul>
+<li>dans le volet gauche la table des matieres</li>
+<li>un notebook au centre, avec une cellule dont on a selectionne le code “selection”</li>
+<li>a droite une console Python ou on a execute la 1ere ligne de la cellule puis l’objet “selection”</li>
+</ul>
+<p><img src="images_jupyterlab/JupyterLab.png" /></p>
+<p>La table des matieres est une extension presente par defaut pour JupyterLab &gt;= 3.0, pour les versions plus anciennes il faut l’installer (l’onglet tout a gauche en forme de piece de puzzle fournit la liste des extensions installees/installables). Voyon maintenant comment ajouter les autres fonctionnalites.</p>
+</div>
+<div id="execution-ligne-par-ligne-du-code" class="section level1">
+<h1>Execution ligne par ligne du code</h1>
+<p>On va dans <code>Settings &gt; Advanced Settings Editor &gt; Keyboard Shortcuts</code> et dans le volet “User Preferences” on copie-colle le JSON ci-dessous :</p>
+<pre><code>{
+    // List of Keyboard Shortcuts
+    &quot;shortcuts&quot;: [
+        {
+            &quot;command&quot;: &quot;notebook:run-in-console&quot;,
+            &quot;keys&quot;: [
+                &quot;F9&quot;
+            ],
+            &quot;selector&quot;: &quot;.jp-Notebook.jp-mod-editMode&quot;
+        },
+    ]
+}</code></pre>
+<p>On peut evidemment remplacer la touche “F9” par le raccourci de son choix. Le raccourci est alors visible dans le menu Run :</p>
+<p><img src="images_jupyterlab/raccourci.png" /></p>
+</div>
+<div id="position-des-differentes-fenetres" class="section level1">
+<h1>Position des differentes fenetres</h1>
+<p>Une fois le raccourci utilise, la console apparait avec le resultat du code et il ne reste plus qu’a deplacer la console a la souris pour agencer JupyterLab comme on le souhaite : console en bas ou en haut, a droite ou a gauche, toujours visible en occupant la moitie de l’ecran (cf impression d’ecran precedente) ou visible en occupant l’integralite de l’ecran :</p>
+<p><img src="images_jupyterlab/disposition.png" /></p>
+<p>Dans ce cas l’onglet gauche “Altair.ipynb” est le notebook, l’autre onglet homonyme (mais de logo different) est la console Python.</p>
+</div>
+<div id="ajouter-r-au-launcher" class="section level1">
+<h1>Ajouter R au Launcher</h1>
+<p>On installe R et ses packages usuels (“R Essentials”) s avec la commande <em>conda install -c r r-essentials</em>.</p>
+<p>On va ensuite dans <code>File &gt; New Launcher</code> pour controler l’ajout du noyau R.</p>
+<p><img src="images_jupyterlab/R.png" /></p>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
