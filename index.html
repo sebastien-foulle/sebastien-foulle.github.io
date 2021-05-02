@@ -11,12 +11,12 @@
 
 
 
-<title>Ma newsletter HebdomadR</title>
+<title>Mes newsletters Pyriodique / HebdomadR</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -254,7 +254,7 @@ $(document).ready(function () {
   <a href="index.html">
     <span class="far fa-newspaper"></span>
      
-    HebdomadR
+    Newsletter
   </a>
 </li>
 <li>
@@ -395,51 +395,85 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Ma newsletter HebdomadR</h1>
+<h1 class="title toc-ignore">Mes newsletters Pyriodique / HebdomadR</h1>
 
 </div>
 
 
 <p>J’anime depuis 2015 une newsletter a destination de mes collegues datascientists, a raison d’une par semaine quand je suis en intercontrat, moins frequemment quand je suis en mission chez un client. C’est a partir de 2018 que je l’ai realisee au format Rmarkdown, une partie de ces documents sont archives ici. Lorsque le code n’est pas present dans la page (<u>ex</u> : flexdashboards), il peut etre recupere sur mon <a href="https://github.com/sebastien-foulle/sebastien-foulle.github.io">compte Github</a>.</p>
 <hr />
-<div id="r-et-python" class="section level1">
-<h1>R et Python</h1>
+<div id="pyriodique" class="section level1">
+<h1>Pyriodique</h1>
+<div id="graphiques" class="section level2">
+<h2>Graphiques</h2>
 <div style="display: flex;">
 <div>
-<p><strong>Presentations au format “.Rpres”</strong></p>
-<p><a href="hebdor_R_Python_agregats.html" target = "blank">Agregats sous R et Python</a>, 07/09/2018</p>
-<p><a href="hebdor_R_Python_graphiques.html" target = "blank">Graphiques sous R et Python</a>, 25/01/2019     <br />
+<p><strong>Format classique</strong></p>
+<p><a href="hebdor_graphiques_pandas.html" target = "blank">Graphiques avec <em>pandas</em></a>, 04/12/2020     <br />
+</p>
+<p><a href="hebdor_Altair.html" target = "blank">Graphiques interactifs avec <em>Altair</em></a>, 16/04/2021     <br />
 </p>
 </div>
 <div>
-<p><strong>Format classique</strong></p>
-<p><a href="hebdor_couleurs.html" target = "blank">Les couleurs</a>, 13/09/2019</p>
+<p><strong>Presentations au format “.Rpres”</strong></p>
+<p><a href="hebdor_R_Python_graphiques.html" target = "blank">Graphiques sous R et Python</a>, 25/01/2019</p>
+</div>
+</div>
+</div>
+<div id="tables" class="section level2">
+<h2>Tables</h2>
 <p><a href="hebdor_format_tables_matrices.html" target = "blank">Mise en forme des tables avec <em>pandas</em>, <em>seaborn</em>, <em>heatmaply</em> et <em>reactable</em></a>, 24/04/2020</p>
-<p><a href="hebdor_Altair.html" target = "blank">Graphiques interactifs avec <em>Altair</em></a>, 16/04/2021</p>
-<p><a href="hebdor_JupyterLab.html" target = "blank">Coder dans JupyterLab</a>, 30/04/2021</p>
+</div>
+<div id="manipulation-de-donnees" class="section level2">
+<h2>Manipulation de donnees</h2>
+<div style="display: flex;">
+<div>
+<p><strong>Format classique</strong></p>
+<p><a href="hebdor_transpositions.html" target = "blank">Transpositions</a>, 15/03/2019</p>
+<p><a href="hebdor_fstrings_glue.html" target = "blank">Expressions dans des chaines de caracteres</a>, 14/06/2019     <br />
+</p>
+<p><a href="hebdor_comprehension.html" target = "blank">Listes en comprehension</a>, 11/10/2019     <br />
+</p>
+</div>
+<div>
+<p><strong>Presentations au format “.Rpres”</strong></p>
+<p><a href="hebdor_R_Python_agregats.html" target = "blank">Agregats sous R et Python</a>, 07/09/2018     <br />
+</p>
 </div>
 </div>
 </div>
-<div id="graphiques" class="section level1">
-<h1>Graphiques</h1>
+<div id="modelisation" class="section level2">
+<h2>Modelisation</h2>
+<p><a href="hebdor_perf_sklearn.html" target = "blank">Performance d’un modele avec <em>scikit-learn</em> et <em>scikit-plot</em></a>, 04/09/2020</p>
+</div>
+<div id="developpement-de-code" class="section level2">
+<h2>Developpement de code</h2>
+<p><a href="hebdor_JupyterLab.html" target = "blank">Coder dans <em>JupyterLab</em></a>, 30/04/2021</p>
+<hr />
+</div>
+</div>
+<div id="hebdomadr" class="section level1">
+<h1>HebdomadR</h1>
+<div id="graphiques-1" class="section level2">
+<h2>Graphiques</h2>
 <div style="display: flex;">
 <div>
 <p><strong><em>ggplot2</em> et ses extensions</strong></p>
-<p><a href="hebdor_erreurs_ggplot2.html" target = "blank"> Quelques erreurs classiques avec <em>ggplot2</em></a>, 25/10/2019</p>
-<p><a href="hebdor_titres_ggplot2.html" target = "blank">Mise en forme des titres sous <em>ggplot2</em></a>, 13/03/2020</p>
-<p><a href="hebdor_ggrepel.html" target = "blank">Eviter les etiquettes superposees avec <em>ggrepel</em></a>, 27/03/2020     <br />
+<p><a href="hebdor_erreurs_ggplot2.html" target = "blank"> Quelques erreurs classiques avec <em>ggplot2</em></a>, 25/10/2019     <br />
 </p>
+<p><a href="hebdor_titres_ggplot2.html" target = "blank">Mise en forme des titres sous <em>ggplot2</em></a>, 13/03/2020</p>
 </div>
 <div>
 <p><strong>Autres</strong></p>
+<p><a href="hebdor_couleurs.html" target = "blank">Les couleurs</a>, 13/09/2019</p>
 <p><a href="hebdor_heatmap.html" target = "blank">Cartes de chaleur interactives avec <em>d3heatmap</em> et <em>heatmaply</em></a>, 21/06/2019</p>
 <p><a href="hebdor_patchwork.html" target = "blank">Graphiques sur une grille avec <em>patchwork</em></a>, 17/01/2020</p>
 <p><a href="hebdor_polices.html" target = "blank">Changer de police de caracteres avec <em>showtext</em></a>, 10/03/2021</p>
 </div>
 </div>
 </div>
-<div id="tables" class="section level1">
-<h1>Tables</h1>
+<div id="tables-1" class="section level2">
+<h2>Tables</h2>
 <div style="display: flex;">
 <div>
 <p><a href="hebdor_formattable.html" target = "blank">Mise en forme des tables avec <em>formattable</em></a>, 01/02/2019      </p>
@@ -449,8 +483,8 @@ $(document).ready(function () {
 </div>
 </div>
 </div>
-<div id="manipulation-de-donnees" class="section level1">
-<h1>Manipulation de donnees</h1>
+<div id="manipulation-de-donnees-1" class="section level2">
+<h2>Manipulation de donnees</h2>
 <div style="display: flex;">
 <div>
 <p><a href="hebdor_dtplyr.html" target = "blank">Compromis entre <em>dplyr</em> et <em>data.table</em> avec <em>dtplyr</em></a>, 29/11/2019     <br />
@@ -463,21 +497,21 @@ $(document).ready(function () {
 </div>
 </div>
 </div>
-<div id="modelisation" class="section level1">
-<h1>Modelisation</h1>
+<div id="modelisation-1" class="section level2">
+<h2>Modelisation</h2>
 <div style="display: flex;">
 <div>
 <p><strong>Flexdashboards</strong></p>
 <p><a href="hebdor_modelePlot.html" target = "blank">choix du seuil d’un score avec <em>modelplotr</em></a>, 07/12/2018     <br />
 </p>
 <p><a href="hebdor_smbinning.html" target = "blank">Discretisation supervisee avec <em>smbinning</em></a>, 14/12/2018</p>
-<p><a href="hebdor_selection_variables.html" target = "blank">Selection de variables “model-free”</a>, 21/12/2018</p>
 <p><a href="hebdor_importance_variables.html" target = "blank"> Mesure “agnostique” de l’importance des variables</a>, 15/02/2019</p>
 </div>
 <div>
 <p><strong>Format classique</strong></p>
 <p><a href="hebdor_KPI_yardstick.html" target = "blank">Mesures de performance d’un modele avec <em>yardstick</em></a>, 04/03/2019</p>
 <p><a href="hebdor_echantillonnage.html" target = "blank">Echantillonnage avec R base, <em>dplyr</em> et <em>themis</em></a>, 13/04/2020</p>
+</div>
 </div>
 </div>
 </div>

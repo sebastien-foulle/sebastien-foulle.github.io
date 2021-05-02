@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Transpositions des tables   </title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_transpositions_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg> Transpositions des tables <svg aria-hidden="true" role="img" viewBox="0 0 581 512" style="height:60px;width:68.09px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:lightblue;overflow:visible;position:relative;"><path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/></svg> <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#sous-python-avec-pandas">Sous Python avec <em>pandas</em></a>
+<ul>
+<li><a href="#format-long">format long</a></li>
+<li><a href="#format-large">format large</a></li>
+</ul></li>
+<li><a href="#sous-r-avec-tidyr">Sous R avec <em>tidyr</em></a>
+<ul>
+<li><a href="#format-long-1">format long</a></li>
+<li><a href="#format-large-1">format large</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<style>
+.r{background-color:lightgrey !important;}
+</style>
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>La transposition d’un dataframe est une operation utile mais moins frequente que d’autres operations (agregats, jointures). On peut quelquefois oublier le nom des differents arguments, ou quelle fonction convertit au format long ou large. Les sections suivantes pourront vous servir d’aide-memoire, en sachant qu’il y a d’autres choix possibles de fonctions, en Python ou en R, pour realiser ces transpositions (<em>pivot.table</em> avec <em>pandas</em>, <em>cast</em> et <em>melt</em> avec <em>data.table</em>, …) .</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyr&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>tips <span class="ot">=</span> reshape2<span class="sc">::</span>tips <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(sex, smoker, day, time, size) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_bill =</span> <span class="fu">sum</span>(total_bill),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">tip =</span> <span class="fu">sum</span>(tip)) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tips)</span></code></pre></div>
+<pre><code># A tibble: 6 x 7
+  sex    smoker day   time    size total_bill   tip
+  &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;  &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;
+1 Female No     Fri   Dinner     2      22.8   3.25
+2 Female No     Fri   Lunch      3      16.0   3   
+3 Female No     Sat   Dinner     1       7.25  1   
+4 Female No     Sat   Dinner     2     149.   21.2 
+5 Female No     Sat   Dinner     3      69.8  10.7 
+6 Female No     Sat   Dinner     4      20.7   2.45</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tips <span class="op">=</span> sns.load_dataset(<span class="st">&quot;tips&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> colonne <span class="kw">in</span> [<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;smoker&#39;</span>, <span class="st">&#39;day&#39;</span>, <span class="st">&#39;time&#39;</span>]:</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  tips[colonne] <span class="op">=</span> tips[colonne].astype(<span class="bu">object</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>tips <span class="op">=</span> tips.groupby([<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;smoker&#39;</span>, <span class="st">&#39;day&#39;</span>, <span class="st">&#39;time&#39;</span>, <span class="st">&#39;size&#39;</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  )[[<span class="st">&#39;total_bill&#39;</span>, <span class="st">&#39;tip&#39;</span>]].<span class="bu">sum</span>().reset_index()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>tips.tail()</span></code></pre></div>
+<pre><code>     sex smoker   day    time  size  total_bill    tip
+51  Male    Yes   Sun  Dinner     4       57.82  10.18
+52  Male    Yes   Sun  Dinner     5       30.46   2.00
+53  Male    Yes  Thur   Lunch     2      152.47  22.58
+54  Male    Yes  Thur   Lunch     3       18.71   4.00
+55  Male    Yes  Thur   Lunch     4       20.53   4.00</code></pre>
+</div>
+<div id="sous-python-avec-pandas" class="section level1">
+<h1>Sous Python avec <em>pandas</em></h1>
+<div id="format-long" class="section level3">
+<h3>format long</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># id_vars : identifiant des lignes du resultat, on garde ces colonnes inchangees</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># value_vars : les colonnes a fusionner</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># var_name: le nom de la colonne quali fusionnee</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># value_name : le nom de la colonne quanti fusionnee</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>tips.head(<span class="dv">30</span>).melt(id_vars <span class="op">=</span> [<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;smoker&#39;</span>, <span class="st">&#39;day&#39;</span>, <span class="st">&#39;time&#39;</span>, <span class="st">&#39;size&#39;</span>], </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  value_vars <span class="op">=</span> [<span class="st">&#39;total_bill&#39;</span>, <span class="st">&#39;tip&#39;</span>], var_name <span class="op">=</span> <span class="st">&#39;noms_col&#39;</span>, value_name <span class="op">=</span> <span class="st">&#39;valeurs_col&#39;</span>)</span></code></pre></div>
+<pre><code>       sex smoker   day    time  size    noms_col  valeurs_col
+0   Female     No   Fri  Dinner     2  total_bill        22.75
+1   Female     No   Fri   Lunch     3  total_bill        15.98
+2   Female     No   Sat  Dinner     1  total_bill         7.25
+3   Female     No   Sat  Dinner     2  total_bill       149.28
+4   Female     No   Sat  Dinner     3  total_bill        69.83
+5   Female     No   Sat  Dinner     4  total_bill        20.69
+6   Female     No   Sun  Dinner     2  total_bill        72.81
+7   Female     No   Sun  Dinner     3  total_bill        69.22
+8   Female     No   Sun  Dinner     4  total_bill       119.66
+9   Female     No   Sun  Dinner     5  total_bill        29.85
+10  Female     No  Thur  Dinner     2  total_bill        18.78
+11  Female     No  Thur   Lunch     1  total_bill        10.07
+12  Female     No  Thur   Lunch     2  total_bill       237.11
+13  Female     No  Thur   Lunch     3  total_bill        18.64
+14  Female     No  Thur   Lunch     4  total_bill        58.91
+15  Female     No  Thur   Lunch     6  total_bill        56.85
+16  Female    Yes   Fri  Dinner     2  total_bill        48.80
+17  Female    Yes   Fri   Lunch     2  total_bill        39.78
+18  Female    Yes   Sat  Dinner     1  total_bill         3.07
+19  Female    Yes   Sat  Dinner     2  total_bill       198.32
+20  Female    Yes   Sat  Dinner     3  total_bill        72.47
+21  Female    Yes   Sat  Dinner     4  total_bill        30.14
+22  Female    Yes   Sun  Dinner     2  total_bill        27.11
+23  Female    Yes   Sun  Dinner     3  total_bill        39.05
+24  Female    Yes  Thur   Lunch     2  total_bill        74.95
+25  Female    Yes  Thur   Lunch     3  total_bill        16.47
+26  Female    Yes  Thur   Lunch     4  total_bill        43.11
+27    Male     No   Fri  Dinner     2  total_bill        34.95
+28    Male     No   Sat  Dinner     2  total_bill       251.38
+29    Male     No   Sat  Dinner     3  total_bill       193.72
+30  Female     No   Fri  Dinner     2         tip         3.25
+31  Female     No   Fri   Lunch     3         tip         3.00
+32  Female     No   Sat  Dinner     1         tip         1.00
+33  Female     No   Sat  Dinner     2         tip        21.23
+34  Female     No   Sat  Dinner     3         tip        10.74
+35  Female     No   Sat  Dinner     4         tip         2.45
+36  Female     No   Sun  Dinner     2         tip        12.74
+37  Female     No   Sun  Dinner     3         tip        11.17
+38  Female     No   Sun  Dinner     4         tip        17.56
+39  Female     No   Sun  Dinner     5         tip         5.14
+40  Female     No  Thur  Dinner     2         tip         3.00
+41  Female     No  Thur   Lunch     1         tip         1.83
+42  Female     No  Thur   Lunch     2         tip        38.01
+43  Female     No  Thur   Lunch     3         tip         1.36
+44  Female     No  Thur   Lunch     4         tip         8.09
+45  Female     No  Thur   Lunch     6         tip         9.20
+46  Female    Yes   Fri  Dinner     2         tip        10.80
+47  Female    Yes   Fri   Lunch     2         tip         7.98
+48  Female    Yes   Sat  Dinner     1         tip         1.00
+49  Female    Yes   Sat  Dinner     2         tip        29.94
+50  Female    Yes   Sat  Dinner     3         tip         9.00
+51  Female    Yes   Sat  Dinner     4         tip         3.09
+52  Female    Yes   Sun  Dinner     2         tip         7.00
+53  Female    Yes   Sun  Dinner     3         tip         7.00
+54  Female    Yes  Thur   Lunch     2         tip        12.70
+55  Female    Yes  Thur   Lunch     3         tip         3.23
+56  Female    Yes  Thur   Lunch     4         tip         5.00
+57    Male     No   Fri  Dinner     2         tip         5.00
+58    Male     No   Sat  Dinner     2         tip        42.85
+59    Male     No   Sat  Dinner     3         tip        30.21</code></pre>
+</div>
+<div id="format-large" class="section level3">
+<h3>format large</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># index : identifiant des lignes du resultat</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># columns : le nom de la colonne quali a decouper en plusieurs colonnes</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># values : le nom de la colonne des valeurs a rearranger</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>tips.head(<span class="dv">30</span>).pivot(index <span class="op">=</span> [<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;smoker&#39;</span>, <span class="st">&#39;time&#39;</span>, <span class="st">&#39;size&#39;</span>], </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  columns <span class="op">=</span> <span class="st">&#39;day&#39;</span>, values<span class="op">=</span> <span class="st">&#39;total_bill&#39;</span>).reset_index().fillna(<span class="dv">0</span>)</span></code></pre></div>
+<pre><code>day     sex smoker    time  size    Fri     Sat     Sun    Thur
+0    Female     No  Dinner     1   0.00    7.25    0.00    0.00
+1    Female     No  Dinner     2  22.75  149.28   72.81   18.78
+2    Female     No  Dinner     3   0.00   69.83   69.22    0.00
+3    Female     No  Dinner     4   0.00   20.69  119.66    0.00
+4    Female     No  Dinner     5   0.00    0.00   29.85    0.00
+5    Female     No   Lunch     1   0.00    0.00    0.00   10.07
+6    Female     No   Lunch     2   0.00    0.00    0.00  237.11
+7    Female     No   Lunch     3  15.98    0.00    0.00   18.64
+8    Female     No   Lunch     4   0.00    0.00    0.00   58.91
+9    Female     No   Lunch     6   0.00    0.00    0.00   56.85
+10   Female    Yes  Dinner     1   0.00    3.07    0.00    0.00
+11   Female    Yes  Dinner     2  48.80  198.32   27.11    0.00
+12   Female    Yes  Dinner     3   0.00   72.47   39.05    0.00
+13   Female    Yes  Dinner     4   0.00   30.14    0.00    0.00
+14   Female    Yes   Lunch     2  39.78    0.00    0.00   74.95
+15   Female    Yes   Lunch     3   0.00    0.00    0.00   16.47
+16   Female    Yes   Lunch     4   0.00    0.00    0.00   43.11
+17     Male     No  Dinner     2  34.95  251.38    0.00    0.00
+18     Male     No  Dinner     3   0.00  193.72    0.00    0.00</code></pre>
+</div>
+</div>
+<div id="sous-r-avec-tidyr" class="section level1">
+<h1>Sous R avec <em>tidyr</em></h1>
+<div id="format-long-1" class="section level3">
+<h3>format long</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tips, <span class="dv">30</span>) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&#39;total_bill&#39;</span>, <span class="st">&#39;tip&#39;</span>), <span class="at">names_to =</span> <span class="st">&#39;noms_col&#39;</span>, </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">values_to =</span> <span class="st">&#39;valeurs_col&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span></code></pre></div>
+<pre><code>      sex smoker  day   time size   noms_col valeurs_col
+1  Female     No  Fri Dinner    2 total_bill       22.75
+2  Female     No  Fri Dinner    2        tip        3.25
+3  Female     No  Fri  Lunch    3 total_bill       15.98
+4  Female     No  Fri  Lunch    3        tip        3.00
+5  Female     No  Sat Dinner    1 total_bill        7.25
+6  Female     No  Sat Dinner    1        tip        1.00
+7  Female     No  Sat Dinner    2 total_bill      149.28
+8  Female     No  Sat Dinner    2        tip       21.23
+9  Female     No  Sat Dinner    3 total_bill       69.83
+10 Female     No  Sat Dinner    3        tip       10.74
+11 Female     No  Sat Dinner    4 total_bill       20.69
+12 Female     No  Sat Dinner    4        tip        2.45
+13 Female     No  Sun Dinner    2 total_bill       72.81
+14 Female     No  Sun Dinner    2        tip       12.74
+15 Female     No  Sun Dinner    3 total_bill       69.22
+16 Female     No  Sun Dinner    3        tip       11.17
+17 Female     No  Sun Dinner    4 total_bill      119.66
+18 Female     No  Sun Dinner    4        tip       17.56
+19 Female     No  Sun Dinner    5 total_bill       29.85
+20 Female     No  Sun Dinner    5        tip        5.14
+21 Female     No Thur Dinner    2 total_bill       18.78
+22 Female     No Thur Dinner    2        tip        3.00
+23 Female     No Thur  Lunch    1 total_bill       10.07
+24 Female     No Thur  Lunch    1        tip        1.83
+25 Female     No Thur  Lunch    2 total_bill      237.11
+26 Female     No Thur  Lunch    2        tip       38.01
+27 Female     No Thur  Lunch    3 total_bill       18.64
+28 Female     No Thur  Lunch    3        tip        1.36
+29 Female     No Thur  Lunch    4 total_bill       58.91
+30 Female     No Thur  Lunch    4        tip        8.09
+31 Female     No Thur  Lunch    6 total_bill       56.85
+32 Female     No Thur  Lunch    6        tip        9.20
+33 Female    Yes  Fri Dinner    2 total_bill       48.80
+34 Female    Yes  Fri Dinner    2        tip       10.80
+35 Female    Yes  Fri  Lunch    2 total_bill       39.78
+36 Female    Yes  Fri  Lunch    2        tip        7.98
+37 Female    Yes  Sat Dinner    1 total_bill        3.07
+38 Female    Yes  Sat Dinner    1        tip        1.00
+39 Female    Yes  Sat Dinner    2 total_bill      198.32
+40 Female    Yes  Sat Dinner    2        tip       29.94
+41 Female    Yes  Sat Dinner    3 total_bill       72.47
+42 Female    Yes  Sat Dinner    3        tip        9.00
+43 Female    Yes  Sat Dinner    4 total_bill       30.14
+44 Female    Yes  Sat Dinner    4        tip        3.09
+45 Female    Yes  Sun Dinner    2 total_bill       27.11
+46 Female    Yes  Sun Dinner    2        tip        7.00
+47 Female    Yes  Sun Dinner    3 total_bill       39.05
+48 Female    Yes  Sun Dinner    3        tip        7.00
+49 Female    Yes Thur  Lunch    2 total_bill       74.95
+50 Female    Yes Thur  Lunch    2        tip       12.70
+51 Female    Yes Thur  Lunch    3 total_bill       16.47
+52 Female    Yes Thur  Lunch    3        tip        3.23
+53 Female    Yes Thur  Lunch    4 total_bill       43.11
+54 Female    Yes Thur  Lunch    4        tip        5.00
+55   Male     No  Fri Dinner    2 total_bill       34.95
+56   Male     No  Fri Dinner    2        tip        5.00
+57   Male     No  Sat Dinner    2 total_bill      251.38
+58   Male     No  Sat Dinner    2        tip       42.85
+59   Male     No  Sat Dinner    3 total_bill      193.72
+60   Male     No  Sat Dinner    3        tip       30.21</code></pre>
+</div>
+<div id="format-large-1" class="section level3">
+<h3>format large</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tips, <span class="dv">30</span>) <span class="sc">%&gt;%</span> <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;smoker&#39;</span>, <span class="st">&#39;time&#39;</span>, <span class="st">&#39;size&#39;</span>), </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">names_from =</span> <span class="st">&#39;day&#39;</span>, <span class="at">values_from =</span> <span class="st">&#39;total_bill&#39;</span>, <span class="at">values_fill =</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code># A tibble: 19 x 8
+   sex    smoker time    size   Fri    Sat   Sun  Thur
+   &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 Female No     Dinner     2  22.8 149.    72.8  18.8
+ 2 Female No     Lunch      3  16.0   0      0    18.6
+ 3 Female No     Dinner     1   0     7.25   0     0  
+ 4 Female No     Dinner     3   0    69.8   69.2   0  
+ 5 Female No     Dinner     4   0    20.7  120.    0  
+ 6 Female No     Dinner     5   0     0     29.8   0  
+ 7 Female No     Lunch      1   0     0      0    10.1
+ 8 Female No     Lunch      2   0     0      0   237. 
+ 9 Female No     Lunch      4   0     0      0    58.9
+10 Female No     Lunch      6   0     0      0    56.8
+11 Female Yes    Dinner     2  48.8 198.    27.1   0  
+12 Female Yes    Lunch      2  39.8   0      0    75.0
+13 Female Yes    Dinner     1   0     3.07   0     0  
+14 Female Yes    Dinner     3   0    72.5   39.0   0  
+15 Female Yes    Dinner     4   0    30.1    0     0  
+16 Female Yes    Lunch      3   0     0      0    16.5
+17 Female Yes    Lunch      4   0     0      0    43.1
+18 Male   No     Dinner     2  35.0 251.     0     0  
+19 Male   No     Dinner     3   0   194.     0     0  </code></pre>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
