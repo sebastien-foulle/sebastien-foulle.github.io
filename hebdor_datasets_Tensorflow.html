@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Pretraitements avec TensorFlow  </title>
+
+<script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_datasets_Tensorflow_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg> Pretraitements avec TensorFlow <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a>
+<ul>
+<li><a href="#notions-sur-les-reseaux-de-neurones">Notions sur les reseaux de neurones</a></li>
+<li><a href="#donnees-et-modules">Donnees et modules</a></li>
+</ul></li>
+<li><a href="#les-datasets">Les datasets</a></li>
+<li><a href="#shuffle-repeat-batch"><em>shuffle</em>, <em>repeat</em>, <em>batch</em></a></li>
+<li><a href="#lecture-dun-dataframe-pandas">Lecture d’un dataframe pandas</a></li>
+<li><a href="#pretraitements">Pretraitements</a>
+<ul>
+<li><a href="#donnees-numeriques">Donnees numeriques</a></li>
+<li><a href="#donnees-numeriques-discretisees">Donnees numeriques discretisees</a></li>
+<li><a href="#donnees-categorielles">Donnees categorielles</a>
+<ul>
+<li><a href="#avec-modalites-explicites">Avec modalites explicites</a></li>
+<li><a href="#hashed-buckets">Hashed buckets</a></li>
+<li><a href="#embeddings">Embeddings</a></li>
+<li><a href="#interactions">Interactions</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<style>
+.r{background-color:lightgrey !important;}
+</style>
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>TensorFlow est une plateforme open-source cree par Google pour faire de l’apprentissage automatique, et notamment du Deep Learning. Dans ce 1er document on decrit la phase de pretraitement des Dataframes pandas et des Datasets TensorFlow.</p>
+<p>On trouve beaucoup de resources en ligne dont des tutoriaux qui tournent sous Colab <a href="https://www.tensorflow.org/tutorials?hl=fr" class="uri">https://www.tensorflow.org/tutorials?hl=fr</a></p>
+<div id="notions-sur-les-reseaux-de-neurones" class="section level3">
+<h3>Notions sur les reseaux de neurones</h3>
+<p>Pour ceux qui ne connaissent pas trop le sujet, un exemple classique de reseau de neurones est la regression logistique : c’est un reseau de neurones a 0 couche cachee et avec la fonction sigmoide <span class="math inline">\(\frac{1 }{1 + e^{-x}}\)</span> comme fonction d’activation qui s’applique a une combinaison lineaire des variables en entree.</p>
+<p>Un peu de terminologie :</p>
+<ul>
+<li>les <em>poids</em> sont les parametres du modele</li>
+<li>un <em>exemple</em> est une ligne de la table d’apprentissage, encore appele individu en statistique classique : un vecteur <span class="math inline">\(X\)</span> des valeurs des variables explicatives et une valeur <span class="math inline">\(Y\)</span> de la variable cible</li>
+<li>un <em>mini-batch</em> est un petit ensemble d’exemples tires aleatoirement. La taille d’un mini-batch est souvent une puissance de 2 (32, 64, 128, …) car cela permet d’optimiser des calculs realises en parallele sur les processeurs de votre machine (CPU, GPU), processeurs dont le nombre est souvent une puissance de 2</li>
+</ul>
+<p>L’entrainement d’un reseau de neurones ne se pratique pas sur tout le jeu de donnees d’apprentissage en un bloc comme le font les autres algorithmes d’apprentissage automatique, cela pour plusieurs raisons :</p>
+<ul>
+<li>les reseaux de neurones necessitent souvent des volumes de donnees trop grands pour la RAM</li>
+<li>la mise a jour par etapes successives des parametres du modele par l’algorithme de retropropagration du gradient necessite un calcul assez couteux de gradients de la fonction de perte, on ne veut pas le realiser sur l’integralite des exemples du jeu d’apprentissage</li>
+</ul>
+<p>On utilise donc des mini-batchs couples a la technique de la <em>descente de gradient stochastique</em> (<a href="https://fr.wikipedia.org/wiki/Algorithme_du_gradient_stochastique" class="uri">https://fr.wikipedia.org/wiki/Algorithme_du_gradient_stochastique</a>). Pour realiser une etape de mise a jour des poids :</p>
+<ul>
+<li>on tire un mini-batch du jeu de donnees d’apprentissage</li>
+<li>pour chaque exemple <span class="math inline">\(X, Y\)</span> du mini-batch on calcule le gradient <span class="math inline">\(\nabla L\)</span> de la fonction de perte <span class="math inline">\(L\)</span>. C’est le vecteur des derivees partielles de la fonction <span class="math inline">\(L\)</span> vue comme une fonction mathematique des poids (cette fonction depend aussi bien sur des valeurs fixees de <span class="math inline">\(X\)</span> et <span class="math inline">\(Y\)</span>)</li>
+<li>on obtient une estimation empirique du gradient en calculant la moyenne des gradients obtenus sur tous les exemples du mini-batch</li>
+<li>on applique alors la formule de mise a jour des poids (<span class="math inline">\(w = w - \alpha * \nabla L\)</span>) ou <span class="math inline">\(\alpha\)</span> est le taux d’apprentissage, a prendre entre 0 et 1 (par exemple 0.01 ou 0.1)</li>
+</ul>
+<p>Encore un peu de vocabulaire pour finir : une <em>epoque</em> correspond a la lecture de tout le jeu d’apprentissage. Si on a choisi des batchs de taille 64 et que le jeu d’apprentissage a 1000 lignes, il faut 16 etapes de mise a jour des poids pour constituer une epoque.</p>
+<p>On a donc au moins 3 hyperparametres du modele a ajuster au mieux en fonction du jeu de donnees :</p>
+<ul>
+<li>la taille des mini-batchs</li>
+<li>la valeur du taux d’apprentissage (trop petit il va ralentir la convergence, trop grand il ne donnera pas le meilleur minima de la fonction de perte)</li>
+<li>le nombre d’epoques car il n’y a aucune raison particuliere pour que l’algorithme converge apres une epoque seulement</li>
+</ul>
+<p>On va traiter la modelisation dans des documents futurs, on n’a ici besoin que de la comprehension des batchs et des epoques.</p>
+</div>
+<div id="donnees-et-modules" class="section level3">
+<h3>Donnees et modules</h3>
+<p>On choisit un jeu de donnees avec des variables quantitatives et qualitatives et une cible multi-classes. Les variables explicatives devront etre mises au format TensorFlow ainsi que la variable cible qui doit etre recodee en entiers consecutifs commencant a 0.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;reticulate&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># on a installe tensorflow dans l&#39;environnement vituel conda &quot;tf_env&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="at">condaenv =</span> <span class="st">&quot;tf_env&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># le jeu de donnees IncomeESL du package R arules</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">&quot;arules&quot;</span>, IncomeESL)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>dtf_class <span class="ot">=</span> tidyr<span class="sc">::</span><span class="fu">drop_na</span>(IncomeESL)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dtf_class) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, <span class="fu">colnames</span>(dtf_class))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>dtf_class <span class="ot">=</span> dtf_class[<span class="fu">c</span>(<span class="st">&quot;number_in_household&quot;</span>, <span class="st">&quot;marital_status&quot;</span>, <span class="st">&quot;householder_status&quot;</span>, <span class="st">&quot;income&quot;</span>)]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># conversion de colonnes quali en quanti</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>number_in_household <span class="ot">=</span> <span class="fu">as.character</span>(dtf_class<span class="sc">$</span>number_in_household)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>number_in_household[dtf_class<span class="sc">$</span>number_in_household <span class="sc">==</span> <span class="st">&quot;9+&quot;</span>]<span class="ot">=</span> <span class="st">&quot;9&quot;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>number_in_household <span class="ot">=</span> <span class="fu">as.integer</span>(dtf_class<span class="sc">$</span>number_in_household)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># conversion des facteurs en character</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col_quali <span class="cf">in</span> <span class="fu">colnames</span>(dtf_class)[<span class="fu">sapply</span>(dtf_class, is.factor)]) {</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  dtf_class[[col_quali]] <span class="ot">=</span> <span class="fu">as.character</span>(dtf_class[[col_quali]] )</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># on remplace les , par des - dans la variable cible</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>income <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">&quot;,&quot;</span>, <span class="st">&quot;-&quot;</span>, dtf_class<span class="sc">$</span>income)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="va">None</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pprint</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> feature_column</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>tf.random.set_seed(<span class="dv">2021</span>)</span></code></pre></div>
+<p>Les versions Python et TensorFlow utilisees.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sys.version</span></code></pre></div>
+<pre><code>&#39;3.8.8 (default, Apr 13 2021, 15:08:03) [MSC v.1916 64 bit (AMD64)]&#39;</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tf.__version__</span></code></pre></div>
+<pre><code>&#39;2.3.0&#39;</code></pre>
+<p>Les donnees sous Python.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dtf_class <span class="op">=</span> r.dtf_class</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dtf_class.info()</span></code></pre></div>
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 6876 entries, 0 to 6875
+Data columns (total 4 columns):
+ #   Column               Non-Null Count  Dtype 
+---  ------               --------------  ----- 
+ 0   number_in_household  6876 non-null   int32 
+ 1   marital_status       6876 non-null   object
+ 2   householder_status   6876 non-null   object
+ 3   income               6876 non-null   object
+dtypes: int32(1), object(3)
+memory usage: 188.1+ KB</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dtf_class.head()</span></code></pre></div>
+<pre><code>   number_in_household marital_status        householder_status   income
+0                    5        married                       own      75+
+1                    3        married                      rent      75+
+2                    4         single  live with parents/family   [0-10)
+3                    4         single  live with parents/family   [0-10)
+4                    2        married                       own  [50-75)</code></pre>
+<p>Frequences des modalites de la cible.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dtf_class.income.value_counts(normalize<span class="op">=</span><span class="va">True</span>).sort_index()</span></code></pre></div>
+<pre><code>75+        0.108057
+[0-10)     0.182519
+[10-15)    0.076934
+[15-20)    0.073444
+[20-25)    0.089878
+[25-30)    0.076643
+[30-40)    0.123037
+[40-50)    0.114020
+[50-75)    0.155468
+Name: income, dtype: float64</code></pre>
+<p>Dictionnaire pour recoder la variable cible.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mapping pour recoder les modalites cibles en entiers</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dico_income <span class="op">=</span> {<span class="st">&#39;[0-10)&#39;</span>:<span class="dv">0</span>,<span class="st">&#39;[10-15)&#39;</span>:<span class="dv">1</span>,<span class="st">&#39;[15-20)&#39;</span>:<span class="dv">2</span>, <span class="st">&#39;[20-25)&#39;</span>:<span class="dv">3</span>,<span class="st">&#39;[25-30)&#39;</span>:<span class="dv">4</span>, <span class="st">&#39;[30-40)&#39;</span>:<span class="dv">5</span>, <span class="st">&#39;[40-50)&#39;</span>:<span class="dv">6</span>, <span class="st">&#39;[50-75)&#39;</span>:<span class="dv">7</span>,<span class="st">&#39;75+&#39;</span>:<span class="dv">8</span>}</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>pp.pprint(dico_income)</span></code></pre></div>
+<pre><code>{   &#39;75+&#39;: 8,
+    &#39;[0-10)&#39;: 0,
+    &#39;[10-15)&#39;: 1,
+    &#39;[15-20)&#39;: 2,
+    &#39;[20-25)&#39;: 3,
+    &#39;[25-30)&#39;: 4,
+    &#39;[30-40)&#39;: 5,
+    &#39;[40-50)&#39;: 6,
+    &#39;[50-75)&#39;: 7}</code></pre>
+</div>
+</div>
+<div id="les-datasets" class="section level1">
+<h1>Les datasets</h1>
+<p>TensorFlow n’utilise pas les DataFrames pandas mais son propre format <em>Dataset</em>. La fonction <em>tf.data.Dataset.from_tensor_slices</em> permet de convertir un DataFrame pandas en Dataset Tensorflow dont on pourra lire les lignes par batch (voir plus bas).</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dtf <span class="op">=</span> dtf_class.copy()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> dtf.pop(<span class="st">&#39;income&#39;</span>).<span class="bu">map</span>(dico_income)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>dtf.head()</span></code></pre></div>
+<pre><code>   number_in_household marital_status        householder_status
+0                    5        married                       own
+1                    3        married                      rent
+2                    4         single  live with parents/family
+3                    4         single  live with parents/family
+4                    2        married                       own</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>labels[:<span class="dv">5</span>]</span></code></pre></div>
+<pre><code>0    8
+1    8
+2    0
+3    0
+4    7
+Name: income, dtype: int64</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> tf.data.Dataset.from_tensor_slices(<span class="bu">dict</span>(dtf))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>ds2 <span class="op">=</span> tf.data.Dataset.from_tensor_slices((<span class="bu">dict</span>(dtf), labels))</span></code></pre></div>
+<p>Pour explorer le contenu d’un dataset, le plus simple est de le transformer en iterateur.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(ds)</span></code></pre></div>
+<pre><code>&lt;class &#39;tensorflow.python.data.ops.dataset_ops.TensorSliceDataset&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>iter_batch <span class="op">=</span> <span class="bu">iter</span>(ds.batch(<span class="dv">5</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">next</span>(iter_batch)</span></code></pre></div>
+<pre><code>{&#39;number_in_household&#39;: &lt;tf.Tensor: shape=(5,), dtype=int32, numpy=array([5, 3, 4, 4, 2])&gt;, &#39;marital_status&#39;: &lt;tf.Tensor: shape=(5,), dtype=string, numpy=
+array([b&#39;married&#39;, b&#39;married&#39;, b&#39;single&#39;, b&#39;single&#39;, b&#39;married&#39;],
+      dtype=object)&gt;, &#39;householder_status&#39;: &lt;tf.Tensor: shape=(5,), dtype=string, numpy=
+array([b&#39;own&#39;, b&#39;rent&#39;, b&#39;live with parents/family&#39;,
+       b&#39;live with parents/family&#39;, b&#39;own&#39;], dtype=object)&gt;}</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(<span class="bu">next</span>(iter_batch))</span></code></pre></div>
+<pre><code>   number_in_household marital_status householder_status
+0                    3      b&#39;single&#39;            b&#39;rent&#39;
+1                    1    b&#39;divorced&#39;            b&#39;rent&#39;
+2                    3     b&#39;married&#39;            b&#39;rent&#39;
+3                    2     b&#39;married&#39;            b&#39;rent&#39;
+4                    1      b&#39;single&#39;            b&#39;rent&#39;</code></pre>
+<p>Le dataset <em>ds2</em> est essentiellement un couple (dictionnaire des predicteurs, tenseur de la variable cible).</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(ds)</span></code></pre></div>
+<pre><code>&lt;class &#39;tensorflow.python.data.ops.dataset_ops.TensorSliceDataset&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>iter_batch <span class="op">=</span> <span class="bu">iter</span>(ds2.batch(<span class="dv">5</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>couple <span class="op">=</span> <span class="bu">next</span>(iter_batch)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(couple[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>   number_in_household marital_status           householder_status
+0                    5     b&#39;married&#39;                       b&#39;own&#39;
+1                    3     b&#39;married&#39;                      b&#39;rent&#39;
+2                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;
+3                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;
+4                    2     b&#39;married&#39;                       b&#39;own&#39;</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>couple[<span class="dv">1</span>].numpy()</span></code></pre></div>
+<pre><code>array([8, 8, 0, 0, 7], dtype=int64)</code></pre>
+</div>
+<div id="shuffle-repeat-batch" class="section level1">
+<h1><em>shuffle</em>, <em>repeat</em>, <em>batch</em></h1>
+<p>La lecture par batchs n’est pas suffisante : on doit par exemple aussi penser a permuter les donnees avec <em>shuffle</em> lors de l’apprentissage, pour que le modele ne voit pas les memes batchs a chaque nouvelle epoque. On applique ces trois methodes a un array numpy pour simplifier leur comprehension.</p>
+<p>La documentation officielle :</p>
+<ul>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shuffle" class="uri">https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shuffle</a></li>
+<li><a href="https://www.tensorflow.org/guide/data#consuming_sets_of_files" class="uri">https://www.tensorflow.org/guide/data#consuming_sets_of_files</a>.</li>
+</ul>
+<p>Si on n’utilise que <em>batch</em> on va epuiser le dataset, ca revient a traiter une seule epoque. On voit au passage que la lecture des donnees est sequentielles, sans alea.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> tf.data.Dataset.<span class="bu">range</span>(<span class="dv">10</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.batch(<span class="dv">3</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>pp.pprint(<span class="bu">list</span>(dataset.as_numpy_iterator()))</span></code></pre></div>
+<pre><code>[   array([0, 1, 2], dtype=int64),
+    array([3, 4, 5], dtype=int64),
+    array([6, 7, 8], dtype=int64),
+    array([9], dtype=int64)]</code></pre>
+<p>En ajoutant un <em>repeat</em> on augmente le nombe d’epoques.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> tf.data.Dataset.<span class="bu">range</span>(<span class="dv">10</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.batch(<span class="dv">3</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.repeat(<span class="dv">2</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>pp.pprint(<span class="bu">list</span>(dataset.as_numpy_iterator()))</span></code></pre></div>
+<pre><code>[   array([0, 1, 2], dtype=int64),
+    array([3, 4, 5], dtype=int64),
+    array([6, 7, 8], dtype=int64),
+    array([9], dtype=int64),
+    array([0, 1, 2], dtype=int64),
+    array([3, 4, 5], dtype=int64),
+    array([6, 7, 8], dtype=int64),
+    array([9], dtype=int64)]</code></pre>
+<p>Enfin avec <em>shuffle</em> on ajoute de l’alea, mais ce n’est pas une permutation sur la totalite des lignes :</p>
+<ul>
+<li>on definit une taille de tampon <em>n</em></li>
+<li>a la 1ere selection d’un element, on place les <em>n</em> 1eres lignes du dataset dans un tampon, on les permute et on en choisit une</li>
+<li>a la seconde selection d’un element, on ajoute la ligne <em>n+1</em> au tampon qui a ainsi a nouveau <em>n</em> elements, on les permute, …</li>
+</ul>
+<p>Utiliser un tampon permet de gagner du temps et de la memoire plutot que d’appliquer une permutation a l’ensemble des elements a chaque fois, et si le tampon est assez grand la permutation obtenue est suffisante.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> tf.data.Dataset.<span class="bu">range</span>(<span class="dv">20</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.shuffle(buffer_size <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(dataset.as_numpy_iterator())</span></code></pre></div>
+<pre><code>[1, 0, 3, 2, 4, 6, 5, 7, 9, 8, 10, 12, 11, 13, 14, 16, 15, 18, 19, 17]</code></pre>
+<p>Si on ajoute une methode <em>batch</em> avant le <em>shuffle</em>, ce sont les <em>batchs</em> qui sont permutes.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> tf.data.Dataset.<span class="bu">range</span>(<span class="dv">20</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.batch(<span class="dv">3</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.shuffle(buffer_size <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>pp.pprint(<span class="bu">list</span>(dataset.as_numpy_iterator()))</span></code></pre></div>
+<pre><code>[   array([0, 1, 2], dtype=int64),
+    array([6, 7, 8], dtype=int64),
+    array([ 9, 10, 11], dtype=int64),
+    array([12, 13, 14], dtype=int64),
+    array([3, 4, 5], dtype=int64),
+    array([15, 16, 17], dtype=int64),
+    array([18, 19], dtype=int64)]</code></pre>
+<p>Et la chaine complete : on permute partiellement les donnees, et on parcourt deux epoques par batchs de 3 elements.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> tf.data.Dataset.<span class="bu">range</span>(<span class="dv">10</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.shuffle(buffer_size <span class="op">=</span> <span class="dv">2</span>).repeat(<span class="dv">2</span>).batch(<span class="dv">3</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>pp.pprint(<span class="bu">list</span>(dataset.as_numpy_iterator()))</span></code></pre></div>
+<pre><code>[   array([0, 1, 2], dtype=int64),
+    array([4, 3, 5], dtype=int64),
+    array([6, 7, 9], dtype=int64),
+    array([8, 1, 0], dtype=int64),
+    array([3, 4, 2], dtype=int64),
+    array([6, 5, 7], dtype=int64),
+    array([9, 8], dtype=int64)]</code></pre>
+<p>Si on place le <em>batch</em> avant le <em>repeat</em>, on peut epuiser le dataset sans remplir totalement un lot avant la relecture du dataset :</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> tf.data.Dataset.<span class="bu">range</span>(<span class="dv">10</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> dataset.shuffle(buffer_size <span class="op">=</span> <span class="dv">2</span>).batch(<span class="dv">3</span>).repeat(<span class="dv">2</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>pp.pprint(<span class="bu">list</span>(dataset.as_numpy_iterator()))</span></code></pre></div>
+<pre><code>[   array([0, 1, 3], dtype=int64),
+    array([4, 2, 6], dtype=int64),
+    array([5, 7, 8], dtype=int64),
+    array([9], dtype=int64),
+    array([0, 2, 3], dtype=int64),
+    array([1, 4, 6], dtype=int64),
+    array([5, 7, 9], dtype=int64),
+    array([8], dtype=int64)]</code></pre>
+</div>
+<div id="lecture-dun-dataframe-pandas" class="section level1">
+<h1>Lecture d’un dataframe pandas</h1>
+<p>On cree une fonction <em>df_to_dataset</em> qui :</p>
+<ul>
+<li>transforme un DataFrame pandas en Dataset en separant predicteurs et cible recodee en entiers grace a un mapping par dictionnaire</li>
+<li>applique une permutation ou pas</li>
+<li>parametre la taille des mini-batchs</li>
+<li>repete <em>x</em> fois la lecture du Dataset, avec <em>None</em> la repetition est sans fin</li>
+</ul>
+<p>Sur le jeu d’apprentissage on applique la permutation et la repetition, pas sur les jeux de test et validation.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> df_to_dataset(dataframe, dico, shuffle <span class="op">=</span> <span class="va">True</span>, buffer_size <span class="op">=</span> <span class="dv">1000</span>, batch_size <span class="op">=</span> <span class="dv">32</span>, </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>nb_repet <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  dataframe <span class="op">=</span> dataframe.copy()</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  labels <span class="op">=</span> dataframe.pop(<span class="st">&#39;income&#39;</span>).<span class="bu">map</span>(dico)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  ds <span class="op">=</span> tf.data.Dataset.from_tensor_slices((<span class="bu">dict</span>(dataframe), labels))</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> shuffle:</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    ds <span class="op">=</span> ds.shuffle(buffer_size <span class="op">=</span> buffer_size)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ds.repeat(count <span class="op">=</span> nb_repet).batch(batch_size)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> df_to_dataset(dtf_class.iloc[:<span class="dv">5</span>], dico <span class="op">=</span> dico_income, buffer_size <span class="op">=</span> <span class="dv">5</span>, batch_size <span class="op">=</span> <span class="dv">4</span>, </span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>nb_repet <span class="op">=</span> <span class="va">None</span>)</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>iter_batch <span class="op">=</span> <span class="bu">iter</span>(ds)</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(<span class="bu">next</span>(iter_batch)[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>   number_in_household marital_status           householder_status
+0                    2     b&#39;married&#39;                       b&#39;own&#39;
+1                    3     b&#39;married&#39;                      b&#39;rent&#39;
+2                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;
+3                    5     b&#39;married&#39;                       b&#39;own&#39;</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(<span class="bu">next</span>(iter_batch)[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>   number_in_household marital_status           householder_status
+0                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;
+1                    5     b&#39;married&#39;                       b&#39;own&#39;
+2                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;
+3                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(<span class="bu">next</span>(iter_batch)[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>   number_in_household marital_status           householder_status
+0                    3     b&#39;married&#39;                      b&#39;rent&#39;
+1                    2     b&#39;married&#39;                       b&#39;own&#39;
+2                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;
+3                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(<span class="bu">next</span>(iter_batch)[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>   number_in_household marital_status householder_status
+0                    2     b&#39;married&#39;             b&#39;own&#39;
+1                    3     b&#39;married&#39;            b&#39;rent&#39;
+2                    5     b&#39;married&#39;             b&#39;own&#39;
+3                    3     b&#39;married&#39;            b&#39;rent&#39;</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(<span class="bu">next</span>(iter_batch)[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>   number_in_household marital_status           householder_status
+0                    2     b&#39;married&#39;                       b&#39;own&#39;
+1                    5     b&#39;married&#39;                       b&#39;own&#39;
+2                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;
+3                    4      b&#39;single&#39;  b&#39;live with parents/family&#39;</code></pre>
+</div>
+<div id="pretraitements" class="section level1">
+<h1>Pretraitements</h1>
+<p>Les variables d’entree d’un reseau de neurones doivent etre mises a un format numerique. On donne ci-dessous quelques exemples de transformations possibles, ces transformations sont des fonctions qu’on applique a des jeux de donnees. Pour les visualiser on incorpore ces transformations dans la couche d’entree <em>DenseFeatures</em> d’un reseau Keras, ce qui produit un tenseur TensorFlow.</p>
+<div id="donnees-numeriques" class="section level3">
+<h3>Donnees numeriques</h3>
+<p>Ici on doit juste signaler cette colonne comme etant deja numerique.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> df_to_dataset(dtf_class, dico <span class="op">=</span> dico_income, buffer_size <span class="op">=</span> <span class="dv">1000</span>, batch_size <span class="op">=</span> <span class="dv">10</span>, nb_repet <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>number_in_household <span class="op">=</span> feature_column.numeric_column(<span class="st">&quot;number_in_household&quot;</span>)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>feature_layer <span class="op">=</span> layers.DenseFeatures(number_in_household)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>batch_exemple <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(ds))[<span class="dv">0</span>]</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(batch_exemple)[[<span class="st">&quot;number_in_household&quot;</span>]]</span></code></pre></div>
+<pre><code>   number_in_household
+0                    4
+1                    4
+2                    3
+3                    1
+4                    3
+5                    2
+6                    1
+7                    2
+8                    4
+9                    2</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(feature_layer(batch_exemple).numpy())</span></code></pre></div>
+<pre><code>[[4.]
+ [4.]
+ [3.]
+ [1.]
+ [3.]
+ [2.]
+ [1.]
+ [2.]
+ [4.]
+ [2.]]</code></pre>
+</div>
+<div id="donnees-numeriques-discretisees" class="section level3">
+<h3>Donnees numeriques discretisees</h3>
+<p>La variable est discretisee avec les intervalles <code>python [-np.inf,]</code> + boundaries + <code>python [np.inf]</code> de la forme [a,b) et on produit une indicatrice par intervalle.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>number_in_household <span class="op">=</span> feature_column.numeric_column(<span class="st">&quot;number_in_household&quot;</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="co"># intervalles {1,2}, {3,4}, {5,6}, {7,8,9}</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>number_in_household <span class="op">=</span> tf.feature_column.bucketized_column(number_in_household, boundaries<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>])</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>feature_layer <span class="op">=</span> layers.DenseFeatures(number_in_household)</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>batch_exemple <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(ds))[<span class="dv">0</span>]</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(batch_exemple)[[<span class="st">&quot;number_in_household&quot;</span>]]</span></code></pre></div>
+<pre><code>   number_in_household
+0                    2
+1                    2
+2                    3
+3                    2
+4                    2
+5                    2
+6                    1
+7                    1
+8                    4
+9                    1</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(feature_layer(batch_exemple).numpy())</span></code></pre></div>
+<pre><code>[[1. 0. 0. 0.]
+ [1. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [1. 0. 0. 0.]
+ [1. 0. 0. 0.]
+ [1. 0. 0. 0.]
+ [1. 0. 0. 0.]
+ [1. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [1. 0. 0. 0.]]</code></pre>
+</div>
+<div id="donnees-categorielles" class="section level3">
+<h3>Donnees categorielles</h3>
+<div id="avec-modalites-explicites" class="section level4">
+<h4>Avec modalites explicites</h4>
+<p>On fournit la liste des modalites et on produit une indicatrice par modalite avec <em>indicator_column</em>.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intervalles {1,2}, {3,4}, {5,6}, {7,8,9}</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>marital_status <span class="op">=</span> tf.feature_column.categorical_column_with_vocabulary_list(</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;marital_status&#39;</span>, </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;single&#39;</span>, <span class="st">&#39;married&#39;</span>, <span class="st">&#39;divorced&#39;</span>, <span class="st">&#39;cohabitation&#39;&#39;, widowed&#39;</span>])</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>marital_one_hot <span class="op">=</span> tf.feature_column.indicator_column(marital_status)</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>feature_layer <span class="op">=</span> layers.DenseFeatures(marital_one_hot)</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>batch_exemple <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(ds))[<span class="dv">0</span>]</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(batch_exemple)[[<span class="st">&#39;marital_status&#39;</span>]]</span></code></pre></div>
+<pre><code>    marital_status
+0  b&#39;cohabitation&#39;
+1       b&#39;married&#39;
+2        b&#39;single&#39;
+3       b&#39;married&#39;
+4       b&#39;married&#39;
+5  b&#39;cohabitation&#39;
+6       b&#39;married&#39;
+7        b&#39;single&#39;
+8       b&#39;married&#39;
+9       b&#39;married&#39;</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(feature_layer(batch_exemple).numpy())</span></code></pre></div>
+<pre><code>[[0. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [1. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [0. 1. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [1. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [0. 1. 0. 0.]]</code></pre>
+</div>
+<div id="hashed-buckets" class="section level4">
+<h4>Hashed buckets</h4>
+<p>A utiliser pour une variable categorielle avec des milliers de modalites. Les modalites sont mises dans un plus petit nombre de groupes (“buckets”) sans avoir besoin de fournir un vocabulaire, et on produit une indicatrice par bucket. On pourrait trouver genant que des modalites differentes se retrouvent dans le meme bucket, mais les valeurs et interactions des autres variables peuvent permettre au modele de les distinguer.</p>
+<p>A noter : le nombre de buckets est un hyperparametre supplementaire a optimiser.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>marital_status <span class="op">=</span> tf.feature_column.categorical_column_with_hash_bucket(<span class="st">&#39;marital_status&#39;</span>, </span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>hash_bucket_size <span class="op">=</span> <span class="dv">3</span>)</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>marital_hashed <span class="op">=</span> tf.feature_column.indicator_column(marital_status)</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>feature_layer <span class="op">=</span> layers.DenseFeatures(marital_hashed)</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>batch_exemple <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(ds))[<span class="dv">0</span>]</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(batch_exemple)[[<span class="st">&#39;marital_status&#39;</span>]]</span></code></pre></div>
+<pre><code>    marital_status
+0       b&#39;widowed&#39;
+1        b&#39;single&#39;
+2        b&#39;single&#39;
+3       b&#39;married&#39;
+4  b&#39;cohabitation&#39;
+5       b&#39;married&#39;
+6       b&#39;married&#39;
+7       b&#39;married&#39;
+8       b&#39;widowed&#39;
+9        b&#39;single&#39;</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(feature_layer(batch_exemple).numpy())</span></code></pre></div>
+<pre><code>[[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 1. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]
+ [0. 1. 0.]
+ [0. 1. 0.]
+ [0. 1. 0.]
+ [1. 0. 0.]
+ [0. 1. 0.]]</code></pre>
+</div>
+<div id="embeddings" class="section level4">
+<h4>Embeddings</h4>
+<p>Un embedding est une maniere de reduire la dimension, l’analogue en statistiques classiques serait de retenir quelques composantes principales d’une Analyse en Composantes Multiples.</p>
+<p>A utiliser la aussi pour une variable categorielle avec beaucoup de de modalites, qui cette fois est transformee en une representation numerique dense a quelques colonnes. L’entree de l’embedding doit etre une variable categorielle deja mis au format TensorFlow.</p>
+<p>La dimension de l’embedding est un autre hyperparametre a optimiser.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>marital_status <span class="op">=</span> tf.feature_column.categorical_column_with_vocabulary_list(</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;marital_status&#39;</span>, </span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;single&#39;</span>, <span class="st">&#39;married&#39;</span>, <span class="st">&#39;divorced&#39;</span>, <span class="st">&#39;cohabitation&#39;&#39;, widowed&#39;</span>])</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>marital_embedding <span class="op">=</span> tf.feature_column.embedding_column(marital_status, dimension <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>feature_layer <span class="op">=</span> layers.DenseFeatures(marital_embedding)</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>batch_exemple <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(ds))[<span class="dv">0</span>]</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(batch_exemple)[[<span class="st">&#39;marital_status&#39;</span>]]</span></code></pre></div>
+<pre><code>    marital_status
+0        b&#39;single&#39;
+1        b&#39;single&#39;
+2        b&#39;single&#39;
+3       b&#39;married&#39;
+4        b&#39;single&#39;
+5       b&#39;married&#39;
+6        b&#39;single&#39;
+7  b&#39;cohabitation&#39;
+8       b&#39;married&#39;
+9        b&#39;single&#39;</code></pre>
+<div class="sourceCode" id="cb72"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(feature_layer(batch_exemple).numpy())</span></code></pre></div>
+<pre><code>[[-0.2315056   0.7147339 ]
+ [-0.2315056   0.7147339 ]
+ [-0.2315056   0.7147339 ]
+ [ 0.40787768  0.10088602]
+ [-0.2315056   0.7147339 ]
+ [ 0.40787768  0.10088602]
+ [-0.2315056   0.7147339 ]
+ [ 0.          0.        ]
+ [ 0.40787768  0.10088602]
+ [-0.2315056   0.7147339 ]]</code></pre>
+</div>
+<div id="interactions" class="section level4">
+<h4>Interactions</h4>
+<p>Il s’agit de l’interaction usuelle entre variables qualitatives (produit cartesien des champs) qui est ensuite repartie entre diffrents buckets.</p>
+<p>Point technique : le parametre <em>hash_key</em> a ete renseigne ci-dessous uniquement pour corriger un bug …</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>marital_status <span class="op">=</span> tf.feature_column.categorical_column_with_vocabulary_list(</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;marital_status&#39;</span>, </span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;single&#39;</span>, <span class="st">&#39;married&#39;</span>, <span class="st">&#39;divorced&#39;</span>, <span class="st">&#39;cohabitation&#39;&#39;, widowed&#39;</span>])</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>householder_status <span class="op">=</span> tf.feature_column.categorical_column_with_vocabulary_list(</span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;householder_status&#39;</span>, </span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;own&#39;</span>, <span class="st">&#39;rent&#39;</span>, <span class="st">&#39;live with parents/family&#39;</span>])</span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>number_in_household <span class="op">=</span> feature_column.numeric_column(<span class="st">&quot;number_in_household&quot;</span>)</span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>number_in_household <span class="op">=</span> tf.feature_column.bucketized_column(number_in_household, </span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>boundaries <span class="op">=</span> [<span class="fl">3.</span>, <span class="fl">5.</span>, <span class="fl">7.</span>])</span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>interactions <span class="op">=</span> tf.feature_column.crossed_column([marital_status, householder_status, </span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>number_in_household], </span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a>hash_bucket_size <span class="op">=</span> <span class="dv">7</span>, hash_key <span class="op">=</span> <span class="dv">8</span>)</span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a>interactions <span class="op">=</span> tf.feature_column.indicator_column(interactions)</span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-18"><a href="#cb74-18" aria-hidden="true" tabindex="-1"></a>feature_layer <span class="op">=</span> layers.DenseFeatures(interactions, dtype<span class="op">=</span><span class="st">&#39;int64&#39;</span>)</span>
+<span id="cb74-19"><a href="#cb74-19" aria-hidden="true" tabindex="-1"></a>batch_exemple <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(ds))[<span class="dv">0</span>]</span>
+<span id="cb74-20"><a href="#cb74-20" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(batch_exemple)[[<span class="st">&#39;marital_status&#39;</span>, <span class="st">&#39;householder_status&#39;</span>, <span class="st">&#39;number_in_household&#39;</span>]]</span></code></pre></div>
+<pre><code>    marital_status           householder_status  number_in_household
+0      b&#39;divorced&#39;                       b&#39;own&#39;                    2
+1       b&#39;married&#39;                       b&#39;own&#39;                    5
+2  b&#39;cohabitation&#39;                      b&#39;rent&#39;                    3
+3       b&#39;married&#39;                      b&#39;rent&#39;                    2
+4        b&#39;single&#39;  b&#39;live with parents/family&#39;                    3
+5        b&#39;single&#39;                      b&#39;rent&#39;                    1
+6       b&#39;married&#39;                      b&#39;rent&#39;                    2
+7        b&#39;single&#39;                      b&#39;rent&#39;                    1
+8        b&#39;single&#39;                      b&#39;rent&#39;                    5
+9       b&#39;married&#39;                       b&#39;own&#39;                    2</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(feature_layer(batch_exemple).numpy())</span></code></pre></div>
+<pre><code>[[0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0.]]</code></pre>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</div>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

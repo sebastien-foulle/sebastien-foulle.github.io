@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>  Reseaux de neurones larges et profonds avec TensorFlow  </title>
+
+<script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link rel="stylesheet" href="hebdor_deepwide_Tensorflow_files/style.css" type="text/css" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<section class="page-header">
+<h1 class="title toc-ignore project-name"> <svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg> Reseaux de neurones larges et profonds avec TensorFlow <br></h1>
+</section>
+
+
+<div id="TOC" class="toc">
+<div class="toc-box">
+<h2 id="toc-title" class="toc-title">Table des matieres</h2>
+<ul>
+<li><a href="#intro">Introduction</a>
+<ul>
+<li><a href="#donnees-et-modules">Donnees et modules</a></li>
+<li><a href="#pretraitement-des-colonnes">Pretraitement des colonnes</a></li>
+<li><a href="#fonction-de-lecture-des-donnees">Fonction de lecture des donnees</a></li>
+</ul></li>
+<li><a href="#modelisation-fonctionnelle-avec-keras">Modelisation Fonctionnelle avec Keras</a>
+<ul>
+<li><a href="#train-test-validation">Train, test, validation</a></li>
+<li><a href="#parametres-et-metriques">Parametres et metriques</a>
+<ul>
+<li><a href="#architecture-du-modele">Architecture du modele</a></li>
+<li><a href="#autres-parametres">Autres parametres</a></li>
+</ul></li>
+<li><a href="#entrainement-des-modeles">Entrainement des modeles</a></li>
+<li><a href="#performance-des-modeles">Performance des modeles</a></li>
+</ul></li>
+<li><a href="#modelisation-avec-tf.estimator">Modelisation avec <em>tf.estimator</em></a></li>
+</ul>
+</div>
+</div>
+
+<section class="main-content">
+<style>
+.r{background-color:lightgrey !important;}
+</style>
+<div id="intro" class="section level1">
+<h1>Introduction</h1>
+<p>On modelise une cible binaire a l’aide de l’interface Keras, mais contrairement au document precedent sur les DNN avec Keras Sequentiel, ici on va utiliser Keras Fonctionnel qui offre plus de possibilites : on peut entre autres coupler des reseaux de type different.</p>
+<p>On reprend le jeu de donnees et les pretraitements du document precedent sur TensorFlow.</p>
+<div id="donnees-et-modules" class="section level3">
+<h3>Donnees et modules</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;reticulate&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># on a installe tensorflow dans l&#39;environnement vituel conda &quot;tf_env&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="at">condaenv =</span> <span class="st">&quot;tf_env&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">&quot;arules&quot;</span>, IncomeESL)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>dtf_class <span class="ot">=</span> tidyr<span class="sc">::</span><span class="fu">drop_na</span>(IncomeESL)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dtf_class) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, <span class="fu">colnames</span>(dtf_class))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>dtf_class <span class="ot">=</span> dtf_class[<span class="fu">c</span>(<span class="st">&quot;number_in_household&quot;</span>, <span class="st">&quot;marital_status&quot;</span>, <span class="st">&quot;householder_status&quot;</span>, <span class="st">&quot;income&quot;</span>)]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>number_in_household <span class="ot">=</span> <span class="fu">as.character</span>(dtf_class<span class="sc">$</span>number_in_household)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>number_in_household[dtf_class<span class="sc">$</span>number_in_household <span class="sc">==</span> <span class="st">&quot;9+&quot;</span>]<span class="ot">=</span> <span class="st">&quot;9&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>number_in_household <span class="ot">=</span> <span class="fu">as.integer</span>(dtf_class<span class="sc">$</span>number_in_household)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col_quali <span class="cf">in</span> <span class="fu">colnames</span>(dtf_class)[<span class="fu">sapply</span>(dtf_class, is.factor)]) {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  dtf_class[[col_quali]] <span class="ot">=</span> <span class="fu">as.character</span>(dtf_class[[col_quali]] )</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>dtf_class<span class="sc">$</span>income <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">&quot;,&quot;</span>, <span class="st">&quot;-&quot;</span>, dtf_class<span class="sc">$</span>income)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="va">None</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pprint</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> feature_column</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># pour regler un bug graphique assez courant avec Anaconda, </span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># adapter le chemin vers le dossier &#39;plugins/platforms&#39;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> os <span class="im">import</span> path</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">&#39;QT_QPA_PLATFORM_PLUGIN_PATH&#39;</span>] <span class="op">=</span> <span class="st">&#39;C:/Users/Sebastien/Anaconda3/Library/plugins/platforms&#39;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>os.chdir(<span class="st">&quot;.&quot;</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>()</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>tf.random.set_seed(<span class="dv">2021</span>)</span></code></pre></div>
+<p>Les versions Python et TensorFlow utilisees.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sys.version</span></code></pre></div>
+<pre><code>&#39;3.8.8 (default, Apr 13 2021, 15:08:03) [MSC v.1916 64 bit (AMD64)]&#39;</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tf.__version__</span></code></pre></div>
+<pre><code>&#39;2.3.0&#39;</code></pre>
+<p>Les donnees sous Python.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dtf_class <span class="op">=</span> r.dtf_class</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dtf_class.head()</span></code></pre></div>
+<pre><code>   number_in_household marital_status        householder_status   income
+0                    5        married                       own      75+
+1                    3        married                      rent      75+
+2                    4         single  live with parents/family   [0-10)
+3                    4         single  live with parents/family   [0-10)
+4                    2        married                       own  [50-75)</code></pre>
+<p>Frequences des modalites de la cible.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dtf_class.income.value_counts(normalize<span class="op">=</span><span class="va">True</span>).sort_index()</span></code></pre></div>
+<pre><code>75+        0.108057
+[0-10)     0.182519
+[10-15)    0.076934
+[15-20)    0.073444
+[20-25)    0.089878
+[25-30)    0.076643
+[30-40)    0.123037
+[40-50)    0.114020
+[50-75)    0.155468
+Name: income, dtype: float64</code></pre>
+<p>Dictionnaire pour recoder la variable cible.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mapping pour recoder les modalites cibles en entiers</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dico_income_bin <span class="op">=</span> {<span class="st">&#39;[0-10)&#39;</span>:<span class="dv">0</span>,<span class="st">&#39;[10-15)&#39;</span>:<span class="dv">0</span>,<span class="st">&#39;[15-20)&#39;</span>:<span class="dv">0</span>, <span class="st">&#39;[20-25)&#39;</span>:<span class="dv">0</span>,<span class="st">&#39;[25-30)&#39;</span>:<span class="dv">0</span>, <span class="st">&#39;[30-40)&#39;</span>:<span class="dv">1</span>, <span class="st">&#39;[40-50)&#39;</span>:<span class="dv">1</span>, <span class="st">&#39;[50-75)&#39;</span>:<span class="dv">1</span>,<span class="st">&#39;75+&#39;</span>:<span class="dv">1</span>}</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>pp.pprint(dico_income_bin)</span></code></pre></div>
+<pre><code>{   &#39;75+&#39;: 1,
+    &#39;[0-10)&#39;: 0,
+    &#39;[10-15)&#39;: 0,
+    &#39;[15-20)&#39;: 0,
+    &#39;[20-25)&#39;: 0,
+    &#39;[25-30)&#39;: 0,
+    &#39;[30-40)&#39;: 1,
+    &#39;[40-50)&#39;: 1,
+    &#39;[50-75)&#39;: 1}</code></pre>
+</div>
+<div id="pretraitement-des-colonnes" class="section level3">
+<h3>Pretraitement des colonnes</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="op">=</span> []</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># numeriques</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>feature_columns.append(feature_column.numeric_column(<span class="st">&quot;number_in_household&quot;</span>))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># en buckets</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>number_in_household <span class="op">=</span> feature_column.numeric_column(<span class="st">&quot;number_in_household&quot;</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>number_bucket <span class="op">=</span> tf.feature_column.bucketized_column(number_in_household, boundaries <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>])</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>feature_columns.append(number_bucket)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># indicatrices</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>marital_status <span class="op">=</span> tf.feature_column.categorical_column_with_vocabulary_list(</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;marital_status&#39;</span>, [<span class="st">&#39;single&#39;</span>, <span class="st">&#39;married&#39;</span>, <span class="st">&#39;divorced&#39;</span>, <span class="st">&#39;cohabitation&#39;&#39;, widowed&#39;</span>])</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>marital_one_hot <span class="op">=</span> tf.feature_column.indicator_column(marital_status)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>feature_columns.append(marital_one_hot)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co"># embedding</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>householder_status <span class="op">=</span> tf.feature_column.categorical_column_with_vocabulary_list(</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;householder_status&#39;</span>, [<span class="st">&#39;own&#39;</span>, <span class="st">&#39;rent&#39;</span>, <span class="st">&#39;live with parents/family&#39;</span>])</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>householder_embedding <span class="op">=</span> tf.feature_column.embedding_column(householder_status, dimension <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>feature_columns.append(householder_embedding)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="co"># interactions</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>interactions <span class="op">=</span> tf.feature_column.crossed_column([marital_status, number_bucket], </span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>hash_bucket_size <span class="op">=</span> <span class="dv">7</span>, hash_key <span class="op">=</span> <span class="dv">8</span>)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>interactions <span class="op">=</span> tf.feature_column.indicator_column(interactions)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>feature_columns.append(interactions)</span></code></pre></div>
+<p>Partie “wide” du reseau :</p>
+<ul>
+<li>variables creuses (indicatrices et leurs interactions)</li>
+<li>relation lineaire avec la cible (modulo l’application d’un softmax ou d’une sigmoide)</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>wide_columns <span class="op">=</span> {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;marital_one_hot&quot;</span>: marital_one_hot,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;interactions&quot;</span>: interactions</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Partie “deep” :</p>
+<ul>
+<li>variables numeriques “denses”</li>
+<li>plongements (“embeddings”)</li>
+<li>relation complexe avec la cible</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>deep_columns <span class="op">=</span> {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;number_in_household&quot;</span>:feature_column.numeric_column(<span class="st">&quot;number_in_household&quot;</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;number_bucket&quot;</span>: number_bucket,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;householder_embedding&quot;</span>: householder_embedding</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="fonction-de-lecture-des-donnees" class="section level3">
+<h3>Fonction de lecture des donnees</h3>
+<p>On prend <em>dico = dico_income_bin</em> pour imposer par defaut une cible binaire recodee en 0/1.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on cree un tf.data.dataset a patir du Dataframe</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> df_to_dataset(dataframe, shuffle <span class="op">=</span> <span class="va">True</span>, batch_size<span class="op">=</span> <span class="dv">32</span>, dico<span class="op">=</span> dico_income_bin, nb_repet<span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  dataframe <span class="op">=</span> dataframe.copy()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  labels <span class="op">=</span> dataframe.pop(<span class="st">&#39;income&#39;</span>).<span class="bu">map</span>(dico)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  ds <span class="op">=</span> tf.data.Dataset.from_tensor_slices((<span class="bu">dict</span>(dataframe), labels))</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> shuffle:</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># permutation dde toutes les lignes du dataframe car seulement quelques milliers de lignes</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    ds <span class="op">=</span> ds.shuffle(buffer_size <span class="op">=</span> <span class="bu">len</span>(dataframe))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  ds <span class="op">=</span> ds.repeat(count <span class="op">=</span> nb_repet).batch(batch_size)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ds</span></code></pre></div>
+</div>
+</div>
+<div id="modelisation-fonctionnelle-avec-keras" class="section level1">
+<h1>Modelisation Fonctionnelle avec Keras</h1>
+<div id="train-test-validation" class="section level3">
+<h3>Train, test, validation</h3>
+<p>Les trois jeux de donnees pour l’apprentissage, les validations et le test final.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test = 20% du total</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>train, test <span class="op">=</span> train_test_split(dtf_class, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state <span class="op">=</span> <span class="dv">2021</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># val = 25% du train = 20% du total</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>train, val <span class="op">=</span> train_test_split(train, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state <span class="op">=</span> <span class="dv">2021</span>)</span></code></pre></div>
+</div>
+<div id="parametres-et-metriques" class="section level3">
+<h3>Parametres et metriques</h3>
+<div id="architecture-du-modele" class="section level4">
+<h4>Architecture du modele</h4>
+<p>Le graphique ci-dessous montre l’architecture du reseau, qui est une combinaison d’une partie large et d’une partie profonde. On notera que les variables d’entree peuvent etre simultanement utilisees par les deux parties du modele.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on doit typer les variables d&#39;entree utilisees</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>inputs_features <span class="op">=</span> {<span class="st">&#39;number_in_household&#39;</span> : layers.Input(name <span class="op">=</span> <span class="st">&#39;number_in_household&#39;</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                                        shape <span class="op">=</span> (), dtype <span class="op">=</span> <span class="st">&#39;int32&#39;</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;marital_status&#39;</span> : layers.Input(name <span class="op">=</span> <span class="st">&#39;marital_status&#39;</span>, shape <span class="op">=</span> (), dtype <span class="op">=</span> <span class="st">&#39;string&#39;</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;householder_status&#39;</span> : layers.Input(name <span class="op">=</span> <span class="st">&#39;householder_status&#39;</span>, shape <span class="op">=</span> (), dtype <span class="op">=</span> <span class="st">&#39;string&#39;</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># parametrage des couches cachees de la partie deep</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>dnn_hidden_units <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">10</span>]</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># partie deep</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>deep <span class="op">=</span> layers.DenseFeatures(deep_columns.values(), name <span class="op">=</span> <span class="st">&#39;deep_inputs&#39;</span>)(inputs_features)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> num_nodes <span class="kw">in</span> dnn_hidden_units:</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    deep <span class="op">=</span> layers.Dense(num_nodes, activation <span class="op">=</span> <span class="st">&#39;relu&#39;</span>)(deep) </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co"># partie wide</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>wide <span class="op">=</span> layers.DenseFeatures(wide_columns.values(), name <span class="op">=</span> <span class="st">&#39;wide_inputs&#39;</span>)(inputs_features)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># on combine les deux parties</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>combined <span class="op">=</span> layers.concatenate(inputs <span class="op">=</span> [deep, wide], name <span class="op">=</span> <span class="st">&#39;combined&#39;</span>)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="co"># le score de sortie</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> layers.Dense(units <span class="op">=</span> <span class="dv">1</span>, activation <span class="op">=</span> <span class="st">&#39;sigmoid&#39;</span>, name <span class="op">=</span> <span class="st">&#39;prediction&#39;</span>)(combined)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="co"># on termine la definition du modele</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>modele <span class="op">=</span> tf.keras.Model(inputs <span class="op">=</span> <span class="bu">list</span>(inputs_features.values()), outputs <span class="op">=</span> output)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Diagramme du reseau</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>tf.keras.utils.plot_model(modele, show_shapes <span class="op">=</span> <span class="va">False</span>, rankdir <span class="op">=</span> <span class="st">&#39;LR&#39;</span>)</span></code></pre></div>
+<p><img src="tmp_tensorflow/model.png" width="900px" height="150px" style="display: block; margin: auto;" /></p>
+</div>
+<div id="autres-parametres" class="section level4">
+<h4>Autres parametres</h4>
+<p>Comme dans le document precedent on ajoute des metriques et on definit trois hyperparametres.</p>
+<p>Les metriques pour le cas d’une cible binaire.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>metriques <span class="op">=</span> [tf.keras.metrics.AUC(name<span class="op">=</span><span class="st">&#39;auc&#39;</span>),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  tf.keras.metrics.BinaryAccuracy(name<span class="op">=</span><span class="st">&#39;accuracy&#39;</span>),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  tf.keras.metrics.Precision(name<span class="op">=</span><span class="st">&#39;precision&#39;</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  tf.keras.metrics.Recall(name<span class="op">=</span><span class="st">&#39;recall&#39;</span>),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  tf.keras.metrics.TruePositives(name<span class="op">=</span><span class="st">&#39;tp&#39;</span>),</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  tf.keras.metrics.FalsePositives(name<span class="op">=</span><span class="st">&#39;fp&#39;</span>),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  tf.keras.metrics.TrueNegatives(name<span class="op">=</span><span class="st">&#39;tn&#39;</span>),</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  tf.keras.metrics.FalseNegatives(name<span class="op">=</span><span class="st">&#39;fn&#39;</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  ]</span></code></pre></div>
+<p>Les hyperparametres.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>TRAIN_BATCH_SIZE <span class="op">=</span> <span class="dv">64</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>NUM_TRAIN_EXAMPLES <span class="op">=</span> <span class="dv">200000</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>NUM_CHECKPOINTS <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>steps_per_epoch <span class="op">=</span> NUM_TRAIN_EXAMPLES <span class="op">//</span> (TRAIN_BATCH_SIZE <span class="op">*</span> NUM_CHECKPOINTS)</span></code></pre></div>
+</div>
+</div>
+<div id="entrainement-des-modeles" class="section level3">
+<h3>Entrainement des modeles</h3>
+<p>On lit les donnees par batchs et on entraine le modele.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>train_ds <span class="op">=</span> df_to_dataset(train, batch_size <span class="op">=</span> TRAIN_BATCH_SIZE, dico <span class="op">=</span> dico_income_bin)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>val_ds <span class="op">=</span> df_to_dataset(val, shuffle <span class="op">=</span> <span class="va">False</span>, batch_size <span class="op">=</span> TRAIN_BATCH_SIZE, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>dico <span class="op">=</span> dico_income_bin, nb_repet <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>test_ds <span class="op">=</span> df_to_dataset(test, shuffle <span class="op">=</span> <span class="va">False</span>, batch_size <span class="op">=</span> TRAIN_BATCH_SIZE, </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>dico <span class="op">=</span> dico_income_bin, nb_repet <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>modele.<span class="bu">compile</span>(optimizer <span class="op">=</span> tf.keras.optimizers.Adam(lr<span class="op">=</span><span class="fl">1e-3</span>),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>              loss <span class="op">=</span> <span class="st">&#39;binary_crossentropy&#39;</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>              metrics <span class="op">=</span> metriques)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> modele.fit(x <span class="op">=</span> train_ds,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                    steps_per_epoch <span class="op">=</span> steps_per_epoch,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>                    epochs <span class="op">=</span> NUM_CHECKPOINTS,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>                    validation_data <span class="op">=</span> val_ds,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>                    verbose <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>                   )</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>                   </span></code></pre></div>
+<pre><code>Epoch 1/20
+156/156 - 4s - loss: 0.6366 - auc: 0.7078 - accuracy: 0.6384 - precision: 0.6121 - recall: 0.7663 - tp: 3846.0000 - fp: 2437.0000 - tn: 2528.0000 - fn: 1173.0000 - val_loss: 0.6189 - val_auc: 0.7342 - val_accuracy: 0.7033 - val_precision: 0.7086 - val_recall: 0.6942 - val_tp: 479.0000 - val_fp: 197.0000 - val_tn: 488.0000 - val_fn: 211.0000
+Epoch 2/20
+156/156 - 0s - loss: 0.5963 - auc: 0.7487 - accuracy: 0.7089 - precision: 0.7337 - recall: 0.6663 - tp: 3364.0000 - fp: 1221.0000 - tn: 3714.0000 - fn: 1685.0000 - val_loss: 0.5646 - val_auc: 0.7786 - val_accuracy: 0.7309 - val_precision: 0.7432 - val_recall: 0.7087 - val_tp: 489.0000 - val_fp: 169.0000 - val_tn: 516.0000 - val_fn: 201.0000
+Epoch 3/20
+156/156 - 0s - loss: 0.5623 - auc: 0.7734 - accuracy: 0.7271 - precision: 0.7446 - recall: 0.7005 - tp: 3536.0000 - fp: 1213.0000 - tn: 3723.0000 - fn: 1512.0000 - val_loss: 0.5582 - val_auc: 0.7781 - val_accuracy: 0.7360 - val_precision: 0.7408 - val_recall: 0.7290 - val_tp: 503.0000 - val_fp: 176.0000 - val_tn: 509.0000 - val_fn: 187.0000
+Epoch 4/20
+156/156 - 0s - loss: 0.5615 - auc: 0.7739 - accuracy: 0.7216 - precision: 0.7325 - recall: 0.7022 - tp: 3522.0000 - fp: 1286.0000 - tn: 3682.0000 - fn: 1494.0000 - val_loss: 0.5564 - val_auc: 0.7782 - val_accuracy: 0.7353 - val_precision: 0.7329 - val_recall: 0.7435 - val_tp: 513.0000 - val_fp: 187.0000 - val_tn: 498.0000 - val_fn: 177.0000
+Epoch 5/20
+156/156 - 0s - loss: 0.5587 - auc: 0.7764 - accuracy: 0.7262 - precision: 0.7365 - recall: 0.7095 - tp: 3563.0000 - fp: 1275.0000 - tn: 3687.0000 - fn: 1459.0000 - val_loss: 0.5548 - val_auc: 0.7787 - val_accuracy: 0.7338 - val_precision: 0.7295 - val_recall: 0.7464 - val_tp: 515.0000 - val_fp: 191.0000 - val_tn: 494.0000 - val_fn: 175.0000
+Epoch 6/20
+156/156 - 1s - loss: 0.5586 - auc: 0.7754 - accuracy: 0.7237 - precision: 0.7337 - recall: 0.7141 - tp: 3615.0000 - fp: 1312.0000 - tn: 3610.0000 - fn: 1447.0000 - val_loss: 0.5537 - val_auc: 0.7792 - val_accuracy: 0.7353 - val_precision: 0.7296 - val_recall: 0.7507 - val_tp: 518.0000 - val_fp: 192.0000 - val_tn: 493.0000 - val_fn: 172.0000
+Epoch 7/20
+156/156 - 0s - loss: 0.5544 - auc: 0.7794 - accuracy: 0.7246 - precision: 0.7292 - recall: 0.7158 - tp: 3579.0000 - fp: 1329.0000 - tn: 3655.0000 - fn: 1421.0000 - val_loss: 0.5520 - val_auc: 0.7810 - val_accuracy: 0.7360 - val_precision: 0.7339 - val_recall: 0.7435 - val_tp: 513.0000 - val_fp: 186.0000 - val_tn: 499.0000 - val_fn: 177.0000
+Epoch 8/20
+156/156 - 0s - loss: 0.5573 - auc: 0.7789 - accuracy: 0.7247 - precision: 0.7285 - recall: 0.7202 - tp: 3612.0000 - fp: 1346.0000 - tn: 3623.0000 - fn: 1403.0000 - val_loss: 0.5514 - val_auc: 0.7814 - val_accuracy: 0.7360 - val_precision: 0.7339 - val_recall: 0.7435 - val_tp: 513.0000 - val_fp: 186.0000 - val_tn: 499.0000 - val_fn: 177.0000
+Epoch 9/20
+156/156 - 0s - loss: 0.5557 - auc: 0.7792 - accuracy: 0.7234 - precision: 0.7325 - recall: 0.7119 - tp: 3588.0000 - fp: 1310.0000 - tn: 3634.0000 - fn: 1452.0000 - val_loss: 0.5517 - val_auc: 0.7821 - val_accuracy: 0.7338 - val_precision: 0.7295 - val_recall: 0.7464 - val_tp: 515.0000 - val_fp: 191.0000 - val_tn: 494.0000 - val_fn: 175.0000
+Epoch 10/20
+156/156 - 0s - loss: 0.5571 - auc: 0.7780 - accuracy: 0.7239 - precision: 0.7291 - recall: 0.7176 - tp: 3604.0000 - fp: 1339.0000 - tn: 3623.0000 - fn: 1418.0000 - val_loss: 0.5509 - val_auc: 0.7818 - val_accuracy: 0.7345 - val_precision: 0.7305 - val_recall: 0.7464 - val_tp: 515.0000 - val_fp: 190.0000 - val_tn: 495.0000 - val_fn: 175.0000
+Epoch 11/20
+156/156 - 1s - loss: 0.5541 - auc: 0.7809 - accuracy: 0.7251 - precision: 0.7369 - recall: 0.7129 - tp: 3613.0000 - fp: 1290.0000 - tn: 3626.0000 - fn: 1455.0000 - val_loss: 0.5517 - val_auc: 0.7824 - val_accuracy: 0.7338 - val_precision: 0.7295 - val_recall: 0.7464 - val_tp: 515.0000 - val_fp: 191.0000 - val_tn: 494.0000 - val_fn: 175.0000
+Epoch 12/20
+156/156 - 0s - loss: 0.5570 - auc: 0.7791 - accuracy: 0.7207 - precision: 0.7263 - recall: 0.7140 - tp: 3588.0000 - fp: 1352.0000 - tn: 3607.0000 - fn: 1437.0000 - val_loss: 0.5509 - val_auc: 0.7818 - val_accuracy: 0.7287 - val_precision: 0.7321 - val_recall: 0.7246 - val_tp: 500.0000 - val_fp: 183.0000 - val_tn: 502.0000 - val_fn: 190.0000
+Epoch 13/20
+156/156 - 1s - loss: 0.5553 - auc: 0.7799 - accuracy: 0.7234 - precision: 0.7349 - recall: 0.7081 - tp: 3573.0000 - fp: 1289.0000 - tn: 3649.0000 - fn: 1473.0000 - val_loss: 0.5512 - val_auc: 0.7826 - val_accuracy: 0.7338 - val_precision: 0.7295 - val_recall: 0.7464 - val_tp: 515.0000 - val_fp: 191.0000 - val_tn: 494.0000 - val_fn: 175.0000
+Epoch 14/20
+156/156 - 0s - loss: 0.5572 - auc: 0.7773 - accuracy: 0.7212 - precision: 0.7288 - recall: 0.7094 - tp: 3561.0000 - fp: 1325.0000 - tn: 3639.0000 - fn: 1459.0000 - val_loss: 0.5506 - val_auc: 0.7817 - val_accuracy: 0.7287 - val_precision: 0.7321 - val_recall: 0.7246 - val_tp: 500.0000 - val_fp: 183.0000 - val_tn: 502.0000 - val_fn: 190.0000
+Epoch 15/20
+156/156 - 1s - loss: 0.5526 - auc: 0.7816 - accuracy: 0.7246 - precision: 0.7348 - recall: 0.7085 - tp: 3561.0000 - fp: 1285.0000 - tn: 3673.0000 - fn: 1465.0000 - val_loss: 0.5506 - val_auc: 0.7817 - val_accuracy: 0.7287 - val_precision: 0.7321 - val_recall: 0.7246 - val_tp: 500.0000 - val_fp: 183.0000 - val_tn: 502.0000 - val_fn: 190.0000
+Epoch 16/20
+156/156 - 0s - loss: 0.5596 - auc: 0.7762 - accuracy: 0.7178 - precision: 0.7302 - recall: 0.6996 - tp: 3526.0000 - fp: 1303.0000 - tn: 3641.0000 - fn: 1514.0000 - val_loss: 0.5513 - val_auc: 0.7829 - val_accuracy: 0.7280 - val_precision: 0.7310 - val_recall: 0.7246 - val_tp: 500.0000 - val_fp: 184.0000 - val_tn: 501.0000 - val_fn: 190.0000
+Epoch 17/20
+156/156 - 0s - loss: 0.5531 - auc: 0.7819 - accuracy: 0.7237 - precision: 0.7370 - recall: 0.7014 - tp: 3526.0000 - fp: 1258.0000 - tn: 3699.0000 - fn: 1501.0000 - val_loss: 0.5505 - val_auc: 0.7827 - val_accuracy: 0.7287 - val_precision: 0.7321 - val_recall: 0.7246 - val_tp: 500.0000 - val_fp: 183.0000 - val_tn: 502.0000 - val_fn: 190.0000
+Epoch 18/20
+156/156 - 0s - loss: 0.5553 - auc: 0.7792 - accuracy: 0.7214 - precision: 0.7335 - recall: 0.7029 - tp: 3539.0000 - fp: 1286.0000 - tn: 3663.0000 - fn: 1496.0000 - val_loss: 0.5511 - val_auc: 0.7837 - val_accuracy: 0.7280 - val_precision: 0.7310 - val_recall: 0.7246 - val_tp: 500.0000 - val_fp: 184.0000 - val_tn: 501.0000 - val_fn: 190.0000
+Epoch 19/20
+156/156 - 1s - loss: 0.5545 - auc: 0.7807 - accuracy: 0.7221 - precision: 0.7329 - recall: 0.7051 - tp: 3545.0000 - fp: 1292.0000 - tn: 3664.0000 - fn: 1483.0000 - val_loss: 0.5509 - val_auc: 0.7828 - val_accuracy: 0.7338 - val_precision: 0.7295 - val_recall: 0.7464 - val_tp: 515.0000 - val_fp: 191.0000 - val_tn: 494.0000 - val_fn: 175.0000
+Epoch 20/20
+156/156 - 0s - loss: 0.5530 - auc: 0.7822 - accuracy: 0.7225 - precision: 0.7320 - recall: 0.7065 - tp: 3546.0000 - fp: 1298.0000 - tn: 3667.0000 - fn: 1473.0000 - val_loss: 0.5502 - val_auc: 0.7835 - val_accuracy: 0.7287 - val_precision: 0.7321 - val_recall: 0.7246 - val_tp: 500.0000 - val_fp: 183.0000 - val_tn: 502.0000 - val_fn: 190.0000</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>modele.summary()</span></code></pre></div>
+<pre><code>Model: &quot;functional_1&quot;
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+householder_status (InputLayer) [(None,)]            0                                            
+__________________________________________________________________________________________________
+marital_status (InputLayer)     [(None,)]            0                                            
+__________________________________________________________________________________________________
+number_in_household (InputLayer [(None,)]            0                                            
+__________________________________________________________________________________________________
+deep_inputs (DenseFeatures)     (None, 7)            6           householder_status[0][0]         
+                                                                 marital_status[0][0]             
+                                                                 number_in_household[0][0]        
+__________________________________________________________________________________________________
+dense (Dense)                   (None, 10)           80          deep_inputs[0][0]                
+__________________________________________________________________________________________________
+dense_1 (Dense)                 (None, 10)           110         dense[0][0]                      
+__________________________________________________________________________________________________
+wide_inputs (DenseFeatures)     (None, 11)           0           householder_status[0][0]         
+                                                                 marital_status[0][0]             
+                                                                 number_in_household[0][0]        
+__________________________________________________________________________________________________
+combined (Concatenate)          (None, 21)           0           dense_1[0][0]                    
+                                                                 wide_inputs[0][0]                
+__________________________________________________________________________________________________
+prediction (Dense)              (None, 1)            22          combined[0][0]                   
+==================================================================================================
+Total params: 218
+Trainable params: 218
+Non-trainable params: 0
+__________________________________________________________________________________________________</code></pre>
+</div>
+<div id="performance-des-modeles" class="section level3">
+<h3>Performance des modeles</h3>
+<p>Fonction de perte et metriques sur l’echantillon de test.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">&quot;KPI&quot;</span>: modele.metrics_names, </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;valeurs&quot;</span>: modele.evaluate(test_ds, verbose <span class="op">=</span> <span class="dv">0</span>)})</span></code></pre></div>
+<pre><code>         KPI     valeurs
+0       loss    0.536791
+1        auc    0.798552
+2   accuracy    0.736192
+3  precision    0.739198
+4     recall    0.711738
+5         tp  479.000000
+6         fp  169.000000
+7         tn  534.000000
+8         fn  194.000000</code></pre>
+<p>Graphiques des performances du modele selon l’epoque virtuelle.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dtf <span class="op">=</span> pd.DataFrame(history.history)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>colonnes <span class="op">=</span> dtf.columns</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>dtf <span class="op">=</span> dtf.reset_index().rename(columns <span class="op">=</span> {<span class="st">&#39;index&#39;</span>: <span class="st">&#39;virtual_epochs&#39;</span>})</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>dtf_tr <span class="op">=</span> pd.melt(dtf, id_vars <span class="op">=</span> [<span class="st">&#39;virtual_epochs&#39;</span>], value_vars <span class="op">=</span> colonnes, </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>var_name <span class="op">=</span><span class="st">&#39;noms_col&#39;</span>, value_name<span class="op">=</span><span class="st">&#39;valeurs_col&#39;</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>dtf_tr[<span class="st">&quot;metrique&quot;</span>] <span class="op">=</span> dtf_tr.noms_col.<span class="bu">str</span>.replace(<span class="st">&quot;^val_&quot;</span>, <span class="st">&quot;&quot;</span>, regex <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>dtf_tr[<span class="st">&quot;echantillon&quot;</span>] <span class="op">=</span> <span class="st">&quot;val&quot;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>dtf_tr.loc[dtf_tr.noms_col <span class="op">==</span> dtf_tr.metrique, <span class="st">&quot;echantillon&quot;</span>] <span class="op">=</span> <span class="st">&quot;train&quot;</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(dtf_tr, col<span class="op">=</span><span class="st">&quot;metrique&quot;</span>, hue <span class="op">=</span> <span class="st">&quot;echantillon&quot;</span>, sharey <span class="op">=</span> <span class="va">False</span>, col_wrap <span class="op">=</span> <span class="dv">3</span>)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>g<span class="op">=</span> g.map_dataframe(sns.lineplot, x <span class="op">=</span> <span class="st">&quot;virtual_epochs&quot;</span>,y <span class="op">=</span> <span class="st">&quot;valeurs_col&quot;</span>).add_legend()</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="hebdor_deepwide_Tensorflow_files/figure-html/unnamed-chunk-15-1.png" width="700px" height="700px" style="display: block; margin: auto;" /></p>
+<p>La matrice de confusion du modele sur l’echantillon test.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>prev <span class="op">=</span> modele.predict(test_ds).squeeze()</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># on choisit un seuil : 0.5 par defaut dans les metriques precedentes (vrais positifs, ...)</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>seuil <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>prev <span class="op">=</span> (prev <span class="op">&gt;=</span> seuil).astype(<span class="bu">int</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># le reel </span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>reel <span class="op">=</span> pd.concat([pd.DataFrame(dts[<span class="dv">1</span>], columns <span class="op">=</span> [<span class="st">&quot;x&quot;</span>]) <span class="cf">for</span> dts <span class="kw">in</span> <span class="bu">iter</span>(test_ds)])</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">&#39;Y&#39;</span>: <span class="bu">list</span>(reel.x), <span class="st">&#39;Ypred&#39;</span>: prev}).groupby([<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;Ypred&quot;</span>]).size(</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  ).reset_index(name <span class="op">=</span> <span class="st">&quot;nb&quot;</span>).pivot(index<span class="op">=</span><span class="st">&quot;Y&quot;</span>, columns<span class="op">=</span><span class="st">&quot;Ypred&quot;</span>)</span></code></pre></div>
+<pre><code>        nb     
+Ypred    0    1
+Y              
+0      534  169
+1      194  479</code></pre>
+</div>
+</div>
+<div id="modelisation-avec-tf.estimator" class="section level1">
+<h1>Modelisation avec <em>tf.estimator</em></h1>
+<p>Fonction de pre-traitement basee sur <em>pandas_input_fn</em>.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_input_fn(dataframe, shuffle<span class="op">=</span> <span class="va">True</span>, batch_size <span class="op">=</span> TRAIN_BATCH_SIZE, </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>dico <span class="op">=</span> dico_income_bin, num_epochs<span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  dataframe <span class="op">=</span> dataframe.copy()</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  labels <span class="op">=</span> dataframe.pop(<span class="st">&#39;income&#39;</span>).<span class="bu">map</span>(dico)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> tf.compat.v1.estimator.inputs.pandas_input_fn(</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> dataframe,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> labels,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    batch_size <span class="op">=</span> batch_size,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    num_epochs <span class="op">=</span> num_epochs,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    shuffle <span class="op">=</span> shuffle,</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    queue_capacity <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    num_threads <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>On utilise le <em>DNNLinearCombinedClassifier</em> qui combine des reseaux deep et wide. On peut affiner la configuration de l’estimateur avec <em>tf.estimator.RunConfig</em>.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>hidden_units <span class="op">=</span> [<span class="dv">16</span>, <span class="dv">8</span>]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>output_dir <span class="op">=</span> <span class="st">&#39;./tmp_tensorflow/trained_model&#39;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>shutil.rmtree(output_dir, ignore_errors <span class="op">=</span> <span class="va">True</span>) </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>run_config <span class="op">=</span> tf.estimator.RunConfig(tf_random_seed <span class="op">=</span> <span class="dv">2021</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    save_checkpoints_secs <span class="op">=</span> <span class="dv">5</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    keep_checkpoint_max <span class="op">=</span> <span class="dv">3</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>estimator_dnnlin <span class="op">=</span> tf.estimator.DNNLinearCombinedClassifier(</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    model_dir <span class="op">=</span> output_dir,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    linear_feature_columns <span class="op">=</span> wide_columns.values(),</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    dnn_feature_columns <span class="op">=</span> deep_columns.values(),</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    dnn_hidden_units <span class="op">=</span> hidden_units,</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    n_classes <span class="op">=</span> <span class="bu">len</span>(dico_income_bin),</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> run_config)</span></code></pre></div>
+<p>On precise quelques parametres pour l’apprentissage et le test.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>num_train_steps <span class="op">=</span> steps_per_epoch <span class="op">*</span> NUM_CHECKPOINTS</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># pour le jeu d&#39;entrainement</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>train_spec <span class="op">=</span> tf.estimator.TrainSpec(input_fn <span class="op">=</span> make_input_fn(train, shuffle<span class="op">=</span><span class="va">True</span>, num_epochs<span class="op">=</span><span class="va">None</span>), </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                                    max_steps <span class="op">=</span> num_train_steps)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># pour le jeu de validation, on evalue apres start_delay_secs secondes</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co"># et on evalue toutes les throttle_secs secondes</span></span></code></pre></div>
+<pre><code>WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow\python\util\lazy_loader.py:63: The name tf.estimator.inputs is deprecated. Please use tf.compat.v1.estimator.inputs instead.</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>eval_spec <span class="op">=</span> tf.estimator.EvalSpec(input_fn <span class="op">=</span> make_input_fn(val, shuffle <span class="op">=</span> <span class="va">False</span>, num_epochs <span class="op">=</span> <span class="dv">1</span>), </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                                  steps <span class="op">=</span> <span class="va">None</span>, </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                                  start_delay_secs <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                                  throttle_secs <span class="op">=</span> <span class="dv">4</span>) </span></code></pre></div>
+<p>On entraine et on evalue le modele.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on vide le repertoire et on le supprime car il sert aussi de checkpoint </span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># et son contenu peut etre recharge pour poursuivre l&#39;entrainement</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>shutil.rmtree(output_dir, ignore_errors <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>tf.estimator.train_and_evaluate(estimator_dnnlin, train_spec, eval_spec)</span></code></pre></div>
+<pre><code>({&#39;accuracy&#39;: 0.6909091, &#39;average_loss&#39;: 0.7212007, &#39;loss&#39;: 0.7190945, &#39;global_step&#39;: 3120}, [])
+
+WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow\python\training\training_util.py:235: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
+WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow_estimator\python\estimator\inputs\queues\feeding_queue_runner.py:60: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow_estimator\python\estimator\inputs\queues\feeding_functions.py:491: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING:tensorflow:AutoGraph could not transform &lt;bound method _DNNModelV2.call of &lt;tensorflow_estimator.python.estimator.canned.dnn._DNNModelV2 object at 0x000000005FA1FF10&gt;&gt; and will run it as-is.
+Please report this to the TensorFlow team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output.
+Cause: module &#39;gast&#39; has no attribute &#39;Index&#39;
+To silence this warning, decorate the function with @tf.autograph.experimental.do_not_convert
+WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow_estimator\python\estimator\canned\linear.py:1471: Layer.add_variable (from tensorflow.python.keras.engine.base_layer_v1) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `layer.add_weight` method instead.
+WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow\python\keras\optimizer_v2\adagrad.py:82: calling Constant.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow\python\training\monitored_session.py:906: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\tf_env\lib\site-packages\tensorflow\python\training\saver.py:969: remove_checkpoint (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to delete files with this prefix.</code></pre>
+<p><a href="#intro"><strong>retour au debut du document</strong></a></p>
+</div>
+</section>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

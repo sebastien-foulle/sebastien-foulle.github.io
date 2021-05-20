@@ -1,0 +1,295 @@
+---
+title: "Agregats sous R et Python dans Rstudio"
+output:
+  xaringan::moon_reader:
+    nature:
+      ratio: '16:7'
+author: Sebastien Foulle
+date: 07/09/2018
+---
+
+<style>
+.python{
+    background-color: gold !important;
+}
+
+pre {
+  white-space: pre-wrap;
+  box-shadow: 10px 5px 5px lightblue;
+}
+</style>
+
+
+## Contenu du document
+
+On presente dans les quelques slides suivantes les operations d'agregation usuelles en R avec *dplyr* et en Python avec *pandas*.
+
+Prerequis pour produire cette presentation **xaringan** avec Rstudio :
+
+- une distribution Python (Anaconda convient tres bien)
+- le package R *reticulate* qui permet d'utiliser des objets R dans des chunks Python (syntaxe *r.mon_objet_r*) et inversement (syntaxe *py$mon_objet_python*)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.show = "hold", 
+                      fig.align='center', 
+                      results = "hold", 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      comment = "", 
+                      #cache = TRUE,
+                      out.width = 500,
+	                    out.height = 400)
+```
+
+.pull-left[
+```{r, message=FALSE}
+library("reticulate")
+# chemin vers l'executable python
+use_python("C:/Users/Sebastien/Anaconda3/python.exe")
+
+library("dplyr")
+tips = reshape2::tips[75:78,-1]
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+```
+]
+
+
+---
+
+## Les donnees
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+tips
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips = r.tips; tips
+```
+]
+
+
+---
+
+## Le type des donnees
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+On a un champ numerique, un champ entier et quatre facteurs
+```{r}
+str(tips)
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+On a un champ numerique, un champ entier et quatre categories *pandas*
+```{python}
+tips.info()
+```
+]
+
+
+---
+
+## Agregats simples
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+tips %>% summarise(moy = mean(tip))
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips[["tip"]].mean()
+```
+]
+
+
+---
+
+## Agregats simples pour toutes les colonnes numeriques
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+tips %>% summarise_if(is.numeric, mean)
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips.mean()
+```
+]
+
+
+---
+
+## Application : % de valeurs manquantes par colonne
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+tips2 = tips; tips2[1,1] = NA;
+# en R base : colMeans(is.na(tips2))
+is.na(tips2) %>% as.data.frame %>% summarise_all(mean)
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips2 = r.tips2;
+tips2.isna().mean().reset_index(name = "pct_na")
+```
+]
+
+
+---
+
+## Agregats par groupe
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+On voit `2.62` au lieu de `2.625` car les *tibble* affichent 3 chiffres significatifs par defaut. Solutions : *options(pillar.sigfig = 7)* ou en rajoutant a la fin *%>% as.data.frame*.
+```{r, message=FALSE}
+
+tips %>% group_by(sex,smoker) %>% summarise(moy=mean(tip))
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips.groupby(["sex", "smoker"], observed = True)["tip"].mean().reset_index(name = "moy")
+```
+]
+
+
+---
+
+## Application : table de contingence
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r, message=FALSE}
+# en bref : tips %>% count(sex, smoker, name = "freq")
+tips %>% group_by(sex,smoker) %>% summarise(freq =n())
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips.groupby(["sex", "smoker"], observed = True).size().reset_index(name = "freq")
+```
+]
+
+
+---
+
+## Agregats multiples par groupe
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+
+```{r, message=FALSE}
+tips %>% group_by(sex,smoker) %>% summarise(moy=mean(tip), somme=sum(size))
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips.groupby(["sex", "smoker"], observed = True).agg(moy=('tip', 'mean'), somme=('size', 'sum')).reset_index()
+```
+]
+
+
+
+---
+
+## Agregats par groupe ajoutes dans la table initiale
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+```{r}
+options(pillar.sigfig = 7)
+tips %>% group_by(sex,smoker) %>% mutate(moy=mean(tip))
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips["moy"] = tips.groupby(["sex", "smoker"], observed = True)["tip"].transform("mean");tips
+```
+]
+
+```{python, eval=TRUE, echo=FALSE}
+tips.drop(columns = "moy", inplace = True)
+```
+
+
+---
+
+## Application : on filtre sur les pourboires au-dessus de la moyenne
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p>
+
+```{r}
+tips %>% mutate(moy = mean(tip)) %>% filter(tip > moy)
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p>
+```{python}
+tips["zero"] = 0;
+tips["moy"]=tips.groupby("zero")["tip"].transform("mean")
+tips.query('tip > moy')
+```
+]
+
+```{python, eval=TRUE, echo=FALSE}
+tips.drop(columns = ["zero", "moy"], inplace = True)
+```
+
+
+---
+
+## Variante : agregats par groupe avec dictionnaire + mapping
+
+.pull-left[
+<p style="text-align:center">`r fontawesome::fa('r-project', fill = 'blue', height = '60px')`</p> 
+En R on passe par un vecteur avec noms 
+```{r}
+vecteur = tips %>% group_by(day) %>% summarise(moy = mean(tip)) %>% tibble::deframe();vecteur
+tips["moy"] = vecteur[as.character(tips$day)];tips
+```
+]
+
+.pull-right[
+<p style="text-align:center">`r fontawesome::fa('python', fill = 'gold', height = '60px')`</p> 
+En Python on utilise un dictionnaire
+```{python}
+dico = tips.groupby("day", observed = True).tip.mean().to_dict();dico
+tips["moy"] = tips.day.map(dico); tips
+```
+]
