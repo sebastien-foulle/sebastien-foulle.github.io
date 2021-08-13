@@ -13,7 +13,7 @@
 
 <title>Theme yeti</title>
 
-<script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
@@ -321,7 +321,7 @@ div.tocify {
       <ul class="nav navbar-nav">
         <li>
   <a href="about.html">
-    <span class="fas fa-user fa-lg"></span>
+    <span class="fa fa-user fa-lg"></span>
      
     A propos
   </a>
@@ -335,28 +335,28 @@ div.tocify {
 </li>
 <li>
   <a href="veille.html">
-    <span class="fas fa-thumbtack fa-lg"></span>
+    <span class="fa fa-thumbtack fa-lg"></span>
      
     A suivre
   </a>
 </li>
 <li>
   <a href="livres.html">
-    <span class="fas fa-book fa-lg"></span>
+    <span class="fa fa-book fa-lg"></span>
      
     A  lire
   </a>
 </li>
 <li>
   <a href="groups.html">
-    <span class="fas fa-users fa-lg"></span>
+    <span class="fa fa-users fa-lg"></span>
      
     A frequenter
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-file-image fa-lg"></span>
+    <span class="fa fa-file-image fa-lg"></span>
      
     Formats Rmd
      
@@ -432,7 +432,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-file-image fa-lg"></span>
+    <span class="fa fa-file-image fa-lg"></span>
      
     Rmd legers
      
@@ -587,6 +587,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

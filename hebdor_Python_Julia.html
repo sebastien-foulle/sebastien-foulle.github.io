@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Manipulation de donnees avec Python et Julia dans Rstudio</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sebastien Foulle" />
+    <meta name="date" content="2021-07-06" />
+    <script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Manipulation de donnees avec Python et Julia dans Rstudio
+### Sebastien Foulle
+### 07/06/2021
+
+---
+
+
+&lt;style&gt;
+.python{
+    background-color: gold !important;
+}
+
+.julia{
+    background-color: lightblue !important;
+}
+
+pre {
+  white-space: pre-wrap;
+  box-shadow: 10px 5px 5px black;
+}
+&lt;/style&gt;
+
+
+
+
+
+## Contenu du document
+
+
+On presente ici la syntaxe des manipulation de donnees les plus frequentes sous Python et Julia.
+
+
+
+
+.pull-left[
+
+```r
+library("JuliaCall")
+# chemin vers l'executable julia
+julia = julia_setup(JULIA_HOME = 
+"C:/Users/Sebastien/AppData/Local/Programs/Julia-1.6.1/bin")
+```
+
+
+```r
+library("reticulate")
+# chemin vers l'executable python
+use_python("C:/Users/Sebastien/Anaconda3/python.exe")
+```
+]
+
+.pull-right[
+Note : si on veut utiliser l'interpreteur julia dans la console R, taper *julia_console()* apres avoir charge le package "JuliaCall" et l'etape de setup. Le prompt *julia&gt;* apparait alors.
+]
+
+---
+
+## Installer des modules
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+Dans une invite de commande :
+
+&gt; conda install pandas
+
+ou
+
+&gt; pip install pandas
+
+Dans Python, le numero de version :
+
+```python
+import pandas as pd
+pd.__version__
+```
+
+```
+'1.2.5'
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+On suppose que le chemin vers l'executable Julia a ete ajoute a la variable d'environnement PATH et qu'on a ouvert une invite de commande.
+
+&gt; julia
+
+et apres le lancement de Julia :
+
+```julia
+import Pkg
+Pkg.add("DataFrames")
+```
+
+
+```julia
+Pkg.status("DataFrames")
+```
+
+
+```
+DataFrames v1.1.1
+```
+]
+
+
+---
+
+## Systeme de fichiers : exploration et deplacements
+
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+import os
+repertoire_courant = os.getcwd()
+os.listdir(repertoire_courant)
+```
+
+```
+['.git', '.gitignore', '.Rproj.user', 'about.html', 'about.Rmd', 'caracteres_irreductibles.pdf', 'coercion_resistant_scheme.pdf', 'ecarts.html', 'graphiques_NLP', 'groups.html', 'groups.Rmd', 'hebdor_Altair.html', 'hebdor_Altair.Rmd', 'hebdor_Altair_cache', 'hebdor_Altair_files', 'hebdor_binarisation.html', 'hebdor_binarisation_files', 'hebdor_comprehension.html', 'hebdor_comprehension_files', 'hebdor_couleurs.html', 'hebdor_couleurs_files', 'hebdor_curly_curly.html', 'hebdor_curly_curly_files', 'hebdor_datasets_Tensorflow.html', 'hebdor_datasets_Tensorflow_files', 'hebdor_deepwide_Tensorflow.html', 'hebdor_deepwide_Tensorflow_files', 'hebdor_diffr.html', 'hebdor_diffr_files', 'hebdor_dnn_Tensorflow.html', 'hebdor_dnn_Tensorflow_files', 'hebdor_dtplyr.html', 'hebdor_dtplyr_files', 'hebdor_echantillonnage.html', 'hebdor_echantillonnage_files', 'hebdor_erreurs_ggplot2.html', 'hebdor_erreurs_ggplot2_files', 'hebdor_flexdashboard.html', 'hebdor_flexdashboard.Rmd', 'hebdor_flexdashboard_cache', 'hebdor_forcats.html', 'hebdor_forcats_files', 'hebdor_formattable.html', 'hebdor_formattable_files', 'hebdor_format_tables_matrices.html', 'hebdor_format_tables_matrices.Rmd', 'hebdor_format_tables_matrices_cache', 'hebdor_format_tables_matrices_files', 'hebdor_fstrings_glue.html', 'hebdor_fstrings_glue_files', 'hebdor_gestion_erreurs.html', 'hebdor_gestion_erreurs_files', 'hebdor_ggrepel.html', 'hebdor_ggrepel_files', 'hebdor_glue.html', 'hebdor_glue_files', 'hebdor_graphiques_pandas.html', 'hebdor_graphiques_pandas_files', 'hebdor_heatmap.html', 'hebdor_heatmap_cache', 'hebdor_heatmap_files', 'hebdor_importance_variables.html', 'hebdor_importance_variables.Rmd', 'hebdor_importance_variables_cache', 'hebdor_importance_variables_files', 'hebdor_JupyterLab.html', 'hebdor_JupyterLab_files', 'hebdor_KPI_yardstick.html', 'hebdor_KPI_yardstick_files', 'hebdor_lstm_gru_tcn.html', 'hebdor_mise_forme_graphiques.html', 'hebdor_mise_forme_graphiques_files', 'hebdor_mise_forme_tables.html', 'hebdor_mise_forme_tables.Rmd', 'hebdor_mise_forme_tables_cache', 'hebdor_mise_forme_tables_files', 'hebdor_modelePlot.html', 'hebdor_modelePlot.Rmd', 'hebdor_modelePlot_cache', 'hebdor_modelePlot_files', 'hebdor_NLP_tweets.html', 'hebdor_nouveautes_dplyr.html', 'hebdor_nouveautes_dplyr_files', 'hebdor_nouveautes_ggplot2.html', 'hebdor_nouveautes_ggplot2_files', 'hebdor_nouveautes_R_Rstudio.html', 'hebdor_nouveautes_R_Rstudio_files', 'hebdor_openssl.html', 'hebdor_openssl_files', 'hebdor_patchwork.html', 'hebdor_patchwork_files', 'hebdor_penguins.html', 'hebdor_penguins_files', 'hebdor_perf_sklearn.html', 'hebdor_perf_sklearn_files', 'hebdor_polices.html', 'hebdor_polices_files', 'hebdor_Python_Julia.html', 'hebdor_Python_Julia.Rmd', 'hebdor_R_Python_agregats.Rmd', 'hebdor_R_Python_graphiques.Rmd', 'hebdor_R_SQL.html', 'hebdor_R_SQL_files', 'hebdor_santoku.html', 'hebdor_santoku_files', 'hebdor_scales.html', 'hebdor_scales_files', 'hebdor_selection_variables.Rmd', 'hebdor_selection_variables_cache', 'hebdor_selection_variables_files', 'hebdor_skimr.html', 'hebdor_skimr_files', 'hebdor_smbinning.Rmd', 'hebdor_smbinning_cache', 'hebdor_smbinning_files', 'hebdor_titres_ggplot2.html', 'hebdor_titres_ggplot2_files', 'hebdor_transposition.html', 'hebdor_transpositions.html', 'hebdor_transpositions_files', 'hebdor_transposition_files', 'htmldoc_cerulean.Rmd', 'htmldoc_cosmo.Rmd', 'htmldoc_darkly.Rmd', 'htmldoc_default.Rmd', 'htmldoc_flatly.Rmd', 'htmldoc_journal.Rmd', 'htmldoc_lumen.Rmd', 'htmldoc_paper.Rmd', 'htmldoc_readable.Rmd', 'htmldoc_sandstone.Rmd', 'htmldoc_simplex.Rmd', 'htmldoc_spacelab.Rmd', 'htmldoc_united.Rmd', 'htmldoc_yeti.Rmd', 'htmlpretty_architect.Rmd', 'htmlpretty_cayman.Rmd', 'htmlpretty_hpstr.Rmd', 'htmlpretty_leonids.Rmd', 'htmlpretty_tactile---Copie_files', 'htmlpretty_tactile.Rmd', 'images', 'images_jupyterlab', 'images_modelePlot', 'index.Rmd', 'julia', 'livres.Rmd', 'ma_table.html', 'mon_site_spacelab.Rproj', 'preambule.Rmd', 'rmdformats_downcute.Rmd', 'rmdformats_html_clean.Rmd', 'rmdformats_html_docco.Rmd', 'rmdformats_material.Rmd', 'rmdformats_readthedown.Rmd', 'rmdformats_robobook.Rmd', 'site_libs', 'tmp_tensorflow', 'veille.Rmd', 'xaringan-themer.css', '_corps_commun.Rmd', '_site', '_site.yml']
+```
+
+
+```python
+new_path = ".."
+os.chdir(new_path)
+```
+
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+```julia
+repertoire_courant = pwd();
+readdir(repertoire_courant)
+```
+
+```
+163-element Vector{String}:
+ ".Rproj.user"
+ ".git"
+ ".gitignore"
+ "_corps_commun.Rmd"
+ "_site"
+ "_site.yml"
+ "about.Rmd"
+ "about.html"
+ "caracteres_irreductibles.pdf"
+ "coercion_resistant_scheme.pdf"
+ ⋮
+ "rmdformats_html_clean.Rmd"
+ "rmdformats_html_docco.Rmd"
+ "rmdformats_material.Rmd"
+ "rmdformats_readthedown.Rmd"
+ "rmdformats_robobook.Rmd"
+ "site_libs"
+ "tmp_tensorflow"
+ "veille.Rmd"
+ "xaringan-themer.css"
+```
+
+
+```julia
+new_path = ".."
+cd(new_path)
+```
+]
+
+
+---
+
+## Charger des modules
+
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+import datetime as dttm
+dttm.date(2021, 12, 31)
+```
+
+```
+datetime.date(2021, 12, 31)
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+```julia
+import Dates as dt
+dt.Date(2021, 12, 31)
+```
+
+```
+2021-12-31
+```
+
+Chargement dans l'espace de noms courant, analogue au *library(package)* en R : plus besoin de prefixer les fonctions.
+
+```julia
+using Dates
+Date(2021, 12, 31)
+```
+
+```
+2021-12-31
+```
+
+]
+
+
+---
+
+## Les types basiques
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+type(1), type( 1.2), type(True), type('string')
+```
+
+```
+(&lt;class 'int'&gt;, &lt;class 'float'&gt;, &lt;class 'bool'&gt;, &lt;class 'str'&gt;)
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+```julia
+typeof(1), typeof( 1.2), typeof(true), typeof("string")
+```
+
+```
+(Int64, Float64, Bool, String)
+```
+
+Attention aux guillemets doubles pour les chaines de caracteres et les guillemets simples reserves aux caracteres simples.
+
+```julia
+'a', typeof('a'), "b", typeof("b")
+```
+
+```
+('a', Char, "b", String)
+```
+]
+
+
+---
+
+## Les dates
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+import datetime as dttm
+dttm.date.today(), dttm.datetime.now()
+```
+
+```
+(datetime.date(2021, 8, 13), datetime.datetime(2021, 8, 13, 11, 27, 47, 409954))
+```
+
+
+
+```python
+dttm.datetime.strptime("2021/06/13 23:59:59", "%Y/%m/%d %H:%M:%S")
+```
+
+```
+datetime.datetime(2021, 6, 13, 23, 59, 59)
+```
+
+
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+```julia
+using Dates
+today(), now()
+```
+
+```
+(Date("2021-08-13"), DateTime("2021-08-13T11:27:48.268"))
+```
+
+
+```julia
+Date("2021/06/13", "y/m/d"), DateTime("2021/06/13 23:59:59", "y/m/d H:M:S")
+```
+
+```
+(Date("2021-06-13"), DateTime("2021-06-13T23:59:59"))
+```
+]
+
+
+---
+
+## Les types complexes
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+Les listes.
+
+```python
+liste = ["spam", 2.0, 5, [10, 20]]
+liste[0], type(liste)
+```
+
+```
+('spam', &lt;class 'list'&gt;)
+```
+
+Les dictionnaires.
+
+```python
+dico = {"cle": "valeur", "int": 2, "float": 1.1}
+dico["cle"], type(dico)
+```
+
+```
+('valeur', &lt;class 'dict'&gt;)
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+Les *arrays*.
+
+```julia
+liste = ["spam", 2.0, 5, [10, 20]];
+liste[1], typeof(liste)
+```
+
+```
+("spam", Vector{Any})
+```
+
+Les dictionnaires.
+
+```julia
+dico = Dict("cle" =&gt; "valeur", "int" =&gt; 2, "float" =&gt; 1.1);
+dico["cle"], typeof(dico)
+```
+
+```
+("valeur", Dict{String, Any})
+```
+]
+
+
+---
+
+## Boucles et conditions
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+for i in range(5):
+  print(i, end = ' ')
+```
+
+```
+0 1 2 3 4 
+```
+
+
+```python
+if 1 &lt; 2:
+  print("1 &lt; 2")
+  print("Et retour a la ligne")
+else:
+  print("1 &gt; 2")
+```
+
+```
+1 &lt; 2
+Et retour a la ligne
+```
+
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+```julia
+ for j in 0:4
+  print(j, " ")
+end
+```
+
+```
+0 1 2 3 4 
+```
+
+
+```julia
+if 1 &lt; 2
+    println("1 &lt; 2")
+    print("Et retour a la ligne avec println")
+else
+    println("1 &gt; 2")
+end
+```
+
+```
+1 &lt; 2
+Et retour a la ligne avec println
+```
+]
+
+
+---
+
+## Les fonctions
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+def f(x,y):
+  x = abs(x)
+  y = abs(y)
+  return x+y
+
+f(-2,3)
+```
+
+```
+5
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+```julia
+function f(x,y)
+  x = abs(x); y = abs(y)
+  return x+y
+end;
+
+f(-2,3)
+```
+
+Version compacte pour les expressions simples.
+
+```julia
+g(x,y) = abs(x) + abs(y);
+g(-2,3)
+```
+
+```
+5
+```
+]
+
+
+---
+
+# Et enfin les dataframes !
+
+## Construction
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+from numpy import random as rd;import pandas as pd
+rd.seed(1234)
+df=pd.DataFrame({"A":["M", "F", "F", "M", "F"],
+"B":rd.rand(5),"C":rd.rand(5)})
+df
+```
+
+```
+   A         B         C
+0  M  0.191519  0.272593
+1  F  0.622109  0.276464
+2  F  0.437728  0.801872
+3  M  0.785359  0.958139
+4  F  0.779976  0.875933
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+```julia
+using Random, DataFrames
+Random.seed!(1234);
+df=DataFrame(A=["M","F","F","M","F"],B=rand(5),C=rand(5))
+```
+
+```
+5×3 DataFrame
+ Row │ A       B         C
+     │ String  Float64   Float64
+─────┼────────────────────────────
+   1 │ M       0.590845  0.854147
+   2 │ F       0.766797  0.200586
+   3 │ F       0.566237  0.298614
+   4 │ M       0.460085  0.246837
+   5 │ F       0.794026  0.579672
+```
+]
+
+
+---
+
+## Selection de lignes et de colonnes
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+df.loc[df.A == "F", ["B", "C"]]
+```
+
+```
+          B         C
+1  0.622109  0.276464
+2  0.437728  0.801872
+4  0.779976  0.875933
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+Le "." devant un operateur binaire rend l'operation vectorielle, cf https://docs.julialang.org/en/v1/manual/mathematical-operations/#man-dot-operators
+
+```julia
+df[df.A .== "F", [:B,:C]]
+```
+
+```
+3×2 DataFrame
+ Row │ B         C
+     │ Float64   Float64
+─────┼────────────────────
+   1 │ 0.766797  0.200586
+   2 │ 0.566237  0.298614
+   3 │ 0.794026  0.579672
+```
+]
+
+
+---
+
+## Champs calcules
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+df["D"] = df.B.apply(lambda x: x &gt; 0.5)
+df["E"] = df.B.mean()
+df
+```
+
+```
+   A         B         C      D         E
+0  M  0.191519  0.272593  False  0.563338
+1  F  0.622109  0.276464   True  0.563338
+2  F  0.437728  0.801872  False  0.563338
+3  M  0.785359  0.958139   True  0.563338
+4  F  0.779976  0.875933   True  0.563338
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+
+
+```julia
+df = transform(df, [:B] =&gt; ByRow(x -&gt; x &gt; 0.5) =&gt; :D);
+transform(df, [:B] =&gt; mean =&gt; :E)
+```
+
+```
+5×5 DataFrame
+ Row │ A       B         C         D      E
+     │ String  Float64   Float64   Bool   Float64
+─────┼─────────────────────────────────────────────
+   1 │ M       0.590845  0.854147   true  0.635598
+   2 │ F       0.766797  0.200586   true  0.635598
+   3 │ F       0.566237  0.298614   true  0.635598
+   4 │ M       0.460085  0.246837  false  0.635598
+   5 │ F       0.794026  0.579672   true  0.635598
+```
+]
+
+
+---
+
+## Agregats par groupe et chainage d'operations
+
+.pull-left[
+&lt;p style="text-align:center"&gt;<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:60px;width:52.5px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z"/></svg>&lt;/p&gt;
+
+```python
+df.assign(F = 10 * df.C)[df.B &gt; 0.5
+  ].groupby("A").agg(mean_F = ("F", "mean")).reset_index(
+  ).sort_values("mean_F").rename(columns = {'A':'genre'})
+```
+
+```
+  genre    mean_F
+0     F  5.761984
+1     M  9.581394
+```
+]
+
+.pull-right[
+&lt;p style="text-align:center"&gt;&lt;img src="julia/julia_dark.png" width="90" style="display: block; margin: auto;" /&gt;&lt;/p&gt;
+Voir les details ici : https://juliadata.github.io/DataFramesMeta.jl/stable/#@linq-and-other-chaining-macros
+
+```julia
+# charger Statistics pour calculer la moyenne
+using DataFramesMeta, Pipe, Statistics
+
+@pipe df |&gt;
+  @transform(_, F = 10 * :C) |&gt; @where(_, :B .&gt; 0.5) |&gt;
+  groupby(_, :A)  |&gt; @combine(_, mean_F = mean(:F)) |&gt;
+  @orderby(_, :mean_F) |&gt; @select(_, genre = :A, :mean_F)
+```
+
+```
+2×2 DataFrame
+ Row │ genre   mean_F
+     │ String  Float64
+─────┼─────────────────
+   1 │ F       3.59624
+   2 │ M       8.54147
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "solarized-light",
+"ratio": "16:7"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

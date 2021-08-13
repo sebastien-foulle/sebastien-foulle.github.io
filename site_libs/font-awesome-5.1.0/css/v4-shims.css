@@ -1348,11 +1348,11 @@
   font-family: 'Font Awesome 5 Brands';
   font-weight: 400; }
 
-.fa.fa-newspaper-o {
+.fa.far fa-newspaper-o {
   font-family: 'Font Awesome 5 Free';
   font-weight: 400; }
 
-.fa.fa-newspaper-o:before {
+.fa.far fa-newspaper-o:before {
   content: "\f1ea"; }
 
 .fa.fa-paypal {
