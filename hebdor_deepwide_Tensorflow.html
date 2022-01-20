@@ -743,31 +743,13 @@ Y
 <span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>                                  steps <span class="op">=</span> <span class="va">None</span>, </span>
 <span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>                                  start_delay_secs <span class="op">=</span> <span class="dv">2</span>,</span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>                                  throttle_secs <span class="op">=</span> <span class="dv">4</span>) </span></code></pre></div>
-<pre><code>WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\env_tf26\lib\site-packages\tensorflow\python\util\lazy_loader.py:63: The name tf.estimator.inputs is deprecated. Please use tf.compat.v1.estimator.inputs instead.</code></pre>
 <p>On entraine et on evalue le modele.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on vide le repertoire et on le supprime car il sert aussi de checkpoint </span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># et son contenu peut etre recharge pour poursuivre l'entrainement</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>shutil.rmtree(output_dir, ignore_errors <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>tf.estimator.train_and_evaluate(estimator_dnnlin, train_spec, eval_spec)</span></code></pre></div>
 <pre><code>({'accuracy': 0.6909091, 'average_loss': 0.72124225, 'loss': 0.7191323, 'global_step': 3120}, [])
-
-WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\env_tf26\lib\site-packages\tensorflow\python\training\training_util.py:235: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
-Instructions for updating:
-Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
-WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\env_tf26\lib\site-packages\tensorflow_estimator\python\estimator\inputs\queues\feeding_queue_runner.py:60: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
-Instructions for updating:
-To construct input pipelines, use the `tf.data` module.
-WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\env_tf26\lib\site-packages\tensorflow_estimator\python\estimator\inputs\queues\feeding_functions.py:491: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
-Instructions for updating:
-To construct input pipelines, use the `tf.data` module.
-C:\Users\SEBAST~1\ANACON~1\envs\env_tf26\lib\site-packages\keras\engine\base_layer_v1.py:1684: UserWarning: `layer.add_variable` is deprecated and will be removed in a future version. Please use `layer.add_weight` method instead.
-  warnings.warn('`layer.add_variable` is deprecated and '
-WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\env_tf26\lib\site-packages\keras\optimizer_v2\adagrad.py:83: calling Constant.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
-Instructions for updating:
-Call initializer instance with the dtype argument instead of passing it to the constructor
-WARNING:tensorflow:From C:\Users\SEBAST~1\ANACON~1\envs\env_tf26\lib\site-packages\tensorflow\python\training\monitored_session.py:907: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
-Instructions for updating:
-To construct input pipelines, use the `tf.data` module.</code></pre>
+</code></pre>
 <p><a href="#intro"><strong>retour au debut du document</strong></a></p>
 </div>
 </div>
