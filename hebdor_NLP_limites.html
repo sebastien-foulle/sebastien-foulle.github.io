@@ -1755,7 +1755,7 @@ pip install textblob-fr vaderSentiment_fr</code></pre>
 <h1><span class="header-section-number">2</span> <strong>Nettoyage de
 textes</strong></h1>
 <p>Une des approches classiques consiste a “nettoyer” le texte pour
-faciliter son analyse, (par exemple la determination des mots les plus
+faciliter son analyse (par exemple la determination des mots les plus
 frequents et le nuage de mots correspondant). Ce nettoyage s’effectue en
 plusieurs etapes :</p>
 <ul>
@@ -1784,7 +1784,7 @@ ponctuations.</p>
 l’apostrophe n’est pas geree correctement.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; * &#39;</span>.join(word_tokenize(x, language <span class="op">=</span> <span class="st">&#39;french&#39;</span>))</span></code></pre></div>
 <pre><code>&quot;La * recette * d&#39;un * classique * : * le * gratin * de * chou-fleur * ( * 4 * personnes * )&quot;</code></pre>
-<p>Une approche par expression regulieres regle ce probleme, mais cette
+<p>Une approche par expression reguliere regle ce probleme, mais cette
 fois c’est le trait d’union qui n’est pas bien gere.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> RegexpTokenizer(<span class="st">&quot;[\w]+&quot;</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; * &#39;</span>.join(tokenizer.tokenize(x))</span></code></pre></div>
@@ -1813,7 +1813,7 @@ emoji, …</p>
 <div id="suppression-des-mots-vides" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Suppression des mots
 vides</h2>
-<p>Avec <em>nltk</em>, la liste des mots vides est minimale, on peut
+<p>Avec <em>nltk</em> la liste des mots vides est minimale, on peut
 vouloir y ajouter des lettres suivies d’apostrophes.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nltk</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>stop <span class="op">=</span> <span class="bu">sorted</span>((stopwords.words(<span class="st">&#39;french&#39;</span>)))</span>
@@ -1858,7 +1858,7 @@ lemmatisation</h2>
 <div id="racinisation" class="section level3" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Racinisation</h3>
 <p>La racinisation est plutot deconseillee : on obtient en general des
-mots qui n’existent pas en francais ce qui peut gener des traitements
+mots qui n’existent pas en francais, ce qui peut gener des traitements
 ulterieurs. On peut meme ne pas reconnaitre que deux mots font partie de
 la meme famille car leurs racines peuvent etre differentes.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>stemmer.stem(<span class="st">&quot;satisfaction&quot;</span>), stemmer.stem(<span class="st">&quot;satisfait&quot;</span>)</span></code></pre></div>
@@ -1874,7 +1874,7 @@ une racine avec un sens different du mot initial.</p>
 masculin singulier, les verbes a l’infinitif, …</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>[token.lemma_ <span class="cf">for</span> token <span class="kw">in</span> nlp(<span class="st">&quot;Les nouvelles étudiantes sont motivées&quot;</span>)]</span></code></pre></div>
 <pre><code>[&#39;le&#39;, &#39;nouveau&#39;, &#39;étudiant&#39;, &#39;être&#39;, &#39;motiver&#39;]</code></pre>
-<p>La lemmtisation peut rencontrer les memes difficultes que la
+<p>La lemmatisation peut rencontrer les memes difficultes que la
 racinisation : avec des mots de la meme famille mais qui ont des natures
 differentes, on obtient des lemmes differents.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>[(token.text, token.pos_, token.lemma_) <span class="cf">for</span> token <span class="kw">in</span> nlp(<span class="st">&quot;satisfaction satisfait&quot;</span>)]</span></code></pre></div>
@@ -1912,10 +1912,9 @@ utilisant un dictionnaire.</p>
 <p>Une premiere approche trop simple ne convient pas : des que le
 dictionnaire s’applique a un mot qui ne fait pas partie de ses cles, une
 erreur se declenche.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convient pas</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nettoyage(x, dico <span class="op">=</span> dico_corrections, mots_vides <span class="op">=</span> stop, tokenizer <span class="op">=</span> RegexpTokenizer(<span class="st">&quot;[\w-]+&quot;</span>)): </span>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nettoyage(x, dico <span class="op">=</span> dico_corrections, mots_vides <span class="op">=</span> stop, tokenizer <span class="op">=</span> RegexpTokenizer(<span class="st">&quot;[\w-]+&quot;</span>)): </span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">&#39; &#39;</span>.join([dico[token.lemma_] <span class="cf">for</span> token <span class="kw">in</span> nlp(x) <span class="cf">if</span> <span class="kw">not</span> token.is_punct <span class="kw">and</span> token.text <span class="kw">not</span> <span class="kw">in</span> stop])</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  return &#39; &#39;.join([dico[word] for word in tokenizer.tokenize(x) if word not in mots_vides])</span></span></code></pre></div>
+</code></pre></div>
 <div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="st">&quot;Il etait pour une fois en retard au rdv, mais je suis patient&quot;</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  nettoyage(y)</span>
@@ -1949,7 +1948,7 @@ d’orthographe, en suivant par exemple la methode suivante :</p>
 <ul>
 <li>on se procure un lexique de la langue francaise le plus complet
 possible, par exemple <a href="http://www.lexique.org/" class="uri">http://www.lexique.org/</a></li>
-<li>on controle si le mot <em>w</em> qu’on veut traiter est ou non dans
+<li>on controle si le mot <em>w</em> qu’on veut traiter est dans
 le lexique</li>
 <li>si ce n’est pas le cas, on cherche dans le lexique les mots a une
 distance faible de <em>w</em></li>
@@ -2038,7 +2037,7 @@ dans la phrase n’est pas pris en compte.</p>
 <p>On verifie que le vecteur d’une phrase est bien la moyenne des
 vecteurs de ses mots.</p>
 <div class="sourceCode" id="cb83"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>(nlp(<span class="st">&quot;je&quot;</span>).vector[:<span class="dv">5</span>] <span class="op">+</span> nlp(<span class="st">&quot;suis&quot;</span>).vector[:<span class="dv">5</span>] <span class="op">+</span> nlp(<span class="st">&quot;content&quot;</span>).vector[:<span class="dv">5</span>])<span class="op">/</span><span class="dv">3</span></span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+</code></pre></div>
 <pre><code>array([ 1.9008666 ,  0.24163334, -4.4582667 , -3.6277363 ,  5.5526333 ],
       dtype=float32)</code></pre>
 <div class="sourceCode" id="cb85"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>nlp(<span class="st">&quot;je suis content&quot;</span>).vector[:<span class="dv">5</span>]</span></code></pre></div>
@@ -2054,7 +2053,7 @@ similarite</h2>
 <div id="similarite-et-sens-des-mots" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Similarite et sens
 des mots</h3>
-<p>Des mots de sens proches sont similaires.</p>
+<p>Des mots de sens proche sont similaires.</p>
 <div class="sourceCode" id="cb89"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="st">&quot;rendement&quot;</span></span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="st">&quot;rentabilité&quot;</span></span>
 <span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="bu">round</span>(nlp(x).similarity(nlp(y)),<span class="dv">2</span>)</span></code></pre></div>
